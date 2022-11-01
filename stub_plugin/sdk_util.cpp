@@ -30,7 +30,6 @@
 #include <extdll.h>
 #include <enginecallback.h>		// ALERT()
 
-#include "osdep.h"				// win32 vsnprintf, etc
 
 //=========================================================
 // UTIL_LogPrintf - Prints a logged message to console.

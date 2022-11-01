@@ -101,19 +101,20 @@ static DLL_FUNCTIONS gFunctionTable =
 	NULL,					// pfnAllowLagCompensation
 };
 
-C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, 
-		int *interfaceVersion)
+C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion) noexcept
 {
-	if(!pFunctionTable) {
-		UTIL_LogPrintf("GetEntityAPI2 called with null pFunctionTable");
-		return(FALSE);
+	if (!pFunctionTable)
+	{
+		//UTIL_LogPrintf("GetEntityAPI2 called with null pFunctionTable");
+		return FALSE;
 	}
-	else if(*interfaceVersion != INTERFACE_VERSION) {
-		UTIL_LogPrintf("GetEntityAPI2 version mismatch; requested=%d ours=%d", *interfaceVersion, INTERFACE_VERSION);
+	else if (*interfaceVersion != INTERFACE_VERSION)
+	{
+		//UTIL_LogPrintf("GetEntityAPI2 version mismatch; requested=%d ours=%d", *interfaceVersion, INTERFACE_VERSION);
 		//! Tell metamod what version we had, so it can figure out who is out of date.
 		*interfaceVersion = INTERFACE_VERSION;
-		return(FALSE);
+		return FALSE;
 	}
 	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-	return(TRUE);
+	return TRUE;
 }
