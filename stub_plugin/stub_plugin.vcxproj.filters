@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -22,9 +18,6 @@
     <Filter Include="HLSDK\dlls">
       <UniqueIdentifier>{cd8d13e5-ee32-4a4d-859f-43c25d6e46ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HLSDK\engine">
-      <UniqueIdentifier>{7fe3e166-d1f0-4c96-9c77-090bb6d8af19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSDK\pm_shared">
       <UniqueIdentifier>{e9ee1fef-be7e-4937-b792-d76da5e5fdde}</UniqueIdentifier>
     </Filter>
@@ -34,23 +27,11 @@
     <Filter Include="metamod">
       <UniqueIdentifier>{7123522a-b507-4db5-b5b1-a2a3f91a9e77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSDK\engine">
+      <UniqueIdentifier>{7fe3e166-d1f0-4c96-9c77-090bb6d8af19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllapi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="engine_api.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_export.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="meta_api.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sdk_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\hlsdk\common\beamdef.ixx">
       <Filter>HLSDK\common</Filter>
     </ClCompile>
@@ -240,14 +221,9 @@
     <ClCompile Include="..\hlsdk\dlls\util.ixx">
       <Filter>HLSDK\dlls</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="dummy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="info_name.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="export.def">

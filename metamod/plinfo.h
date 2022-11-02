@@ -79,7 +79,7 @@ typedef struct {
 extern plugin_info_t Plugin_info DLLHIDDEN;
 
 // Plugin identifier, passed to all Meta Utility Functions.
-typedef plugin_info_t* plid_t;
+using plid_t = const plugin_info_t *;
 #define PLID	&Plugin_info
 
 #endif /* PLINFO_H */

@@ -42,4 +42,4 @@ export struct plugin_info_t
 };
 
 // Plugin identifier, passed to all Meta Utility Functions.
-export using plid_t = plugin_info_t *;
+export using plid_t = const plugin_info_t *;

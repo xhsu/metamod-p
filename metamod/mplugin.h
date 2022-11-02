@@ -139,7 +139,7 @@ class MPlugin : public class_metamod_new {
 		mBOOL is_unloader;				// fix to prevent other plugins unload active unloader.
 		
 		DLHANDLE handle;				// handle for dlopen, dlsym, etc
-		plugin_info_t *info;				// information plugin provides about itself
+		plugin_info_t const *info;		// information plugin provides about itself
 		time_t time_loaded;				// when plugin was loaded
 		
 		char filename[PATH_MAX];			// ie "dlls/mm_test_i386.so", from inifile

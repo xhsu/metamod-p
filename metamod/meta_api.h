@@ -122,32 +122,36 @@ extern mutil_funcs_t *gpMetaUtilFuncs DLLHIDDEN;
 // procedure.  In particular, this will allow for DLL's that can be used as
 // both standalone DLL's and metamod plugins. (optional; not required in
 // plugin)
-C_DLLEXPORT void Meta_Init(void);
-typedef void (*META_INIT_FN) (void);
+C_DLLEXPORT void Meta_Init(void) noexcept;
+using META_INIT_FN = void (*) (void) noexcept;
 
 // Get info about plugin, compare meta_interface versions, provide meta
 // utility callback functions.
-C_DLLEXPORT int Meta_Query(char *interfaceVersion, 
-		plugin_info_t **plinfo, 
-		mutil_funcs_t *pMetaUtilFuncs);
-typedef int (*META_QUERY_FN) (char *interfaceVersion, 
-		plugin_info_t **plinfo, 
-		mutil_funcs_t *pMetaUtilFuncs);
+C_DLLEXPORT int Meta_Query(const char *interfaceVersion,
+	plugin_info_t const **plinfo,
+	mutil_funcs_t *pMetaUtilFuncs
+) noexcept;
+using META_QUERY_FN = int (*) (const char *interfaceVersion,
+	plugin_info_t const **plinfo,
+	mutil_funcs_t *pMetaUtilFuncs
+) noexcept;
 
 // Attach the plugin to the API; get the table of getapi functions; give 
 // meta_globals and gamedll_funcs.
-C_DLLEXPORT int Meta_Attach(PLUG_LOADTIME now, 
-		META_FUNCTIONS *pFunctionTable, 
-		meta_globals_t *pMGlobals, 
-		gamedll_funcs_t *pGamedllFuncs);
-typedef int (*META_ATTACH_FN) (PLUG_LOADTIME now, 
-		META_FUNCTIONS *pFunctionTable, 
-		meta_globals_t *pMGlobals, 
-		gamedll_funcs_t *pGamedllFuncs);
+C_DLLEXPORT int Meta_Attach(PLUG_LOADTIME now,
+	META_FUNCTIONS *pFunctionTable,
+	meta_globals_t *pMGlobals,
+	gamedll_funcs_t *pGamedllFuncs
+) noexcept;
+using META_ATTACH_FN = int (*) (PLUG_LOADTIME now,
+	META_FUNCTIONS *pFunctionTable,
+	meta_globals_t *pMGlobals,
+	gamedll_funcs_t *pGamedllFuncs
+) noexcept;
 
 // Detach the plugin; tell why and when.
-C_DLLEXPORT int Meta_Detach(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
-typedef int (*META_DETACH_FN) (PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
+C_DLLEXPORT int Meta_Detach(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) noexcept;
+using META_DETACH_FN = int (*) (PLUG_LOADTIME now, PL_UNLOAD_REASON reason) noexcept;
 
 // Standard HL SDK interface function prototypes.
 C_DLLEXPORT int GetEntityAPI_Post(DLL_FUNCTIONS *pFunctionTable, 

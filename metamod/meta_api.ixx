@@ -91,23 +91,25 @@ export inline mutil_funcs_t *gpMetaUtilFuncs = nullptr;
 // procedure.  In particular, this will allow for DLL's that can be used as
 // both standalone DLL's and metamod plugins. (optional; not required in
 // plugin)
-export using META_INIT_FN = void (*) (void);
+export using META_INIT_FN = void (*) (void) noexcept;
 
 // Get info about plugin, compare meta_interface versions, provide meta
 // utility callback functions.
-export using META_QUERY_FN = int (*) (char *interfaceVersion,
-	plugin_info_t **plinfo,
-	mutil_funcs_t *pMetaUtilFuncs);
+export using META_QUERY_FN = int (*) (const char *interfaceVersion,
+	plugin_info_t const **plinfo,
+	mutil_funcs_t *pMetaUtilFuncs
+) noexcept;
 
 // Attach the plugin to the API; get the table of getapi functions; give 
 // meta_globals and gamedll_funcs.
 export using META_ATTACH_FN = int (*) (PLUG_LOADTIME now,
 	META_FUNCTIONS *pFunctionTable,
 	meta_globals_t *pMGlobals,
-	gamedll_funcs_t *pGamedllFuncs);
+	gamedll_funcs_t *pGamedllFuncs
+) noexcept;
 
 // Detach the plugin; tell why and when.
-export using META_DETACH_FN = int (*) (PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
+export using META_DETACH_FN = int (*) (PLUG_LOADTIME now, PL_UNLOAD_REASON reason) noexcept;
 
 // Standard HL SDK interface function prototypes. #FN_STUB
 //C_DLLEXPORT int GetEntityAPI_Post(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);

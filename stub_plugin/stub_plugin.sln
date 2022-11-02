@@ -9,28 +9,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hlsdk-cpp23", "..\hlsdk\msv
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|x64.ActiveCfg = Debug|x64
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|x64.Build.0 = Debug|x64
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|x86.ActiveCfg = Debug|Win32
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|x86.Build.0 = Debug|Win32
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|x64.ActiveCfg = Release|x64
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|x64.Build.0 = Release|x64
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|x86.ActiveCfg = Release|Win32
-		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|x86.Build.0 = Release|Win32
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|x64.ActiveCfg = Debug|x64
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|x64.Build.0 = Debug|x64
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|x86.ActiveCfg = Debug|Win32
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|x86.Build.0 = Debug|Win32
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|x64.ActiveCfg = Release|x64
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|x64.Build.0 = Release|x64
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|x86.ActiveCfg = Release|Win32
-		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|x86.Build.0 = Release|Win32
+		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Debug|Win32.Build.0 = Debug|Win32
+		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|Win32.ActiveCfg = Release|Win32
+		{FB18149B-E6A0-4F27-8A19-3007723F1D4C}.Release|Win32.Build.0 = Release|Win32
+		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E9EF723-800E-4715-8580-0414ACED92C9}.Debug|Win32.Build.0 = Debug|Win32
+		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|Win32.ActiveCfg = Release|Win32
+		{9E9EF723-800E-4715-8580-0414ACED92C9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
