@@ -1,5 +1,7 @@
 #temporary files
 *~
+**/bin/*
 **/Release/*
 **/Debug/*
 **/.vs/*
+**/*.bak

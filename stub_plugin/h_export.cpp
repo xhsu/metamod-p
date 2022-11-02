@@ -25,20 +25,20 @@
 
 */
 
-#include <extdll.h>
+#include <string.h>
 
-#include <h_export.h>
+import eiface;
 
 // From SDK dlls/h_export.cpp:
 
 //! Holds engine functionality callbacks
-enginefuncs_t g_engfuncs;
-globalvars_t  *gpGlobals;
+inline enginefuncs_t g_engfuncs = {};
+inline globalvars_t  *gpGlobals = nullptr;
 
 // Receive engine function table from engine.
 // This appears to be the _first_ DLL routine called by the engine, so we
 // do some setup operations here.
-void WINAPI GiveFnptrsToDll(enginefuncs_t *pengfuncsFromEngine, globalvars_t *pGlobals) noexcept
+void __stdcall GiveFnptrsToDll(enginefuncs_t *pengfuncsFromEngine, globalvars_t *pGlobals) noexcept
 {
 	memcpy(&g_engfuncs, pengfuncsFromEngine, sizeof(enginefuncs_t));
 	gpGlobals = pGlobals;

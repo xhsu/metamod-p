@@ -19,6 +19,69 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\hlsdk\cl_dll\hud_iface.ixx" />
+    <ClCompile Include="..\hlsdk\cl_dll\wrect.ixx" />
+    <ClCompile Include="..\hlsdk\common\beamdef.ixx" />
+    <ClCompile Include="..\hlsdk\common\cl_entity.ixx" />
+    <ClCompile Include="..\hlsdk\common\com_model.ixx" />
+    <ClCompile Include="..\hlsdk\common\const_.ixx" />
+    <ClCompile Include="..\hlsdk\common\con_nprint.ixx" />
+    <ClCompile Include="..\hlsdk\common\crc.ixx" />
+    <ClCompile Include="..\hlsdk\common\cvardef.ixx" />
+    <ClCompile Include="..\hlsdk\common\demo_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\director_cmds.ixx" />
+    <ClCompile Include="..\hlsdk\common\dlight.ixx" />
+    <ClCompile Include="..\hlsdk\common\dll_state.ixx" />
+    <ClCompile Include="..\hlsdk\common\engine_launcher_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\entity_state.ixx" />
+    <ClCompile Include="..\hlsdk\common\entity_types.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_args.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_flags.ixx" />
+    <ClCompile Include="..\hlsdk\common\exefuncs.ixx" />
+    <ClCompile Include="..\hlsdk\common\hltv.ixx" />
+    <ClCompile Include="..\hlsdk\common\in_buttons.ixx" />
+    <ClCompile Include="..\hlsdk\common\ivoicetweak.ixx" />
+    <ClCompile Include="..\hlsdk\common\mathlib.ixx" />
+    <ClCompile Include="..\hlsdk\common\netadr.ixx" />
+    <ClCompile Include="..\hlsdk\common\net_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\particledef.ixx" />
+    <ClCompile Include="..\hlsdk\common\pmtrace.ixx" />
+    <ClCompile Include="..\hlsdk\common\qfont.ixx" />
+    <ClCompile Include="..\hlsdk\common\ref_params.ixx" />
+    <ClCompile Include="..\hlsdk\common\r_efx.ixx" />
+    <ClCompile Include="..\hlsdk\common\r_studioint.ixx" />
+    <ClCompile Include="..\hlsdk\common\screenfade.ixx" />
+    <ClCompile Include="..\hlsdk\common\studio_event.ixx" />
+    <ClCompile Include="..\hlsdk\common\triangleapi.ixx" />
+    <ClCompile Include="..\hlsdk\common\usercmd.ixx" />
+    <ClCompile Include="..\hlsdk\common\weaponinfo.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\cdll_dll.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\extdll.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\util.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\vector.ixx" />
+    <ClCompile Include="..\hlsdk\engine\archtypes.ixx" />
+    <ClCompile Include="..\hlsdk\engine\cdll_int.ixx" />
+    <ClCompile Include="..\hlsdk\engine\custom.ixx" />
+    <ClCompile Include="..\hlsdk\engine\customentity.ixx" />
+    <ClCompile Include="..\hlsdk\engine\edict.ixx" />
+    <ClCompile Include="..\hlsdk\engine\eiface.ixx" />
+    <ClCompile Include="..\hlsdk\engine\keydefs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\progdefs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\progs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\Sequence.ixx" />
+    <ClCompile Include="..\hlsdk\engine\shake.ixx" />
+    <ClCompile Include="..\hlsdk\engine\studio.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_defs.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_info.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_materials.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_movevars.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_shared.ixx" />
+    <ClCompile Include="..\metamod\dllapi.ixx" />
+    <ClCompile Include="..\metamod\engine_api.ixx" />
+    <ClCompile Include="..\metamod\meta_api.ixx" />
+    <ClCompile Include="..\metamod\mutil.ixx" />
+    <ClCompile Include="..\metamod\plinfo.ixx" />
     <ClCompile Include="dllapi.cpp" />
     <ClCompile Include="engine_api.cpp" />
     <ClCompile Include="h_export.cpp" />
@@ -104,11 +167,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,11 +187,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,11 +207,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,11 +227,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

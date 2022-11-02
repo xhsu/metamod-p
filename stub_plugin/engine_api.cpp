@@ -32,237 +32,237 @@
  *
  */
 
-#include <extdll.h>
+#include <string.h>
 
-#include <meta_api.h>
+import eiface;
 
-enginefuncs_t meta_engfuncs = 
+inline enginefuncs_t meta_engfuncs = 
 {
-	NULL,						// pfnPrecacheModel()
-	NULL,						// pfnPrecacheSound()
-	NULL,						// pfnSetModel()
-	NULL,						// pfnModelIndex()
-	NULL,						// pfnModelFrames()
+	nullptr,						// pfnPrecacheModel()
+	nullptr,						// pfnPrecacheSound()
+	nullptr,						// pfnSetModel()
+	nullptr,						// pfnModelIndex()
+	nullptr,						// pfnModelFrames()
 
-	NULL,						// pfnSetSize()
-	NULL,						// pfnChangeLevel()
-	NULL,						// pfnGetSpawnParms()
-	NULL,						// pfnSaveSpawnParms()
+	nullptr,						// pfnSetSize()
+	nullptr,						// pfnChangeLevel()
+	nullptr,						// pfnGetSpawnParms()
+	nullptr,						// pfnSaveSpawnParms()
 
-	NULL,						// pfnVecToYaw()
-	NULL,						// pfnVecToAngles()
-	NULL,						// pfnMoveToOrigin()
-	NULL,						// pfnChangeYaw()
-	NULL,						// pfnChangePitch()
+	nullptr,						// pfnVecToYaw()
+	nullptr,						// pfnVecToAngles()
+	nullptr,						// pfnMoveToOrigin()
+	nullptr,						// pfnChangeYaw()
+	nullptr,						// pfnChangePitch()
 
-	NULL,						// pfnFindEntityByString()
-	NULL,						// pfnGetEntityIllum()
-	NULL,						// pfnFindEntityInSphere()
-	NULL,						// pfnFindClientInPVS()
-	NULL,						// pfnEntitiesInPVS()
+	nullptr,						// pfnFindEntityByString()
+	nullptr,						// pfnGetEntityIllum()
+	nullptr,						// pfnFindEntityInSphere()
+	nullptr,						// pfnFindClientInPVS()
+	nullptr,						// pfnEntitiesInPVS()
 
-	NULL,						// pfnMakeVectors()
-	NULL,						// pfnAngleVectors()
+	nullptr,						// pfnMakeVectors()
+	nullptr,						// pfnAngleVectors()
 
-	NULL,						// pfnCreateEntity()
-	NULL,						// pfnRemoveEntity()
-	NULL,						// pfnCreateNamedEntity()
+	nullptr,						// pfnCreateEntity()
+	nullptr,						// pfnRemoveEntity()
+	nullptr,						// pfnCreateNamedEntity()
 
-	NULL,						// pfnMakeStatic()
-	NULL,						// pfnEntIsOnFloor()
-	NULL,						// pfnDropToFloor()
+	nullptr,						// pfnMakeStatic()
+	nullptr,						// pfnEntIsOnFloor()
+	nullptr,						// pfnDropToFloor()
 
-	NULL,						// pfnWalkMove()
-	NULL,						// pfnSetOrigin()
+	nullptr,						// pfnWalkMove()
+	nullptr,						// pfnSetOrigin()
 
-	NULL,						// pfnEmitSound()
-	NULL,						// pfnEmitAmbientSound()
+	nullptr,						// pfnEmitSound()
+	nullptr,						// pfnEmitAmbientSound()
 
-	NULL,						// pfnTraceLine()
-	NULL,						// pfnTraceToss()
-	NULL,						// pfnTraceMonsterHull()
-	NULL,						// pfnTraceHull()
-	NULL,						// pfnTraceModel()
-	NULL,						// pfnTraceTexture()
-	NULL,						// pfnTraceSphere()
-	NULL,						// pfnGetAimVector()
+	nullptr,						// pfnTraceLine()
+	nullptr,						// pfnTraceToss()
+	nullptr,						// pfnTraceMonsterHull()
+	nullptr,						// pfnTraceHull()
+	nullptr,						// pfnTraceModel()
+	nullptr,						// pfnTraceTexture()
+	nullptr,						// pfnTraceSphere()
+	nullptr,						// pfnGetAimVector()
 
-	NULL,						// pfnServerCommand()
-	NULL,						// pfnServerExecute()
-	NULL,						// pfnClientCommand()
+	nullptr,						// pfnServerCommand()
+	nullptr,						// pfnServerExecute()
+	nullptr,						// pfnClientCommand()
 
-	NULL,						// pfnParticleEffect()
-	NULL,						// pfnLightStyle()
-	NULL,						// pfnDecalIndex()
-	NULL,						// pfnPointContents()
+	nullptr,						// pfnParticleEffect()
+	nullptr,						// pfnLightStyle()
+	nullptr,						// pfnDecalIndex()
+	nullptr,						// pfnPointContents()
 
-	NULL,						// pfnMessageBegin()
-	NULL,						// pfnMessageEnd()
+	nullptr,						// pfnMessageBegin()
+	nullptr,						// pfnMessageEnd()
 
-	NULL,						// pfnWriteByte()
-	NULL,						// pfnWriteChar()
-	NULL,						// pfnWriteShort()
-	NULL,						// pfnWriteLong()
-	NULL,						// pfnWriteAngle()
-	NULL,						// pfnWriteCoord()
-	NULL,						// pfnWriteString()
-	NULL,						// pfnWriteEntity()
+	nullptr,						// pfnWriteByte()
+	nullptr,						// pfnWriteChar()
+	nullptr,						// pfnWriteShort()
+	nullptr,						// pfnWriteLong()
+	nullptr,						// pfnWriteAngle()
+	nullptr,						// pfnWriteCoord()
+	nullptr,						// pfnWriteString()
+	nullptr,						// pfnWriteEntity()
 
-	NULL,						// pfnCVarRegister()
-	NULL,						// pfnCVarGetFloat()
-	NULL,						// pfnCVarGetString()
-	NULL,						// pfnCVarSetFloat()
-	NULL,						// pfnCVarSetString()
+	nullptr,						// pfnCVarRegister()
+	nullptr,						// pfnCVarGetFloat()
+	nullptr,						// pfnCVarGetString()
+	nullptr,						// pfnCVarSetFloat()
+	nullptr,						// pfnCVarSetString()
 
-	NULL,						// pfnAlertMessage()
-	NULL,						// pfnEngineFprintf()
+	nullptr,						// pfnAlertMessage()
+	nullptr,						// pfnEngineFprintf()
 
-	NULL,						// pfnPvAllocEntPrivateData()
-	NULL,						// pfnPvEntPrivateData()
-	NULL,						// pfnFreeEntPrivateData()
+	nullptr,						// pfnPvAllocEntPrivateData()
+	nullptr,						// pfnPvEntPrivateData()
+	nullptr,						// pfnFreeEntPrivateData()
 
-	NULL,						// pfnSzFromIndex()
-	NULL,						// pfnAllocString()
+	nullptr,						// pfnSzFromIndex()
+	nullptr,						// pfnAllocString()
 
-	NULL, 						// pfnGetVarsOfEnt()
-	NULL,						// pfnPEntityOfEntOffset()
-	NULL,						// pfnEntOffsetOfPEntity()
-	NULL,						// pfnIndexOfEdict()
-	NULL,						// pfnPEntityOfEntIndex()
-	NULL,						// pfnFindEntityByVars()
-	NULL,						// pfnGetModelPtr()
+	nullptr, 						// pfnGetVarsOfEnt()
+	nullptr,						// pfnPEntityOfEntOffset()
+	nullptr,						// pfnEntOffsetOfPEntity()
+	nullptr,						// pfnIndexOfEdict()
+	nullptr,						// pfnPEntityOfEntIndex()
+	nullptr,						// pfnFindEntityByVars()
+	nullptr,						// pfnGetModelPtr()
 
-	NULL,						// pfnRegUserMsg()
+	nullptr,						// pfnRegUserMsg()
 
-	NULL,						// pfnAnimationAutomove()
-	NULL,						// pfnGetBonePosition()
+	nullptr,						// pfnAnimationAutomove()
+	nullptr,						// pfnGetBonePosition()
 
-	NULL,						// pfnFunctionFromName()
-	NULL,						// pfnNameForFunction()
+	nullptr,						// pfnFunctionFromName()
+	nullptr,						// pfnNameForFunction()
 
-	NULL,						// pfnClientPrintf()
-	NULL,						// pfnServerPrint()
+	nullptr,						// pfnClientPrintf()
+	nullptr,						// pfnServerPrint()
 
-	NULL,						// pfnCmd_Args()
-	NULL,						// pfnCmd_Argv()
-	NULL,						// pfnCmd_Argc()
+	nullptr,						// pfnCmd_Args()
+	nullptr,						// pfnCmd_Argv()
+	nullptr,						// pfnCmd_Argc()
 
-	NULL,						// pfnGetAttachment()
+	nullptr,						// pfnGetAttachment()
 
-	NULL,						// pfnCRC32_Init()
-	NULL,						// pfnCRC32_ProcessBuffer()
-	NULL,						// pfnCRC32_ProcessByte()
-	NULL,						// pfnCRC32_Final()
+	nullptr,						// pfnCRC32_Init()
+	nullptr,						// pfnCRC32_ProcessBuffer()
+	nullptr,						// pfnCRC32_ProcessByte()
+	nullptr,						// pfnCRC32_Final()
 
-	NULL,						// pfnRandomLong()
-	NULL,						// pfnRandomFloat()
+	nullptr,						// pfnRandomLong()
+	nullptr,						// pfnRandomFloat()
 
-	NULL,						// pfnSetView()
-	NULL,						// pfnTime()
-	NULL,						// pfnCrosshairAngle()
+	nullptr,						// pfnSetView()
+	nullptr,						// pfnTime()
+	nullptr,						// pfnCrosshairAngle()
 
-	NULL,						// pfnLoadFileForMe()
-	NULL,						// pfnFreeFile()
+	nullptr,						// pfnLoadFileForMe()
+	nullptr,						// pfnFreeFile()
 
-	NULL,						// pfnEndSection()
-	NULL,						// pfnCompareFileTime()
-	NULL,						// pfnGetGameDir()
-	NULL,						// pfnCvar_RegisterVariable()
-	NULL,						// pfnFadeClientVolume()
-	NULL,						// pfnSetClientMaxspeed()
-	NULL,						// pfnCreateFakeClient()
-	NULL,						// pfnRunPlayerMove()
-	NULL,						// pfnNumberOfEntities()
+	nullptr,						// pfnEndSection()
+	nullptr,						// pfnCompareFileTime()
+	nullptr,						// pfnGetGameDir()
+	nullptr,						// pfnCvar_RegisterVariable()
+	nullptr,						// pfnFadeClientVolume()
+	nullptr,						// pfnSetClientMaxspeed()
+	nullptr,						// pfnCreateFakeClient()
+	nullptr,						// pfnRunPlayerMove()
+	nullptr,						// pfnNumberOfEntities()
 
-	NULL,						// pfnGetInfoKeyBuffer()
-	NULL,						// pfnInfoKeyValue()
-	NULL,						// pfnSetKeyValue()
-	NULL,						// pfnSetClientKeyValue()
+	nullptr,						// pfnGetInfoKeyBuffer()
+	nullptr,						// pfnInfoKeyValue()
+	nullptr,						// pfnSetKeyValue()
+	nullptr,						// pfnSetClientKeyValue()
 
-	NULL,						// pfnIsMapValid()
-	NULL,						// pfnStaticDecal()
-	NULL,						// pfnPrecacheGeneric()
-	NULL, 						// pfnGetPlayerUserId()
-	NULL,						// pfnBuildSoundMsg()
-	NULL,						// pfnIsDedicatedServer()
-	NULL,						// pfnCVarGetPointer()
-	NULL,						// pfnGetPlayerWONId()
+	nullptr,						// pfnIsMapValid()
+	nullptr,						// pfnStaticDecal()
+	nullptr,						// pfnPrecacheGeneric()
+	nullptr, 						// pfnGetPlayerUserId()
+	nullptr,						// pfnBuildSoundMsg()
+	nullptr,						// pfnIsDedicatedServer()
+	nullptr,						// pfnCVarGetPointer()
+	nullptr,						// pfnGetPlayerWONId()
 
-	NULL,						// pfnInfo_RemoveKey()
-	NULL,						// pfnGetPhysicsKeyValue()
-	NULL,						// pfnSetPhysicsKeyValue()
-	NULL,						// pfnGetPhysicsInfoString()
-	NULL,						// pfnPrecacheEvent()
-	NULL,						// pfnPlaybackEvent()
+	nullptr,						// pfnInfo_RemoveKey()
+	nullptr,						// pfnGetPhysicsKeyValue()
+	nullptr,						// pfnSetPhysicsKeyValue()
+	nullptr,						// pfnGetPhysicsInfoString()
+	nullptr,						// pfnPrecacheEvent()
+	nullptr,						// pfnPlaybackEvent()
 
-	NULL,						// pfnSetFatPVS()
-	NULL,						// pfnSetFatPAS()
+	nullptr,						// pfnSetFatPVS()
+	nullptr,						// pfnSetFatPAS()
 
-	NULL,						// pfnCheckVisibility()
+	nullptr,						// pfnCheckVisibility()
 
-	NULL,						// pfnDeltaSetField()
-	NULL,						// pfnDeltaUnsetField()
-	NULL,						// pfnDeltaAddEncoder()
-	NULL,						// pfnGetCurrentPlayer()
-	NULL,						// pfnCanSkipPlayer()
-	NULL,						// pfnDeltaFindField()
-	NULL,						// pfnDeltaSetFieldByIndex()
-	NULL,						// pfnDeltaUnsetFieldByIndex()
+	nullptr,						// pfnDeltaSetField()
+	nullptr,						// pfnDeltaUnsetField()
+	nullptr,						// pfnDeltaAddEncoder()
+	nullptr,						// pfnGetCurrentPlayer()
+	nullptr,						// pfnCanSkipPlayer()
+	nullptr,						// pfnDeltaFindField()
+	nullptr,						// pfnDeltaSetFieldByIndex()
+	nullptr,						// pfnDeltaUnsetFieldByIndex()
 
-	NULL,						// pfnSetGroupMask()
+	nullptr,						// pfnSetGroupMask()
 
-	NULL,						// pfnCreateInstancedBaseline()
-	NULL,						// pfnCvar_DirectSet()
+	nullptr,						// pfnCreateInstancedBaseline()
+	nullptr,						// pfnCvar_DirectSet()
 
-	NULL,						// pfnForceUnmodified()
+	nullptr,						// pfnForceUnmodified()
 
-	NULL,						// pfnGetPlayerStats()
+	nullptr,						// pfnGetPlayerStats()
 
-	NULL,						// pfnAddServerCommand()
+	nullptr,						// pfnAddServerCommand()
 
 	// Added in SDK 2.2:
-	NULL,						// pfnVoice_GetClientListening()
-	NULL,						// pfnVoice_SetClientListening()
+	nullptr,						// pfnVoice_GetClientListening()
+	nullptr,						// pfnVoice_SetClientListening()
 
 	// Added for HL 1109 (no SDK update):
-	NULL,						// pfnGetPlayerAuthId()
+	nullptr,						// pfnGetPlayerAuthId()
 
 	// Added 2003/11/10 (no SDK update):
-	NULL,						// pfnSequenceGet()
-	NULL,						// pfnSequencePickSentence()
-	NULL,						// pfnGetFileSize()
-	NULL,						// pfnGetApproxWavePlayLen()
-	NULL,						// pfnIsCareerMatch()
-	NULL,						// pfnGetLocalizedStringLength()
-	NULL,						// pfnRegisterTutorMessageShown()
-	NULL,						// pfnGetTimesTutorMessageShown()
-	NULL,						// pfnProcessTutorMessageDecayBuffer()
-	NULL,						// pfnConstructTutorMessageDecayBuffer()
-	NULL,						// pfnResetTutorMessageDecayData()
+	nullptr,						// pfnSequenceGet()
+	nullptr,						// pfnSequencePickSentence()
+	nullptr,						// pfnGetFileSize()
+	nullptr,						// pfnGetApproxWavePlayLen()
+	nullptr,						// pfnIsCareerMatch()
+	nullptr,						// pfnGetLocalizedStringLength()
+	nullptr,						// pfnRegisterTutorMessageShown()
+	nullptr,						// pfnGetTimesTutorMessageShown()
+	nullptr,						// pfnProcessTutorMessageDecayBuffer()
+	nullptr,						// pfnConstructTutorMessageDecayBuffer()
+	nullptr,						// pfnResetTutorMessageDecayData()
 
 	// Added Added 2005-08-11 (no SDK update)
-	NULL,						// pfnQueryClientCvarValue()
+	nullptr,						// pfnQueryClientCvarValue()
 	// Added Added 2005-11-22 (no SDK update)
-	NULL,						// pfnQueryClientCvarValue2()
+	nullptr,						// pfnQueryClientCvarValue2()
 	// Added 2009-06-17 (no SDK update)
-	NULL,						// pfnEngCheckParm()
+	nullptr,						// pfnEngCheckParm()
 };
 
-C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion) noexcept
+int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion) noexcept
 {
 	if (!pengfuncsFromEngine)
 	{
 		//UTIL_LogPrintf("GetEngineFunctions called with null pengfuncsFromEngine");
-		return FALSE;
+		return false;
 	}
-	else if (*interfaceVersion != ENGINE_INTERFACE_VERSION)
+	else if (*interfaceVersion != 138)
 	{
 		//UTIL_LogPrintf("GetEngineFunctions version mismatch; requested=%d ours=%d", *interfaceVersion, ENGINE_INTERFACE_VERSION);
 		// Tell metamod what version we had, so it can figure out who is out of date.
-		*interfaceVersion = ENGINE_INTERFACE_VERSION;
-		return FALSE;
+		*interfaceVersion = 138;
+		return false;
 	}
 
 	memcpy(pengfuncsFromEngine, &meta_engfuncs, sizeof(enginefuncs_t));
-	return TRUE;
+	return true;
 }

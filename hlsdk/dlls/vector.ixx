@@ -12,8 +12,8 @@ export using vec_t = float;
 //=========================================================
 export struct Vector2D
 {
-	inline Vector2D(void) noexcept : x(0.0), y(0.0) { }
-	inline Vector2D(float X, float Y) noexcept : x(0.0), y(0.0) { x = X; y = Y; }
+	constexpr inline Vector2D(void) noexcept : x(0.0), y(0.0) { }
+	constexpr inline Vector2D(float X, float Y) noexcept : x(0.0), y(0.0) { x = X; y = Y; }
 	inline Vector2D operator+(const Vector2D &v) const noexcept { return Vector2D(x + v.x, y + v.y); }
 	inline Vector2D operator-(const Vector2D &v) const noexcept { return Vector2D(x - v.x, y - v.y); }
 	inline Vector2D operator*(float fl) const noexcept { return Vector2D(x * fl, y * fl); }
@@ -49,13 +49,13 @@ export Vector2D operator*(float fl, const Vector2D &v) noexcept { return v * fl;
 export struct Vector                                            // same data-layout as engine's vec3_t,
 {                                                               //              which is a vec_t[3]
 	// Construction/destruction
-	inline Vector(void) noexcept : x(0.0), y(0.0), z(0.0) { }
-	inline Vector(float X, float Y, float Z) noexcept : x(0.0), y(0.0), z(0.0) { x = X; y = Y; z = Z; }
+	constexpr inline Vector(void) noexcept : x(0.0), y(0.0), z(0.0) { }
+	constexpr inline Vector(float X, float Y, float Z) noexcept : x(0.0), y(0.0), z(0.0) { x = X; y = Y; z = Z; }
 	//inline Vector(double X, double Y, double Z)                   { x = (float)X; y = (float)Y; z = (float)Z;     }
 	//inline Vector(int X, int Y, int Z)                            { x = (float)X; y = (float)Y; z = (float)Z;     }
-	inline Vector(const Vector &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; z = v.z; }
-	inline Vector(float rgfl[3]) noexcept : x(0.0), y(0.0), z(0.0) { x = rgfl[0]; y = rgfl[1]; z = rgfl[2]; }
-	inline Vector(const Vector2D &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; }
+	constexpr inline Vector(const Vector &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; z = v.z; }
+	constexpr inline Vector(const float (&rgfl)[3]) noexcept : x(0.0), y(0.0), z(0.0) { x = rgfl[0]; y = rgfl[1]; z = rgfl[2]; }
+	constexpr inline Vector(const Vector2D &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; }
 
 	// Operators
 	inline Vector operator-(void) const noexcept { return Vector(-x, -y, -z); }

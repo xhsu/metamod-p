@@ -32,89 +32,89 @@
  *
  */
 
-#include <extdll.h>
+#include <string.h>
 
-#include <dllapi.h>
-#include <meta_api.h>
+import eiface;
 
-static DLL_FUNCTIONS gFunctionTable = 
+inline DLL_FUNCTIONS gFunctionTable =
 {
-	NULL,					// pfnGameInit
-	NULL,					// pfnSpawn
-	NULL,					// pfnThink
-	NULL,					// pfnUse
-	NULL,					// pfnTouch
-	NULL,					// pfnBlocked
-	NULL,					// pfnKeyValue
-	NULL,					// pfnSave
-	NULL,					// pfnRestore
-	NULL,					// pfnSetAbsBox
+	.pfnGameInit = nullptr,
+	.pfnSpawn = nullptr,
+	.pfnThink = nullptr,
+	.pfnUse = nullptr,
+	.pfnTouch = nullptr,
+	.pfnBlocked = nullptr,
+	.pfnKeyValue = nullptr,
+	.pfnSave = nullptr,
+	.pfnRestore = nullptr,
+	.pfnSetAbsBox = nullptr,
 
-	NULL,					// pfnSaveWriteFields
-	NULL,					// pfnSaveReadFields
+	.pfnSaveWriteFields = nullptr,
+	.pfnSaveReadFields = nullptr,
 
-	NULL,					// pfnSaveGlobalState
-	NULL,					// pfnRestoreGlobalState
-	NULL,					// pfnResetGlobalState
+	.pfnSaveGlobalState = nullptr,
+	.pfnRestoreGlobalState = nullptr,
+	.pfnResetGlobalState = nullptr,
 
-	NULL,					// pfnClientConnect
-	NULL,					// pfnClientDisconnect
-	NULL,					// pfnClientKill
-	NULL,					// pfnClientPutInServer
-	NULL,					// pfnClientCommand
-	NULL,					// pfnClientUserInfoChanged
-	NULL,					// pfnServerActivate
-	NULL,					// pfnServerDeactivate
+	.pfnClientConnect = nullptr,
+	.pfnClientDisconnect = nullptr,
+	.pfnClientKill = nullptr,
+	.pfnClientPutInServer = nullptr,
+	.pfnClientCommand = nullptr,
+	.pfnClientUserInfoChanged = nullptr,
+	.pfnServerActivate = nullptr,
+	.pfnServerDeactivate = nullptr,
 
-	NULL,					// pfnPlayerPreThink
-	NULL,					// pfnPlayerPostThink
+	.pfnPlayerPreThink = nullptr,
+	.pfnPlayerPostThink = nullptr,
 
-	NULL,					// pfnStartFrame
-	NULL,					// pfnParmsNewLevel
-	NULL,					// pfnParmsChangeLevel
+	.pfnStartFrame = nullptr,
+	.pfnParmsNewLevel = nullptr,
+	.pfnParmsChangeLevel = nullptr,
 
-	NULL,					// pfnGetGameDescription
-	NULL,					// pfnPlayerCustomization
+	.pfnGetGameDescription = nullptr,
+	.pfnPlayerCustomization = nullptr,
 
-	NULL,					// pfnSpectatorConnect
-	NULL,					// pfnSpectatorDisconnect
-	NULL,					// pfnSpectatorThink
-	
-	NULL,					// pfnSys_Error
+	.pfnSpectatorConnect = nullptr,
+	.pfnSpectatorDisconnect = nullptr,
+	.pfnSpectatorThink = nullptr,
 
-	NULL,					// pfnPM_Move
-	NULL,					// pfnPM_Init
-	NULL,					// pfnPM_FindTextureType
-	
-	NULL,					// pfnSetupVisibility
-	NULL,					// pfnUpdateClientData
-	NULL,					// pfnAddToFullPack
-	NULL,					// pfnCreateBaseline
-	NULL,					// pfnRegisterEncoders
-	NULL,					// pfnGetWeaponData
-	NULL,					// pfnCmdStart
-	NULL,					// pfnCmdEnd
-	NULL,					// pfnConnectionlessPacket
-	NULL,					// pfnGetHullBounds
-	NULL,					// pfnCreateInstancedBaselines
-	NULL,					// pfnInconsistentFile
-	NULL,					// pfnAllowLagCompensation
+	.pfnSys_Error = nullptr,
+
+	.pfnPM_Move = nullptr,
+	.pfnPM_Init = nullptr,
+	.pfnPM_FindTextureType = nullptr,
+
+	.pfnSetupVisibility = nullptr,
+	.pfnUpdateClientData = nullptr,
+	.pfnAddToFullPack = nullptr,
+	.pfnCreateBaseline = nullptr,
+	.pfnRegisterEncoders = nullptr,
+	.pfnGetWeaponData = nullptr,
+	.pfnCmdStart = nullptr,
+	.pfnCmdEnd = nullptr,
+	.pfnConnectionlessPacket = nullptr,
+	.pfnGetHullBounds = nullptr,
+	.pfnCreateInstancedBaselines = nullptr,
+	.pfnInconsistentFile = nullptr,
+	.pfnAllowLagCompensation = nullptr,
 };
 
-C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion) noexcept
+int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion) noexcept
 {
 	if (!pFunctionTable)
 	{
 		//UTIL_LogPrintf("GetEntityAPI2 called with null pFunctionTable");
-		return FALSE;
+		return false;
 	}
 	else if (*interfaceVersion != INTERFACE_VERSION)
 	{
 		//UTIL_LogPrintf("GetEntityAPI2 version mismatch; requested=%d ours=%d", *interfaceVersion, INTERFACE_VERSION);
 		//! Tell metamod what version we had, so it can figure out who is out of date.
 		*interfaceVersion = INTERFACE_VERSION;
-		return FALSE;
+		return false;
 	}
+
 	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-	return TRUE;
+	return true;
 }

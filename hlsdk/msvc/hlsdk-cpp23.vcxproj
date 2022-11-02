@@ -70,6 +70,26 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Configuration)</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -135,6 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\metamod\dllapi.ixx" />
+    <ClCompile Include="..\..\metamod\engine_api.ixx" />
+    <ClCompile Include="..\..\metamod\meta_api.ixx" />
+    <ClCompile Include="..\..\metamod\mutil.ixx" />
+    <ClCompile Include="..\..\metamod\plinfo.ixx" />
+    <ClCompile Include="..\cl_dll\hud_iface.ixx" />
+    <ClCompile Include="..\cl_dll\wrect.ixx" />
     <ClCompile Include="..\common\beamdef.ixx" />
     <ClCompile Include="..\common\cl_entity.ixx" />
     <ClCompile Include="..\common\com_model.ixx" />
@@ -172,19 +199,37 @@
     <ClCompile Include="..\common\weaponinfo.ixx" />
     <ClCompile Include="..\dlls\cdll_dll.ixx" />
     <ClCompile Include="..\dlls\extdll.ixx" />
+    <ClCompile Include="..\dlls\util.ixx" />
     <ClCompile Include="..\dlls\vector.ixx" />
+    <ClCompile Include="..\engine\archtypes.ixx" />
+    <ClCompile Include="..\engine\cdll_int.ixx" />
     <ClCompile Include="..\engine\custom.ixx" />
+    <ClCompile Include="..\engine\customentity.ixx" />
     <ClCompile Include="..\engine\edict.ixx" />
     <ClCompile Include="..\engine\eiface.ixx" />
+    <ClCompile Include="..\engine\keydefs.ixx" />
     <ClCompile Include="..\engine\progdefs.ixx" />
     <ClCompile Include="..\engine\progs.ixx" />
     <ClCompile Include="..\engine\Sequence.ixx" />
+    <ClCompile Include="..\engine\shake.ixx" />
+    <ClCompile Include="..\engine\studio.ixx" />
     <ClCompile Include="..\pm_shared\pm_defs.ixx" />
     <ClCompile Include="..\pm_shared\pm_info.ixx" />
+    <ClCompile Include="..\pm_shared\pm_materials.ixx" />
     <ClCompile Include="..\pm_shared\pm_movevars.ixx" />
+    <ClCompile Include="..\pm_shared\pm_shared.ixx" />
     <ClCompile Include="hlsdk-cpp23.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\metamod\comp_dep.h" />
+    <ClInclude Include="..\..\metamod\dllapi.h" />
+    <ClInclude Include="..\..\metamod\engine_api.h" />
+    <ClInclude Include="..\..\metamod\meta_api.h" />
+    <ClInclude Include="..\..\metamod\mutil.h" />
+    <ClInclude Include="..\..\metamod\osdep.h" />
+    <ClInclude Include="..\..\metamod\plinfo.h" />
+    <ClInclude Include="..\cl_dll\hud_iface.h" />
+    <ClInclude Include="..\cl_dll\wrect.h" />
     <ClInclude Include="..\common\beamdef.h" />
     <ClInclude Include="..\common\cl_entity.h" />
     <ClInclude Include="..\common\com_model.h" />

@@ -4,23 +4,27 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\czero.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\hl.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(OutputPath)..\..\..\..\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-game czero</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\czero.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\hl.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(OutputPath)..\..\..\..\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-game czero</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\czero.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\hl.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(OutputPath)..\..\..\..\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-game czero</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\czero.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(OutputPath)..\..\..\..\hl.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(OutputPath)..\..\..\..\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-game czero</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

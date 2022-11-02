@@ -12,6 +12,21 @@ export import netadr;
 export import pm_defs;
 export import progdefs;
 
+#ifdef HLDEMO_BUILD
+export inline constexpr auto INTERFACE_VERSION = 001;
+#else  // !HLDEMO_BUILD, i.e., regular version of HL
+export inline constexpr auto INTERFACE_VERSION = 140;
+#endif // !HLDEMO_BUILD
+
+//
+// Defines entity interface between engine and DLLs.
+// This header file included by engine files and DLL files.
+//
+// Before including this header, DLLs must:
+//		include progdefs.h
+// This is conveniently done for them in extdll.h
+//
+
 export enum ALERT_TYPE
 {
 	at_notice,
