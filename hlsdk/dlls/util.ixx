@@ -1,8 +1,16 @@
 export module util;
 
+import <cstddef>;
+import <cstdint>;
 import <cstring>;
 
+import <concepts>;
+
+import <experimental/generator>;
+
 export import const_;
+export import eiface;
+export import progdefs;
 
 //
 // Misc utility code
@@ -11,19 +19,25 @@ export inline constexpr auto SVC_DIRECTOR = 51;
 
 //inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent);  // implementation later in this file
 
-//extern globalvars_t *gpGlobals;
+export inline enginefuncs_t g_engfuncs = {};
+export inline globalvars_t *gpGlobals = nullptr;
 
 // Use this instead of ALLOC_STRING on constant strings
-//#define STRING(offset)          ((const char *)(gpGlobals->pStringBase + (int)offset))
-//#define MAKE_STRING(str)        ((int)str - (int)STRING(0))
-//export inline const char *STRING(long offset) { return (const char *)(gpGlobals->pStringBase + (long)offset); }
-//export inline long MAKE_STRING(const char *str) { return (long)str - (long)STRING(0); }
+export inline auto STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
+export inline auto MAKE_STRING(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
 
-//inline edict_t *FIND_ENTITY_BY_CLASSNAME(edict_t *entStart, const char *pszName)
-//{
-//	return FIND_ENTITY_BY_STRING(entStart, "classname", pszName);
-//}
-//
+export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept
+{
+	for (auto pEntity = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
+		pEntity != nullptr;
+		pEntity = g_engfuncs.pfnFindEntityByString(pEntity, "classname", pszName))
+	{
+		co_yield pEntity;
+	}
+
+	co_return;
+}
+
 //inline edict_t *FIND_ENTITY_BY_TARGETNAME(edict_t *entStart, const char *pszName)
 //{
 //	return FIND_ENTITY_BY_STRING(entStart, "targetname", pszName);
@@ -85,44 +99,48 @@ export inline constexpr auto SVC_DIRECTOR = 51;
 //
 // Conversion among the three types of "entity", including identity-conversions.
 //
-//#ifdef DEBUG
-//extern edict_t *DBG_EntOfVars(const entvars_t *pev);
-//inline edict_t *ENT(const entvars_t *pev) { return DBG_EntOfVars(pev); }
-//#else
-//inline edict_t *ENT(const entvars_t *pev) { return pev->pContainingEntity; }
-//#endif
-//inline edict_t *ENT(edict_t *pent) { return pent; }
-//inline edict_t *ENT(EOFFSET eoffset) { return (*g_engfuncs.pfnPEntityOfEntOffset)(eoffset); }
-//inline EOFFSET OFFSET(EOFFSET eoffset) { return eoffset; }
-//inline EOFFSET OFFSET(const edict_t *pent)
-//{
-//#ifdef _DEBUG
-//	if (!pent)
-//		ALERT(at_error, "Bad ent in OFFSET()\n");
-//#endif
-//	return (*g_engfuncs.pfnEntOffsetOfPEntity)(pent);
-//}
-//inline EOFFSET OFFSET(entvars_t *pev)
-//{
-//#ifdef _DEBUG
-//	if (!pev)
-//		ALERT(at_error, "Bad pev in OFFSET()\n");
-//#endif
-//	return OFFSET(ENT(pev));
-//}
-//inline entvars_t *VARS(entvars_t *pev) { return pev; }
-//
-//inline entvars_t *VARS(edict_t *pent)
-//{
-//	if (!pent)
-//		return NULL;
-//
-//	return &pent->v;
-//}
-//
-//inline entvars_t *VARS(EOFFSET eoffset) { return VARS(ENT(eoffset)); }
-//inline int        ENTINDEX(edict_t *pEdict) { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
-//inline edict_t *INDEXENT(int iEdictNum) { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
+
+export template <typename new_t, typename org_t>
+[[nodiscard]] inline std::remove_cvref_t<new_t> ent_cast(org_t const &ent) noexcept
+{
+	if constexpr (std::integral<org_t>)
+	{
+		if constexpr (std::integral<new_t>)	// eoffset -> eoffset
+			return ent;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// eoffset -> entvars_t*
+			return &g_engfuncs.pfnPEntityOfEntOffset(ent)->v;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// eoffset -> edict_t*
+			return g_engfuncs.pfnPEntityOfEntOffset(ent);
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
+	{
+		if constexpr (std::integral<new_t>)	// entvars_t* -> eoffset
+			return g_engfuncs.pfnEntOffsetOfPEntity(ent->pContainingEntity);
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entvars_t* -> entvars_t*
+			return ent;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entvars_t* -> edict_t*
+			return ent->pContainingEntity;
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
+	{
+		if constexpr (std::integral<new_t>)	// edict_t* -> eoffset
+			return g_engfuncs.pfnEntOffsetOfPEntity(ent);
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// edict_t* -> entvars_t*
+			return &ent->v;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// edict_t* -> edict_t*
+			return ent;
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+}
+
+export inline auto ENTINDEX(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
+export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
+
 //inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent) {
 //	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ENT(ent));
 //}
