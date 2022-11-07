@@ -86,8 +86,8 @@ export struct CDStatus
 // Engine hands this to DLLs for functionality callbacks
 export struct enginefuncs_s
 {
-	int			(*pfnPrecacheModel)			(char *s);
-	int			(*pfnPrecacheSound)			(char *s);
+	int			(*pfnPrecacheModel)			(const char *s);
+	int			(*pfnPrecacheSound)			(const char *s);
 	void		(*pfnSetModel)				(edict_t *e, const char *m);
 	int			(*pfnModelIndex)			(const char *m);
 	int			(*pfnModelFrames)			(int modelIndex);
