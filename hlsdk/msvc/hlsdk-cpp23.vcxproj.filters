@@ -217,6 +217,9 @@
     <ClCompile Include="..\dlls\util.ixx">
       <Filter>dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\activity.ixx">
+      <Filter>dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\beamdef.h">
@@ -428,6 +431,12 @@
     </ClInclude>
     <ClInclude Include="..\..\metamod\engine_api.h">
       <Filter>metamod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\activity.h">
+      <Filter>dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\activitymap.h">
+      <Filter>dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

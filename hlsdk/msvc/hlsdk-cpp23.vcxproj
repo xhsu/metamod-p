@@ -197,6 +197,7 @@
     <ClCompile Include="..\common\triangleapi.ixx" />
     <ClCompile Include="..\common\usercmd.ixx" />
     <ClCompile Include="..\common\weaponinfo.ixx" />
+    <ClCompile Include="..\dlls\activity.ixx" />
     <ClCompile Include="..\dlls\cdll_dll.ixx" />
     <ClCompile Include="..\dlls\extdll.ixx" />
     <ClCompile Include="..\dlls\util.ixx" />
@@ -267,6 +268,8 @@
     <ClInclude Include="..\common\triangleapi.h" />
     <ClInclude Include="..\common\usercmd.h" />
     <ClInclude Include="..\common\weaponinfo.h" />
+    <ClInclude Include="..\dlls\activity.h" />
+    <ClInclude Include="..\dlls\activitymap.h" />
     <ClInclude Include="..\dlls\cdll_dll.h" />
     <ClInclude Include="..\dlls\enginecallback.h" />
     <ClInclude Include="..\dlls\extdll.h" />
