@@ -230,11 +230,11 @@ export inline bool FStrEq(const char *psz1, const char *psz2) noexcept { return 
 //extern void                     UTIL_ShowMessageAll(const char *pString);
 //extern void                     UTIL_ScreenFadeAll(const Vector &color, float fadeTime, float holdTime, int alpha, int flags);
 //
-//typedef enum { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 } IGNORE_MONSTERS;
-//typedef enum { ignore_glass = 1, dont_ignore_glass = 0 } IGNORE_GLASS;
+export enum IGNORE_MONSTERS { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 };
+export enum IGNORE_GLASS { ignore_glass = 1, dont_ignore_glass = 0 };
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
-//typedef enum { point_hull = 0, human_hull = 1, large_hull = 2, head_hull = 3 } hull_enum;
+export enum hull_enum { point_hull = 0, human_hull = 1, large_hull = 2, head_hull = 3 };
 //extern void                     UTIL_TraceHull(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
 //extern TraceResult      UTIL_GetGlobalTrace(void);
 //extern void                     UTIL_TraceModel(const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr);

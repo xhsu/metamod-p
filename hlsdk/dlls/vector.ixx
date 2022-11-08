@@ -95,6 +95,9 @@ export struct Vector                                            // same data-lay
 	}
 	inline float Length2D(void) const noexcept { return (float)sqrt(x * x + y * y); }
 
+	// Static Methods
+	static inline consteval Vector Zero(void) noexcept { return Vector(0, 0, 0); }
+
 	// Members
 	vec_t x, y, z;
 };

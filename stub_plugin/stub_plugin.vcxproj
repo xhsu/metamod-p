@@ -48,6 +48,7 @@
     <ClCompile Include="..\hlsdk\common\triangleapi.ixx" />
     <ClCompile Include="..\hlsdk\common\usercmd.ixx" />
     <ClCompile Include="..\hlsdk\common\weaponinfo.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\activity.ixx" />
     <ClCompile Include="..\hlsdk\dlls\cdll_dll.ixx" />
     <ClCompile Include="..\hlsdk\dlls\extdll.ixx" />
     <ClCompile Include="..\hlsdk\dlls\util.ixx" />

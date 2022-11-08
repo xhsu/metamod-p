@@ -244,7 +244,7 @@ export struct enginefuncs_s
 	void		(*pfnSetGroupMask)			(int mask, int op);
 
 	int			(*pfnCreateInstancedBaseline) (int classname, entity_state_t *baseline);
-	void		(*pfnCvar_DirectSet)		(cvar_t *var, char *value);
+	void		(*pfnCvar_DirectSet)		(cvar_t *var, const char *value);
 
 	// Forces the client and server to be running with the same version of the specified file
 	//  ( e.g., a player model ).
