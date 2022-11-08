@@ -23,8 +23,8 @@ export inline enginefuncs_t g_engfuncs = {};
 export inline globalvars_t *gpGlobals = nullptr;
 
 // Use this instead of ALLOC_STRING on constant strings
-export inline auto STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
-export inline auto MAKE_STRING(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
+export inline const char *STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
+export inline std::ptrdiff_t MAKE_STRING(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
 
 export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept
 {
@@ -48,6 +48,18 @@ export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(c
 //{
 //	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
 //}
+
+export inline std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector& vecOrigin, float const flRadius) noexcept
+{
+	for (auto pEntity = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
+		pEntity != nullptr;
+		pEntity = g_engfuncs.pfnFindEntityInSphere(pEntity, vecOrigin, flRadius))
+	{
+		co_yield pEntity;
+	}
+
+	co_return;
+}
 
 // Keeps clutter down a bit, when writing key-value pairs
 //#define WRITEKEY_INT(pf, szKeyName, iKeyValue) ENGINE_FPRINTF(pf, "\"%s\" \"%d\"\n", szKeyName, iKeyValue)
@@ -150,6 +162,16 @@ export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEn
 //inline BOOL FNullEnt(EOFFSET eoffset) { return eoffset == 0; }
 //inline BOOL FNullEnt(const edict_t *pent) { return pent == NULL || FNullEnt(OFFSET(pent)); }
 //inline BOOL FNullEnt(entvars_t *pev) { return pev == NULL || FNullEnt(OFFSET(pev)); }
+export inline byte pev_valid(entvars_t *pev) noexcept
+{
+	if (pev == nullptr || ent_cast<int>(pev) <= 0)
+		return 0;
+
+	if (auto const pEdict = ent_cast<edict_t *>(pev); pEdict && pEdict->pvPrivateData != nullptr)
+		return 2;
+
+	return 1;
+}
 
 // Testing strings for nullity
 //#define iStringNull 0
@@ -193,16 +215,7 @@ export enum TOGGLE_STATE
 
 // Misc useful
 export inline bool FStrEq(const char *psz1, const char *psz2) noexcept { return !strcmp(psz1, psz2); }
-
-// #UNDONE
-//inline BOOL FClassnameIs(edict_t *pent, const char *szClassname)
-//{
-//	return FStrEq(STRING(VARS(pent)->classname), szClassname);
-//}
-//inline BOOL FClassnameIs(entvars_t *pev, const char *szClassname)
-//{
-//	return FStrEq(STRING(pev->classname), szClassname);
-//}
+export inline bool FClassnameIs(entvars_t *pent, const char *szClassname) noexcept { return !strcmp(STRING(pent->classname), szClassname); }
 
 // Misc. Prototypes
 //extern void                     UTIL_SetSize(entvars_t *pev, const Vector &vecMin, const Vector &vecMax);

@@ -7,6 +7,14 @@ export module const_;
 export import edict;
 export import vector;
 
+export using func_t = int;
+export using string_t = int;
+
+export using byte = std::uint8_t;
+export using word = std::uint16_t;
+
+export using qboolean = int;
+
 //
 // Constants shared by the engine and dlls
 // This header file included by engine files and DLL files.
@@ -109,7 +117,7 @@ export inline constexpr auto EFLAG_SLERP = 1;	// do studio interpolation of this
 //
 // temp entity events
 //
-export inline constexpr auto TE_BEAMPOINTS = 0;		// beam effect between two points
+export inline constexpr byte TE_BEAMPOINTS = 0;		// beam effect between two points
 // coord coord coord (start position) 
 // coord coord coord (end position) 
 // short (sprite index) 
@@ -122,7 +130,7 @@ export inline constexpr auto TE_BEAMPOINTS = 0;		// beam effect between two poin
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_BEAMENTPOINT = 1;		// beam effect between point and entity
+export inline constexpr byte TE_BEAMENTPOINT = 1;		// beam effect between point and entity
 // short (start entity) 
 // coord coord coord (end position) 
 // short (sprite index) 
@@ -135,10 +143,10 @@ export inline constexpr auto TE_BEAMENTPOINT = 1;		// beam effect between point 
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_GUNSHOT = 2;		// particle effect plus ricochet sound
+export inline constexpr byte TE_GUNSHOT = 2;		// particle effect plus ricochet sound
 // coord coord coord (position) 
 
-export inline constexpr auto TE_EXPLOSION = 3;		// additive sprite, 2 dynamic lights, flickering particles, explosion sound, move vertically 8 pps
+export inline constexpr byte TE_EXPLOSION = 3;		// additive sprite, 2 dynamic lights, flickering particles, explosion sound, move vertically 8 pps
 // coord coord coord (position) 
 // short (sprite index)
 // byte (scale in 0.1's)
@@ -146,27 +154,27 @@ export inline constexpr auto TE_EXPLOSION = 3;		// additive sprite, 2 dynamic li
 // byte (flags)
 //
 // The Explosion effect has some flags to control performance/aesthetic features:
-export inline constexpr auto TE_EXPLFLAG_NONE = 0;	// all flags clear makes default Half-Life explosion
-export inline constexpr auto TE_EXPLFLAG_NOADDITIVE = 1;	// sprite will be drawn opaque (ensure that the sprite you send is a non-additive sprite)
-export inline constexpr auto TE_EXPLFLAG_NODLIGHTS = 2;	// do not render dynamic lights
-export inline constexpr auto TE_EXPLFLAG_NOSOUND = 4;	// do not play client explosion sound
-export inline constexpr auto TE_EXPLFLAG_NOPARTICLES = 8;	// do not draw particles
+export inline constexpr byte TE_EXPLFLAG_NONE = 0;	// all flags clear makes default Half-Life explosion
+export inline constexpr byte TE_EXPLFLAG_NOADDITIVE = 1;	// sprite will be drawn opaque (ensure that the sprite you send is a non-additive sprite)
+export inline constexpr byte TE_EXPLFLAG_NODLIGHTS = 2;	// do not render dynamic lights
+export inline constexpr byte TE_EXPLFLAG_NOSOUND = 4;	// do not play client explosion sound
+export inline constexpr byte TE_EXPLFLAG_NOPARTICLES = 8;	// do not draw particles
 
 
-export inline constexpr auto TE_TAREXPLOSION = 4;		// Quake1 "tarbaby" explosion with sound
+export inline constexpr byte TE_TAREXPLOSION = 4;		// Quake1 "tarbaby" explosion with sound
 // coord coord coord (position) 
 
-export inline constexpr auto TE_SMOKE = 5;		// alphablend sprite, move vertically 30 pps
+export inline constexpr byte TE_SMOKE = 5;		// alphablend sprite, move vertically 30 pps
 // coord coord coord (position) 
 // short (sprite index)
 // byte (scale in 0.1's)
 // byte (framerate)
 
-export inline constexpr auto TE_TRACER = 6;		// tracer effect from point to point
+export inline constexpr byte TE_TRACER = 6;		// tracer effect from point to point
 // coord, coord, coord (start) 
 // coord, coord, coord (end)
 
-export inline constexpr auto TE_LIGHTNING = 7;		// TE_BEAMPOINTS with simplified parameters
+export inline constexpr byte TE_LIGHTNING = 7;		// TE_BEAMPOINTS with simplified parameters
 // coord, coord, coord (start) 
 // coord, coord, coord (end) 
 // byte (life in 0.1's) 
@@ -174,7 +182,7 @@ export inline constexpr auto TE_LIGHTNING = 7;		// TE_BEAMPOINTS with simplified
 // byte (amplitude in 0.01's)
 // short (sprite model index)
 
-export inline constexpr auto TE_BEAMENTS = 8;
+export inline constexpr byte TE_BEAMENTS = 8;
 // short (start entity) 
 // short (end entity) 
 // short (sprite index) 
@@ -187,33 +195,33 @@ export inline constexpr auto TE_BEAMENTS = 8;
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_SPARKS = 9;		// 8 random tracers with gravity, ricochet sprite
+export inline constexpr byte TE_SPARKS = 9;		// 8 random tracers with gravity, ricochet sprite
 // coord coord coord (position) 
 
-export inline constexpr auto TE_LAVASPLASH = 10;		// Quake1 lava splash
+export inline constexpr byte TE_LAVASPLASH = 10;		// Quake1 lava splash
 // coord coord coord (position) 
 
-export inline constexpr auto TE_TELEPORT = 11;		// Quake1 teleport splash
+export inline constexpr byte TE_TELEPORT = 11;		// Quake1 teleport splash
 // coord coord coord (position) 
 
-export inline constexpr auto TE_EXPLOSION2 = 12;		// Quake1 colormaped (base palette) particle explosion with sound
+export inline constexpr byte TE_EXPLOSION2 = 12;		// Quake1 colormaped (base palette) particle explosion with sound
 // coord coord coord (position) 
 // byte (starting color)
 // byte (num colors)
 
-export inline constexpr auto TE_BSPDECAL = 13;		// Decal from the .BSP file 
+export inline constexpr byte TE_BSPDECAL = 13;		// Decal from the .BSP file 
 // coord, coord, coord (x,y,z), decal position (center of texture in world)
 // short (texture index of precached decal texture name)
 // short (entity index)
 // [optional - only included if previous short is non-zero (not the world)] short (index of model of above entity)
 
-export inline constexpr auto TE_IMPLOSION = 14;		// tracers moving toward a point
+export inline constexpr byte TE_IMPLOSION = 14;		// tracers moving toward a point
 // coord, coord, coord (position)
 // byte (radius)
 // byte (count)
 // byte (life in 0.1's) 
 
-export inline constexpr auto TE_SPRITETRAIL = 15;		// line of moving glow sprites with gravity, fadeout, and collisions
+export inline constexpr byte TE_SPRITETRAIL = 15;		// line of moving glow sprites with gravity, fadeout, and collisions
 // coord, coord, coord (start) 
 // coord, coord, coord (end) 
 // short (sprite index)
@@ -223,21 +231,21 @@ export inline constexpr auto TE_SPRITETRAIL = 15;		// line of moving glow sprite
 // byte (velocity along vector in 10's)
 // byte (randomness of velocity in 10's)
 
-export inline constexpr auto TE_BEAM = 16;		// obsolete
+export inline constexpr byte TE_BEAM = 16;		// obsolete
 
-export inline constexpr auto TE_SPRITE = 17;		// additive sprite, plays 1 cycle
+export inline constexpr byte TE_SPRITE = 17;		// additive sprite, plays 1 cycle
 // coord, coord, coord (position) 
 // short (sprite index) 
 // byte (scale in 0.1's) 
 // byte (brightness)
 
-export inline constexpr auto TE_BEAMSPRITE = 18;		// A beam with a sprite at the end
+export inline constexpr byte TE_BEAMSPRITE = 18;		// A beam with a sprite at the end
 // coord, coord, coord (start position) 
 // coord, coord, coord (end position) 
 // short (beam sprite index) 
 // short (end sprite index) 
 
-export inline constexpr auto TE_BEAMTORUS = 19;		// screen aligned beam ring, expands to max radius over lifetime
+export inline constexpr byte TE_BEAMTORUS = 19;		// screen aligned beam ring, expands to max radius over lifetime
 // coord coord coord (center position) 
 // coord coord coord (axis and radius) 
 // short (sprite index) 
@@ -250,7 +258,7 @@ export inline constexpr auto TE_BEAMTORUS = 19;		// screen aligned beam ring, ex
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_BEAMDISK = 20;		// disk that expands to max radius over lifetime
+export inline constexpr byte TE_BEAMDISK = 20;		// disk that expands to max radius over lifetime
 // coord coord coord (center position) 
 // coord coord coord (axis and radius) 
 // short (sprite index) 
@@ -263,7 +271,7 @@ export inline constexpr auto TE_BEAMDISK = 20;		// disk that expands to max radi
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_BEAMCYLINDER = 21;		// cylinder that expands to max radius over lifetime
+export inline constexpr byte TE_BEAMCYLINDER = 21;		// cylinder that expands to max radius over lifetime
 // coord coord coord (center position) 
 // coord coord coord (axis and radius) 
 // short (sprite index) 
@@ -276,7 +284,7 @@ export inline constexpr auto TE_BEAMCYLINDER = 21;		// cylinder that expands to 
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_BEAMFOLLOW = 22;		// create a line of decaying beam segments until entity stops moving
+export inline constexpr byte TE_BEAMFOLLOW = 22;		// create a line of decaying beam segments until entity stops moving
 // short (entity:attachment to follow)
 // short (sprite index)
 // byte (life in 0.1's) 
@@ -284,10 +292,10 @@ export inline constexpr auto TE_BEAMFOLLOW = 22;		// create a line of decaying b
 // byte,byte,byte (color)
 // byte (brightness)
 
-export inline constexpr auto TE_GLOWSPRITE = 23;
+export inline constexpr byte TE_GLOWSPRITE = 23;
 // coord, coord, coord (pos) short (model index) byte (scale / 10)
 
-export inline constexpr auto TE_BEAMRING = 24;		// connect a beam ring to two entities
+export inline constexpr byte TE_BEAMRING = 24;		// connect a beam ring to two entities
 // short (start entity) 
 // short (end entity) 
 // short (sprite index) 
@@ -300,7 +308,7 @@ export inline constexpr auto TE_BEAMRING = 24;		// connect a beam ring to two en
 // byte (brightness)
 // byte (scroll speed in 0.1's)
 
-export inline constexpr auto TE_STREAK_SPLASH = 25;		// oriented shower of tracers
+export inline constexpr byte TE_STREAK_SPLASH = 25;		// oriented shower of tracers
 // coord coord coord (start position) 
 // coord coord coord (direction vector) 
 // byte (color)
@@ -308,9 +316,9 @@ export inline constexpr auto TE_STREAK_SPLASH = 25;		// oriented shower of trace
 // short (base speed)
 // short (ramdon velocity)
 
-export inline constexpr auto TE_BEAMHOSE = 26;		// obsolete
+export inline constexpr byte TE_BEAMHOSE = 26;		// obsolete
 
-export inline constexpr auto TE_DLIGHT = 27;		// dynamic light, effect world, minor entity effect
+export inline constexpr byte TE_DLIGHT = 27;		// dynamic light, effect world, minor entity effect
 // coord, coord, coord (pos) 
 // byte (radius in 10's) 
 // byte byte byte (color)
@@ -318,7 +326,7 @@ export inline constexpr auto TE_DLIGHT = 27;		// dynamic light, effect world, mi
 // byte (life in 10's)
 // byte (decay rate in 10's)
 
-export inline constexpr auto TE_ELIGHT = 28;		// point entity light, no world effect
+export inline constexpr byte TE_ELIGHT = 28;		// point entity light, no world effect
 // short (entity:attachment to follow)
 // coord coord coord (initial position) 
 // coord (radius)
@@ -326,7 +334,7 @@ export inline constexpr auto TE_ELIGHT = 28;		// point entity light, no world ef
 // byte (life in 0.1's)
 // coord (decay rate)
 
-export inline constexpr auto TE_TEXTMESSAGE = 29;
+export inline constexpr byte TE_TEXTMESSAGE = 29;
 // short 1.2.13 x (-1 = center)
 // short 1.2.13 y (-1 = center)
 // byte Effect 0 = fade in/fade out
@@ -340,53 +348,53 @@ export inline constexpr auto TE_TEXTMESSAGE = 29;
 // ushort 8.8 hold time
 // optional ushort 8.8 fxtime	(time the highlight lags behing the leading text in effect 2)
 // string text message		(512 chars max sz string)
-export inline constexpr auto TE_LINE = 30;
+export inline constexpr byte TE_LINE = 30;
 // coord, coord, coord		startpos
 // coord, coord, coord		endpos
 // short life in 0.1 s
 // 3 bytes r, g, b
 
-export inline constexpr auto TE_BOX = 31;
+export inline constexpr byte TE_BOX = 31;
 // coord, coord, coord		boxmins
 // coord, coord, coord		boxmaxs
 // short life in 0.1 s
 // 3 bytes r, g, b
 
-export inline constexpr auto TE_KILLBEAM = 99;		// kill all beams attached to entity
+export inline constexpr byte TE_KILLBEAM = 99;		// kill all beams attached to entity
 // short (entity)
 
-export inline constexpr auto TE_LARGEFUNNEL = 100;
+export inline constexpr byte TE_LARGEFUNNEL = 100;
 // coord coord coord (funnel position)
 // short (sprite index) 
 // short (flags) 
 
-export inline constexpr auto TE_BLOODSTREAM = 101;		// particle spray
+export inline constexpr byte TE_BLOODSTREAM = 101;		// particle spray
 // coord coord coord (start position)
 // coord coord coord (spray vector)
 // byte (color)
 // byte (speed)
 
-export inline constexpr auto TE_SHOWLINE = 102;		// line of particles every 5 units, dies in 30 seconds
+export inline constexpr byte TE_SHOWLINE = 102;		// line of particles every 5 units, dies in 30 seconds
 // coord coord coord (start position)
 // coord coord coord (end position)
 
-export inline constexpr auto TE_BLOOD = 103;		// particle spray
+export inline constexpr byte TE_BLOOD = 103;		// particle spray
 // coord coord coord (start position)
 // coord coord coord (spray vector)
 // byte (color)
 // byte (speed)
 
-export inline constexpr auto TE_DECAL = 104;		// Decal applied to a brush entity (not the world)
+export inline constexpr byte TE_DECAL = 104;		// Decal applied to a brush entity (not the world)
 // coord, coord, coord (x,y,z), decal position (center of texture in world)
 // byte (texture index of precached decal texture name)
 // short (entity index)
 
-export inline constexpr auto TE_FIZZ = 105;		// create alpha sprites inside of entity, float upwards
+export inline constexpr byte TE_FIZZ = 105;		// create alpha sprites inside of entity, float upwards
 // short (entity)
 // short (sprite index)
 // byte (density)
 
-export inline constexpr auto TE_MODEL = 106;		// create a moving model that bounces and makes a sound when it hits
+export inline constexpr byte TE_MODEL = 106;		// create a moving model that bounces and makes a sound when it hits
 // coord, coord, coord (position) 
 // coord, coord, coord (velocity)
 // angle (initial yaw)
@@ -394,14 +402,14 @@ export inline constexpr auto TE_MODEL = 106;		// create a moving model that boun
 // byte (bounce sound type)
 // byte (life in 0.1's)
 
-export inline constexpr auto TE_EXPLODEMODEL = 107;		// spherical shower of models, picks from set
+export inline constexpr byte TE_EXPLODEMODEL = 107;		// spherical shower of models, picks from set
 // coord, coord, coord (origin)
 // coord (velocity)
 // short (model index)
 // short (count)
 // byte (life in 0.1's)
 
-export inline constexpr auto TE_BREAKMODEL = 108;		// box of models or sprites
+export inline constexpr byte TE_BREAKMODEL = 108;		// box of models or sprites
 // coord, coord, coord (position)
 // coord, coord, coord (size)
 // coord, coord, coord (velocity)
@@ -411,12 +419,12 @@ export inline constexpr auto TE_BREAKMODEL = 108;		// box of models or sprites
 // byte (life in 0.1 secs)
 // byte (flags)
 
-export inline constexpr auto TE_GUNSHOTDECAL = 109;		// decal and ricochet sound
+export inline constexpr byte TE_GUNSHOTDECAL = 109;		// decal and ricochet sound
 // coord, coord, coord (position)
 // short (entity index???)
 // byte (decal???)
 
-export inline constexpr auto TE_SPRITE_SPRAY = 110;		// spay of alpha sprites
+export inline constexpr byte TE_SPRITE_SPRAY = 110;		// spay of alpha sprites
 // coord, coord, coord (position)
 // coord, coord, coord (velocity)
 // short (sprite index)
@@ -424,18 +432,18 @@ export inline constexpr auto TE_SPRITE_SPRAY = 110;		// spay of alpha sprites
 // byte (speed)
 // byte (noise)
 
-export inline constexpr auto TE_ARMOR_RICOCHET = 111;		// quick spark sprite, client ricochet sound. 
+export inline constexpr byte TE_ARMOR_RICOCHET = 111;		// quick spark sprite, client ricochet sound. 
 // coord, coord, coord (position)
 // byte (scale in 0.1's)
 
-export inline constexpr auto TE_PLAYERDECAL = 112;		// ???
+export inline constexpr byte TE_PLAYERDECAL = 112;		// ???
 // byte (playerindex)
 // coord, coord, coord (position)
 // short (entity???)
 // byte (decal number???)
 // [optional] short (model index???)
 
-export inline constexpr auto TE_BUBBLES = 113;		// create alpha sprites inside of box, float upwards
+export inline constexpr byte TE_BUBBLES = 113;		// create alpha sprites inside of box, float upwards
 // coord, coord, coord (min start position)
 // coord, coord, coord (max start position)
 // coord (float height)
@@ -443,7 +451,7 @@ export inline constexpr auto TE_BUBBLES = 113;		// create alpha sprites inside o
 // byte (count)
 // coord (speed)
 
-export inline constexpr auto TE_BUBBLETRAIL = 114;		// create alpha sprites along a line, float upwards
+export inline constexpr byte TE_BUBBLETRAIL = 114;		// create alpha sprites along a line, float upwards
 // coord, coord, coord (min start position)
 // coord, coord, coord (max start position)
 // coord (float height)
@@ -451,34 +459,34 @@ export inline constexpr auto TE_BUBBLETRAIL = 114;		// create alpha sprites alon
 // byte (count)
 // coord (speed)
 
-export inline constexpr auto TE_BLOODSPRITE = 115;		// spray of opaque sprite1's that fall, single sprite2 for 1..2 secs (this is a high-priority tent)
+export inline constexpr byte TE_BLOODSPRITE = 115;		// spray of opaque sprite1's that fall, single sprite2 for 1..2 secs (this is a high-priority tent)
 // coord, coord, coord (position)
 // short (sprite1 index)
 // short (sprite2 index)
 // byte (color)
 // byte (scale)
 
-export inline constexpr auto TE_WORLDDECAL = 116;		// Decal applied to the world brush
+export inline constexpr byte TE_WORLDDECAL = 116;		// Decal applied to the world brush
 // coord, coord, coord (x,y,z), decal position (center of texture in world)
 // byte (texture index of precached decal texture name)
 
-export inline constexpr auto TE_WORLDDECALHIGH = 117;		// Decal (with texture index > 256) applied to world brush
+export inline constexpr byte TE_WORLDDECALHIGH = 117;		// Decal (with texture index > 256) applied to world brush
 // coord, coord, coord (x,y,z), decal position (center of texture in world)
 // byte (texture index of precached decal texture name - 256)
 
-export inline constexpr auto TE_DECALHIGH = 118;		// Same as TE_DECAL, but the texture index was greater than 256
+export inline constexpr byte TE_DECALHIGH = 118;		// Same as TE_DECAL, but the texture index was greater than 256
 // coord, coord, coord (x,y,z), decal position (center of texture in world)
 // byte (texture index of precached decal texture name - 256)
 // short (entity index)
 
-export inline constexpr auto TE_PROJECTILE = 119;		// Makes a projectile (like a nail) (this is a high-priority tent)
+export inline constexpr byte TE_PROJECTILE = 119;		// Makes a projectile (like a nail) (this is a high-priority tent)
 // coord, coord, coord (position)
 // coord, coord, coord (velocity)
 // short (modelindex)
 // byte (life)
 // byte (owner)  projectile won't collide with owner (if owner == 0, projectile will hit any client).
 
-export inline constexpr auto TE_SPRAY = 120;		// Throws a shower of sprites or models
+export inline constexpr byte TE_SPRAY = 120;		// Throws a shower of sprites or models
 // coord, coord, coord (position)
 // coord, coord, coord (direction)
 // short (modelindex)
@@ -487,19 +495,19 @@ export inline constexpr auto TE_SPRAY = 120;		// Throws a shower of sprites or m
 // byte (noise)
 // byte (rendermode)
 
-export inline constexpr auto TE_PLAYERSPRITES = 121;		// sprites emit from a player's bounding box (ONLY use for players!)
+export inline constexpr byte TE_PLAYERSPRITES = 121;		// sprites emit from a player's bounding box (ONLY use for players!)
 // byte (playernum)
 // short (sprite modelindex)
 // byte (count)
 // byte (variance) (0 = no variance in size) (10 = 10% variance in size)
 
-export inline constexpr auto TE_PARTICLEBURST = 122;		// very similar to lavasplash.
+export inline constexpr byte TE_PARTICLEBURST = 122;		// very similar to lavasplash.
 // coord (origin)
 // short (radius)
 // byte (particle color)
 // byte (duration * 10) (will be randomized a bit)
 
-export inline constexpr auto TE_FIREFIELD = 123;		// makes a field of fire.
+export inline constexpr byte TE_FIREFIELD = 123;		// makes a field of fire.
 // coord (origin)
 // short (radius) (fire is made in a square around origin. -radius, -radius to radius, radius)
 // short (modelindex)
@@ -508,22 +516,22 @@ export inline constexpr auto TE_FIREFIELD = 123;		// makes a field of fire.
 // byte (duration (in seconds) * 10) (will be randomized a bit)
 //
 // to keep network traffic low, this message has associated flags that fit into a byte:
-export inline constexpr auto TEFIRE_FLAG_ALLFLOAT = 1; // all sprites will drift upwards as they animate
-export inline constexpr auto TEFIRE_FLAG_SOMEFLOAT = 2; // some of the sprites will drift upwards. (50% chance)
-export inline constexpr auto TEFIRE_FLAG_LOOP = 4; // if set, sprite plays at 15 fps, otherwise plays at whatever rate stretches the animation over the sprite's duration.
-export inline constexpr auto TEFIRE_FLAG_ALPHA = 8; // if set, sprite is rendered alpha blended at 50% else, opaque
-export inline constexpr auto TEFIRE_FLAG_PLANAR = 16; // if set, all fire sprites have same initial Z instead of randomly filling a cube. 
+export inline constexpr byte TEFIRE_FLAG_ALLFLOAT = 1; // all sprites will drift upwards as they animate
+export inline constexpr byte TEFIRE_FLAG_SOMEFLOAT = 2; // some of the sprites will drift upwards. (50% chance)
+export inline constexpr byte TEFIRE_FLAG_LOOP = 4; // if set, sprite plays at 15 fps, otherwise plays at whatever rate stretches the animation over the sprite's duration.
+export inline constexpr byte TEFIRE_FLAG_ALPHA = 8; // if set, sprite is rendered alpha blended at 50% else, opaque
+export inline constexpr byte TEFIRE_FLAG_PLANAR = 16; // if set, all fire sprites have same initial Z instead of randomly filling a cube. 
 
-export inline constexpr auto TE_PLAYERATTACHMENT = 124; // attaches a TENT to a player (this is a high-priority tent)
+export inline constexpr byte TE_PLAYERATTACHMENT = 124; // attaches a TENT to a player (this is a high-priority tent)
 // byte (entity index of player)
 // coord (vertical offset) ( attachment origin.z = player origin.z + vertical offset )
 // short (model index)
 // short (life * 10 );
 
-export inline constexpr auto TE_KILLPLAYERATTACHMENTS = 125; // will expire all TENTS attached to a player.
+export inline constexpr byte TE_KILLPLAYERATTACHMENTS = 125; // will expire all TENTS attached to a player.
 // byte (entity index of player)
 
-export inline constexpr auto TE_MULTIGUNSHOT = 126; // much more compact shotgun message
+export inline constexpr byte TE_MULTIGUNSHOT = 126; // much more compact shotgun message
 // This message is used to make a client approximate a 'spray' of gunfire.
 // Any weapon that fires more than one bullet per frame and fires in a bit of a spread is
 // a good candidate for MULTIGUNSHOT use. (shotguns)
@@ -542,7 +550,7 @@ export inline constexpr auto TE_MULTIGUNSHOT = 126; // much more compact shotgun
 // byte (count)
 // byte (bullethole decal texture index)
 
-export inline constexpr auto TE_USERTRACER = 127; // larger message than the standard tracer, but allows some customization.
+export inline constexpr byte TE_USERTRACER = 127; // larger message than the standard tracer, but allows some customization.
 // coord (origin)
 // coord (origin)
 // coord (origin)
@@ -654,9 +662,9 @@ export inline constexpr auto BOUNCE_CONCRETE = BREAK_CONCRETE;
 export inline constexpr auto BOUNCE_SHOTSHELL = 0x80;
 
 // Temp entity bounce sound types
-export inline constexpr auto TE_BOUNCE_NULL = 0;
-export inline constexpr auto TE_BOUNCE_SHELL = 1;
-export inline constexpr auto TE_BOUNCE_SHOTSHELL = 2;
+export inline constexpr byte TE_BOUNCE_NULL = 0;
+export inline constexpr byte TE_BOUNCE_SHELL = 1;
+export inline constexpr byte TE_BOUNCE_SHOTSHELL = 2;
 
 // Rendering constants
 export enum kRenderFn
@@ -694,14 +702,6 @@ export enum  kRenderFx
 	kRenderFxClampMinScale,		// Keep this sprite from getting very small (SPRITES only!)
 };
 
-
-export using func_t = int;
-export using string_t = int;
-
-export using byte = std::uint8_t;
-export using word = std::uint16_t;
-
-export using qboolean = int;
 
 export struct color24
 {
