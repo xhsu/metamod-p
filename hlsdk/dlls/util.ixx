@@ -17,10 +17,6 @@ export import progdefs;
 //
 export inline constexpr auto SVC_DIRECTOR = 51;
 
-//inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent);  // implementation later in this file
-
-export inline enginefuncs_t g_engfuncs = {};
-export inline globalvars_t *gpGlobals = nullptr;
 
 // Use this instead of ALLOC_STRING on constant strings
 export inline const char *STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }

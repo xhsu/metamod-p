@@ -244,3 +244,5 @@ export struct globalvars_t
 	void *pSaveData;
 	vec3_t		vecLandmarkOffset;
 };
+
+export inline globalvars_t *gpGlobals = nullptr;

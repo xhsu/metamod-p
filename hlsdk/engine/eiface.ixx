@@ -303,7 +303,7 @@ export struct enginefuncs_s
 };
 
 export using enginefuncs_t = enginefuncs_s;
-
+export inline enginefuncs_t g_engfuncs = {};
 
 // ONLY ADD NEW FUNCTIONS TO THE END OF THIS STRUCT.  INTERFACE VERSION IS FROZEN AT 138
 
