@@ -49,8 +49,8 @@ export Vector2D operator*(float fl, const Vector2D &v) noexcept { return v * fl;
 export struct Vector                                            // same data-layout as engine's vec3_t,
 {                                                               //              which is a vec_t[3]
 	// Construction/destruction
-	constexpr inline Vector(void) noexcept : x(0.0), y(0.0), z(0.0) { }
-	constexpr inline Vector(float X, float Y, float Z) noexcept : x(0.0), y(0.0), z(0.0) { x = X; y = Y; z = Z; }
+	constexpr inline Vector(void) noexcept : x{}, y{}, z{} { }
+	constexpr inline Vector(float X, float Y, float Z) noexcept : x{ X }, y{ Y }, z{ Z } {}
 	//inline Vector(double X, double Y, double Z)                   { x = (float)X; y = (float)Y; z = (float)Z;     }
 	//inline Vector(int X, int Y, int Z)                            { x = (float)X; y = (float)Y; z = (float)Z;     }
 	constexpr inline Vector(const Vector &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; z = v.z; }
