@@ -4,6 +4,8 @@ module;
 
 export module vector;
 
+import <limits>;
+
 export using vec_t = float;
 
 //=========================================================
@@ -50,53 +52,41 @@ export struct Vector                                            // same data-lay
 {                                                               //              which is a vec_t[3]
 	// Construction/destruction
 	constexpr inline Vector(void) noexcept : x{}, y{}, z{} { }
-	constexpr inline Vector(float X, float Y, float Z) noexcept : x{ X }, y{ Y }, z{ Z } {}
-	//inline Vector(double X, double Y, double Z)                   { x = (float)X; y = (float)Y; z = (float)Z;     }
-	//inline Vector(int X, int Y, int Z)                            { x = (float)X; y = (float)Y; z = (float)Z;     }
-	constexpr inline Vector(const Vector &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; z = v.z; }
-	constexpr inline Vector(const float (&rgfl)[3]) noexcept : x(0.0), y(0.0), z(0.0) { x = rgfl[0]; y = rgfl[1]; z = rgfl[2]; }
-	constexpr inline Vector(const Vector2D &v) noexcept : x(0.0), y(0.0), z(0.0) { x = v.x; y = v.y; }
+	constexpr inline Vector(double X, double Y, double Z) noexcept : x{ (float)X }, y{ (float)Y }, z{ (float)Z } {}
+	constexpr inline Vector(const Vector &rhs) noexcept = default;
 
 	// Operators
 	inline Vector operator-(void) const noexcept { return Vector(-x, -y, -z); }
-	inline int operator==(const Vector &v) const noexcept { return x == v.x && y == v.y && z == v.z; }
+	inline bool operator==(const Vector &v) const noexcept { return x == v.x && y == v.y && z == v.z; }
 	//inline int operator!=(const Vector &v) const { return !(*this == v); } // LUNA: CPP20 - auto generated.
 	inline Vector operator+(const Vector &v) const noexcept { return Vector(x + v.x, y + v.y, z + v.z); }
 	inline Vector operator-(const Vector &v) const noexcept { return Vector(x - v.x, y - v.y, z - v.z); }
-	inline Vector operator*(float fl) const noexcept { return Vector(x * fl, y * fl, z * fl); }
-	inline Vector operator/(float fl) const noexcept { fl = 1 / fl; return Vector(x * fl, y * fl, z * fl); }
+	inline Vector operator*(double fl) const noexcept { return Vector(x * fl, y * fl, z * fl); }
+	inline Vector operator/(double fl) const noexcept { fl = 1 / fl; return Vector(x * fl, y * fl, z * fl); }
 	inline Vector &operator+=(const Vector &v) noexcept { *this = *this + v; return *this; }
 	inline Vector &operator-=(const Vector &v) noexcept { *this = *this - v; return *this; }
-	inline Vector &operator*=(float fl) noexcept { *this = *this * fl; return *this; }
-	inline Vector &operator/=(float fl) noexcept { *this = *this / fl; return *this; }
+	inline Vector &operator*=(double fl) noexcept { *this = *this * fl; return *this; }
+	inline Vector &operator/=(double fl) noexcept { *this = *this / fl; return *this; }
 
 	// Methods
 	inline void CopyToArray(float *rgfl) const noexcept { rgfl[0] = x, rgfl[1] = y, rgfl[2] = z; }
 	inline float Length(void) const noexcept { return (float)sqrt(x * x + y * y + z * z); }
+	inline double LengthSquared(void) const noexcept { return x * x + y * y + z * z; }
 	inline operator float *() noexcept { return &x; } // Vectors will now automatically convert to float * when needed
 	inline operator Vector2D () const noexcept { return (*this).Make2D(); }
-
-#if !defined(__GNUC__) || (__GNUC__ >= 3)
 	inline operator const float *() const noexcept { return &x; } // Vectors will now automatically convert to float * when needed
-#endif
 
 	inline Vector Normalize(void) const noexcept
 	{
-		float flLen = Length();
-		if (flLen == 0) return Vector(0, 0, 1); // ????
-		flLen = 1 / flLen;
-		return Vector(x * flLen, y * flLen, z * flLen);
+		auto const flLength = std::sqrt(x * x + y * y + z * z);
+
+		if (flLength <= std::numeric_limits<vec_t>::epsilon())
+			return Vector();
+
+		return Vector(x / flLength, y / flLength, z / flLength);
 	}
 
-	inline Vector2D Make2D(void) const noexcept
-	{
-		Vector2D        Vec2;
-
-		Vec2.x = x;
-		Vec2.y = y;
-
-		return Vec2;
-	}
+	inline Vector2D Make2D(void) const noexcept { return Vector2D(x, y); }
 	inline float Length2D(void) const noexcept { return (float)sqrt(x * x + y * y); }
 
 	// Static Methods
@@ -106,9 +96,46 @@ export struct Vector                                            // same data-lay
 	vec_t x, y, z;
 };
 
-export Vector operator*(float fl, const Vector &v) noexcept { return v * fl; }
-export float DotProduct(const Vector &a, const Vector &b) noexcept { return(a.x * b.x + a.y * b.y + a.z * b.z); }
+export Vector operator*(double fl, const Vector &v) noexcept { return v * fl; }
+export double DotProduct(const Vector &a, const Vector &b) noexcept { return a.x * b.x + a.y * b.y + a.z * b.z; }
 export Vector CrossProduct(const Vector &a, const Vector &b) noexcept { return Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x); }
 
 // LUNA: watchout for the freaking marcos.
 export using vec3_t = Vector;
+
+export struct Quaternion
+{
+	inline Quaternion Versor(void) const noexcept
+	{
+		auto const mag = std::sqrt(a * a + b * b + c * c + d * d);
+
+		if (mag <= std::numeric_limits<double>::epsilon())
+			return Quaternion{};
+
+		return Quaternion{ a / mag, b / mag, c / mag, d / mag };
+	}
+
+	inline decltype(auto) Real() const noexcept { return a; }
+	inline decltype(auto) Pure() const noexcept { return Vector(b, c, d); }
+
+	inline Vector operator* (const Vector &v) const noexcept
+	{
+		return 2.0 * DotProduct(Pure(), v) * Pure() + (a * a - Pure().LengthSquared()) * v + 2.0 * a * CrossProduct(Pure(), v);
+	}
+
+	static inline consteval Quaternion Identity(void) noexcept { return Quaternion{ 1, 0, 0, 0 }; }
+
+	static inline Quaternion Rotate(const Vector &vecFrom, const Vector &vecTo) noexcept
+	{
+		auto const vecCross = CrossProduct(vecFrom, vecTo);
+
+		return Quaternion(
+			std::sqrt(vecFrom.LengthSquared() * vecTo.LengthSquared()) + DotProduct(vecFrom, vecTo),
+			vecCross.x,
+			vecCross.y,
+			vecCross.z
+		).Versor();
+	}
+
+	double a{1}, b{}, c{}, d{};
+};

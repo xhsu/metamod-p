@@ -17,18 +17,83 @@ export import progdefs;
 //
 export inline constexpr auto SVC_DIRECTOR = 51;
 
+//
+// Conversion among the three types of "entity", including identity-conversions.
+//
+export template <typename new_t, typename org_t>
+[[nodiscard]] inline std::remove_cvref_t<new_t> ent_cast(org_t const &ent) noexcept
+{
+	if constexpr (std::integral<org_t>)
+	{
+		if constexpr (std::integral<new_t>)	// eoffset -> eoffset
+			return ent;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// eoffset -> entvars_t*
+			return &g_engfuncs.pfnPEntityOfEntOffset(ent)->v;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// eoffset -> edict_t*
+			return g_engfuncs.pfnPEntityOfEntOffset(ent);
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
+	{
+		if constexpr (std::integral<new_t>)	// entvars_t* -> eoffset
+			return g_engfuncs.pfnEntOffsetOfPEntity(ent->pContainingEntity);
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entvars_t* -> entvars_t*
+			return ent;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entvars_t* -> edict_t*
+			return ent->pContainingEntity;
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
+	{
+		if constexpr (std::integral<new_t>)	// edict_t* -> eoffset
+			return g_engfuncs.pfnEntOffsetOfPEntity(ent);
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// edict_t* -> entvars_t*
+			return &ent->v;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// edict_t* -> edict_t*
+			return ent;
+		else
+			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+	}
+}
+
+export inline auto ENTINDEX(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
+export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
+
+// Testing the three types of "entity" for nullity
+//#define eoNullEntity 0
+//inline BOOL FNullEnt(EOFFSET eoffset) { return eoffset == 0; }
+//inline BOOL FNullEnt(const edict_t *pent) { return pent == NULL || FNullEnt(OFFSET(pent)); }
+//inline BOOL FNullEnt(entvars_t *pev) { return pev == NULL || FNullEnt(OFFSET(pev)); }
+export inline byte pev_valid(entvars_t *pev) noexcept
+{
+	if (pev == nullptr || ent_cast<int>(pev) <= 0)
+		return 0;
+
+	if (auto const pEdict = ent_cast<edict_t *>(pev); pEdict && pEdict->pvPrivateData != nullptr)
+		return 2;
+
+	return 1;
+}
+
+export __forceinline byte pev_valid(edict_t *pEdict) noexcept { return pEdict ? pev_valid(&pEdict->v) : 0; }
+
 
 // Use this instead of ALLOC_STRING on constant strings
 export inline const char *STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
 export inline std::ptrdiff_t MAKE_STRING(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
 
+//
+// Search Entity
+//
 export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept
 {
-	for (auto pEntity = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
-		pEntity != nullptr;
-		pEntity = g_engfuncs.pfnFindEntityByString(pEntity, "classname", pszName))
+	for (auto pEdict = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
+		pev_valid(pEdict) == 2;
+		pEdict = g_engfuncs.pfnFindEntityByString(pEdict, "classname", pszName))
 	{
-		co_yield pEntity;
+		co_yield pEdict;
 	}
 
 	co_return;
@@ -45,13 +110,13 @@ export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(c
 //	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
 //}
 
-export inline std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector& vecOrigin, float const flRadius) noexcept
+export inline std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector &vecOrigin, float const flRadius) noexcept
 {
-	for (auto pEntity = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
-		pEntity != nullptr;
-		pEntity = g_engfuncs.pfnFindEntityInSphere(pEntity, vecOrigin, flRadius))
+	for (auto pEdict = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
+		pev_valid(pEdict) == 2;
+		pEdict = g_engfuncs.pfnFindEntityInSphere(pEdict, vecOrigin, flRadius))
 	{
-		co_yield pEntity;
+		co_yield pEdict;
 	}
 
 	co_return;
@@ -103,71 +168,9 @@ export inline std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(cons
 //#define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName) extern "C" void mapClassName( entvars_t *pev ); void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
 //#endif
 
-
-//
-// Conversion among the three types of "entity", including identity-conversions.
-//
-
-export template <typename new_t, typename org_t>
-[[nodiscard]] inline std::remove_cvref_t<new_t> ent_cast(org_t const &ent) noexcept
-{
-	if constexpr (std::integral<org_t>)
-	{
-		if constexpr (std::integral<new_t>)	// eoffset -> eoffset
-			return ent;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// eoffset -> entvars_t*
-			return &g_engfuncs.pfnPEntityOfEntOffset(ent)->v;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// eoffset -> edict_t*
-			return g_engfuncs.pfnPEntityOfEntOffset(ent);
-		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
-	}
-	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
-	{
-		if constexpr (std::integral<new_t>)	// entvars_t* -> eoffset
-			return g_engfuncs.pfnEntOffsetOfPEntity(ent->pContainingEntity);
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entvars_t* -> entvars_t*
-			return ent;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entvars_t* -> edict_t*
-			return ent->pContainingEntity;
-		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
-	}
-	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
-	{
-		if constexpr (std::integral<new_t>)	// edict_t* -> eoffset
-			return g_engfuncs.pfnEntOffsetOfPEntity(ent);
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// edict_t* -> entvars_t*
-			return &ent->v;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// edict_t* -> edict_t*
-			return ent;
-		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
-	}
-}
-
-export inline auto ENTINDEX(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
-export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
-
 //inline void MESSAGE_BEGIN(int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent) {
 //	(*g_engfuncs.pfnMessageBegin)(msg_dest, msg_type, pOrigin, ENT(ent));
 //}
-
-// Testing the three types of "entity" for nullity
-//#define eoNullEntity 0
-//inline BOOL FNullEnt(EOFFSET eoffset) { return eoffset == 0; }
-//inline BOOL FNullEnt(const edict_t *pent) { return pent == NULL || FNullEnt(OFFSET(pent)); }
-//inline BOOL FNullEnt(entvars_t *pev) { return pev == NULL || FNullEnt(OFFSET(pev)); }
-export inline byte pev_valid(entvars_t *pev) noexcept
-{
-	if (pev == nullptr || ent_cast<int>(pev) <= 0)
-		return 0;
-
-	if (auto const pEdict = ent_cast<edict_t *>(pev); pEdict && pEdict->pvPrivateData != nullptr)
-		return 2;
-
-	return 1;
-}
 
 // Testing strings for nullity
 //#define iStringNull 0
