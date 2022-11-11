@@ -18,7 +18,10 @@ export enum EBeamTypes : std::uint8_t
 	BEAM_HOSE,
 };
 
-export inline constexpr auto BEAM_FSINE = 0x10;
-export inline constexpr auto BEAM_FSOLID = 0x20;
-export inline constexpr auto BEAM_FSHADEIN = 0x40;
-export inline constexpr auto BEAM_FSHADEOUT = 0x80;
+export enum EBeamFlags : std::uint8_t
+{
+	BEAM_FSINE = 0x10,
+	BEAM_FSOLID = 0x20,
+	BEAM_FSHADEIN = 0x40,
+	BEAM_FSHADEOUT = 0x80,
+};
