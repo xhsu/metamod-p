@@ -127,7 +127,7 @@ export struct enginefuncs_s
 	void		(*pfnGetAimVector)			(edict_t *ent, float speed, float *rgflReturn);
 	void		(*pfnServerCommand)			(char *str);
 	void		(*pfnServerExecute)			(void);
-	void		(*pfnClientCommand)			(edict_t *pEdict, char *szFmt, ...);
+	void		(*pfnClientCommand)			(edict_t *pEdict, const char *szFmt, ...);
 	void		(*pfnParticleEffect)		(const float *org, const float *dir, float color, float count);
 	void		(*pfnLightStyle)			(int style, char *val);
 	int			(*pfnDecalIndex)			(const char *name);

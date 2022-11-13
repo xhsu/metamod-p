@@ -7,6 +7,7 @@
 #include <fmt/color.h>
 
 import <filesystem>;
+import <iostream>;
 import <string>;
 
 import studio;
@@ -24,12 +25,14 @@ int main(int argc, const char *argv[]) noexcept
 	if (argc != 2)
 	{
 		fmt::print(fg(fmt::color::red), "No model file selected.\n");
+		std::cin.get();
 		return 0;
 	}
 
 	if (!fs::exists(argv[1]))
 	{
 		fmt::print(fg(fmt::color::red), "Model file: \"{}\" no found.\n", argv[1]);
+		std::cin.get();
 		return 0;
 	}
 #endif
@@ -47,15 +50,19 @@ int main(int argc, const char *argv[]) noexcept
 		auto const phdr = (studiohdr_t *)pBuffer;
 		auto const pseq = (mstudioseqdesc_t *)((byte *)pBuffer + phdr->seqindex);
 
-		string szModelName = phdr->name;
+		string szModelName = fs::path(argv[1]).filename().string();
 		if (auto const pos = szModelName.find_last_of('.'); pos != string::npos)
 			szModelName.erase(pos);
 
 		for (auto i = 0; i < phdr->numseq; ++i)
 			fmt::print("{:<16}: {}/{} == {}\n", pseq[i].label, pseq[i].numframes, pseq[i].fps, (double)pseq[i].numframes / (double)pseq[i].fps);
 
-		if (auto fout = fopen(fmt::format("{}.hpp", szModelName).c_str(), "wt"); fout)
+		auto const hOutPath = fs::path(argv[0]).parent_path() / fmt::format("{}.hpp", szModelName);
+
+		if (auto fout = fopen(hOutPath.string().c_str(), "wt"); fout)
 		{
+			fmt::print("\nOutputing file: {}\n", hOutPath.string());
+
 			fmt::print(fout, "namespace {}\n{{\n", szModelName);
 			fmt::print(fout,
 				"\tenum struct seq\n"
@@ -85,6 +92,7 @@ int main(int argc, const char *argv[]) noexcept
 		fclose(f);
 	}
 
+	std::cin.get();
 	return 0;
 }
 

@@ -25,19 +25,19 @@ export template <typename new_t, typename org_t>
 {
 	if constexpr (std::integral<org_t>)
 	{
-		if constexpr (std::integral<new_t>)	// eoffset -> eoffset
+		if constexpr (std::integral<new_t>)	// entindex -> entindex
 			return ent;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// eoffset -> entvars_t*
-			return &g_engfuncs.pfnPEntityOfEntOffset(ent)->v;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// eoffset -> edict_t*
-			return g_engfuncs.pfnPEntityOfEntOffset(ent);
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entindex -> entvars_t*
+			return &g_engfuncs.pfnPEntityOfEntIndex(ent)->v;
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entindex -> edict_t*
+			return g_engfuncs.pfnPEntityOfEntIndex(ent);
 		else
 			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
 	{
-		if constexpr (std::integral<new_t>)	// entvars_t* -> eoffset
-			return g_engfuncs.pfnEntOffsetOfPEntity(ent->pContainingEntity);
+		if constexpr (std::integral<new_t>)	// entvars_t* -> entindex
+			return g_engfuncs.pfnIndexOfEdict(ent->pContainingEntity);
 		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entvars_t* -> entvars_t*
 			return ent;
 		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entvars_t* -> edict_t*
@@ -47,8 +47,8 @@ export template <typename new_t, typename org_t>
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
 	{
-		if constexpr (std::integral<new_t>)	// edict_t* -> eoffset
-			return g_engfuncs.pfnEntOffsetOfPEntity(ent);
+		if constexpr (std::integral<new_t>)	// edict_t* -> entindex
+			return g_engfuncs.pfnIndexOfEdict(ent);
 		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// edict_t* -> entvars_t*
 			return &ent->v;
 		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// edict_t* -> edict_t*
@@ -58,8 +58,8 @@ export template <typename new_t, typename org_t>
 	}
 }
 
-export inline auto ENTINDEX(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnIndexOfEdict)(pEdict); }
-export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntIndex)(iEdictNum); }
+export inline auto ENTOFFSET(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnEntOffsetOfPEntity)(pEdict); }	// eoffset is different from entindex!!
+export inline auto OFFSETENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntOffset)(iEdictNum); }
 
 // Testing the three types of "entity" for nullity
 //#define eoNullEntity 0
@@ -68,7 +68,7 @@ export inline auto INDEXENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEn
 //inline BOOL FNullEnt(entvars_t *pev) { return pev == NULL || FNullEnt(OFFSET(pev)); }
 export inline byte pev_valid(entvars_t *pev) noexcept
 {
-	if (pev == nullptr || ent_cast<int>(pev) <= 0)
+	if (pev == nullptr || ent_cast<int>(pev->pContainingEntity) <= 0)
 		return 0;
 
 	if (auto const pEdict = ent_cast<edict_t *>(pev); pEdict && pEdict->pvPrivateData != nullptr)
@@ -243,7 +243,7 @@ export inline bool FClassnameIs(entvars_t *pent, const char *szClassname) noexce
 //extern void                     UTIL_ScreenFadeAll(const Vector &color, float fadeTime, float holdTime, int alpha, int flags);
 //
 export enum IGNORE_MONSTERS { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 };
-export enum IGNORE_GLASS { ignore_glass = 1, dont_ignore_glass = 0 };
+export enum IGNORE_GLASS { ignore_glass = 0x100, dont_ignore_glass = 0 };
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
 export enum hull_enum { point_hull = 0, human_hull = 1, large_hull = 2, head_hull = 3 };
