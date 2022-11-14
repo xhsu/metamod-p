@@ -24,8 +24,8 @@ export struct ScreenShake
 // Fade in/out
 //extern int gmsgFade;
 
-export inline constexpr auto FFADE_IN = 0x0000;		// Just here so we don't pass 0 into the function
-export inline constexpr auto FFADE_OUT = 0x0001;		// Fade out (not in)
+export inline constexpr auto FFADE_IN = 0x0000;		// LUNA: Fade into game world.
+export inline constexpr auto FFADE_OUT = 0x0001;		// LUNA: Fade into color screen
 export inline constexpr auto FFADE_MODULATE = 0x0002;		// Modulate (don't blend)
 export inline constexpr auto FFADE_STAYOUT = 0x0004;		// ignores the duration, stays faded out until new ScreenFade message received
 
