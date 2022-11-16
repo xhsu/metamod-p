@@ -125,7 +125,7 @@ export struct enginefuncs_s
 	const char *(*pfnTraceTexture)			(edict_t *pTextureEntity, const float *v1, const float *v2);
 	void		(*pfnTraceSphere)			(const float *v1, const float *v2, int fNoMonsters, float radius, edict_t *pentToSkip, TraceResult *ptr);
 	void		(*pfnGetAimVector)			(edict_t *ent, float speed, float *rgflReturn);
-	void		(*pfnServerCommand)			(char *str);
+	void		(*pfnServerCommand)			(const char *str);
 	void		(*pfnServerExecute)			(void);
 	void		(*pfnClientCommand)			(edict_t *pEdict, const char *szFmt, ...);
 	void		(*pfnParticleEffect)		(const float *org, const float *dir, float color, float count);
@@ -253,7 +253,7 @@ export struct enginefuncs_s
 
 	void		(*pfnGetPlayerStats)		(const edict_t *pClient, int *ping, int *packet_loss);
 
-	void		(*pfnAddServerCommand)		(char *cmd_name, void (*function) (void));
+	void		(*pfnAddServerCommand)		(const char *cmd_name, void (*function) (void));
 
 	// For voice communications, set which clients hear eachother.
 	// NOTE: these functions take player entity indices (starting at 1).
