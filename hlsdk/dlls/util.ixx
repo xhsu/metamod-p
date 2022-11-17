@@ -4,6 +4,7 @@ import <cstddef>;
 import <cstdint>;
 import <cstring>;
 
+export import <vector>;
 import <concepts>;
 
 import <experimental/generator>;
@@ -551,3 +552,76 @@ export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max numbe
 //float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
 //
 //float UTIL_WeaponTimeBase(void);
+
+//
+// LUNA's extension
+//
+
+// for pfnSetGroupMask
+// The engine will skip entity for physent[], before executing PM_Move.
+// Some hack can be done if we do PlayerPreThink(), groupinfo, for example.
+// Adjust Groupinfo op function to achieve these.
+// As for non-players, use ShouldCollide() instead.
+export enum ESetGroupMaskOp
+{
+	/*
+	* if ( mode == GROUP_OP_AND && (check->pev->groupinfo & player->pev->groupinfo) == 0 )
+		continue;
+	*/
+	GROUP_OP_AND = 0,
+
+	/*
+	* if ( mode == GROUP_OP_NAND && (check->pev->groupinfo & player->pev->groupinfo) != 0 )
+		continue;
+	*/
+	GROUP_OP_NAND
+};
+
+// Allows you to set a bunch of entities to skip.
+export
+inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *pPlayer, std::vector<edict_t *> const &rgpEntsToSkip, TraceResult *pTr) noexcept
+{
+	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
+
+	auto const iPlayerLastGroupInfo = pPlayer->v.groupinfo;
+	pPlayer->v.groupinfo = (1 << 1);
+
+	std::vector<int> rgiEdictsLastGroupInfo(rgpEntsToSkip.size());
+	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
+	{
+		rgiEdictsLastGroupInfo[i] = rgpEntsToSkip[i]->v.groupinfo;
+		rgpEntsToSkip[i]->v.groupinfo = (1 << 1);
+	}
+
+	g_engfuncs.pfnTraceLine(vecSrc, vecEnd, dont_ignore_monsters, pPlayer, pTr);
+
+	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
+	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
+		rgpEntsToSkip[i]->v.groupinfo = rgiEdictsLastGroupInfo[i];
+
+	g_engfuncs.pfnSetGroupMask(0, 0);
+}
+
+export
+inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum iHullIndex, edict_t *pPlayer, std::vector<edict_t *> const &rgpEntsToSkip, TraceResult *pTr) noexcept
+{
+	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
+
+	auto const iPlayerLastGroupInfo = pPlayer->v.groupinfo;
+	pPlayer->v.groupinfo = (1 << 1);
+
+	std::vector<int> rgiEdictsLastGroupInfo(rgpEntsToSkip.size());
+	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
+	{
+		rgiEdictsLastGroupInfo[i] = rgpEntsToSkip[i]->v.groupinfo;
+		rgpEntsToSkip[i]->v.groupinfo = (1 << 1);
+	}
+
+	g_engfuncs.pfnTraceHull(vecSrc, vecEnd, dont_ignore_monsters, iHullIndex, pPlayer, pTr);
+
+	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
+	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
+		rgpEntsToSkip[i]->v.groupinfo = rgiEdictsLastGroupInfo[i];
+
+	g_engfuncs.pfnSetGroupMask(0, 0);
+}
