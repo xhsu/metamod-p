@@ -457,7 +457,7 @@ export inline constexpr auto SF_PUSH_BREAKABLE = 128;
 export inline constexpr auto SF_LIGHT_START_OFF = 1;
 
 export inline constexpr auto SPAWNFLAG_NOMESSAGE = 1;
-export inline constexpr auto SPAWNFLAG_NOTOUCH = 1;	// LUNA: #POTENTIAL_BUG #UNTESTED should be 2?
+export inline constexpr auto SPAWNFLAG_NOTOUCH = 1;	// LUNA: #POTENTIAL_BUG #INVESTIGATE should be 2?
 export inline constexpr auto SPAWNFLAG_DROIDONLY = 4;
 
 export inline constexpr auto SPAWNFLAG_USEONLY = 1;	// can't be touched, must be used (buttons)
@@ -624,4 +624,38 @@ inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum
 		rgpEntsToSkip[i]->v.groupinfo = rgiEdictsLastGroupInfo[i];
 
 	g_engfuncs.pfnSetGroupMask(0, 0);
+}
+
+// Decal Helper
+export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextureIndex) noexcept
+{
+	auto const iEntityIndex = ent_cast<short>(pent);
+
+	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
+
+	if (iEntityIndex > 0)
+	{
+		if (iDecalTextureIndex >= 256)
+			g_engfuncs.pfnWriteByte(TE_DECALHIGH);
+		else
+			g_engfuncs.pfnWriteByte(TE_DECAL);
+	}
+	else
+	{
+		if (iDecalTextureIndex >= 256)
+			g_engfuncs.pfnWriteByte(TE_WORLDDECALHIGH);
+		else
+			g_engfuncs.pfnWriteByte(TE_WORLDDECAL);
+	}
+
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z);
+
+	g_engfuncs.pfnWriteByte(iDecalTextureIndex >= 256 ? (iDecalTextureIndex - 256) : iDecalTextureIndex);
+
+	if (iEntityIndex > 0)
+		g_engfuncs.pfnWriteShort(iEntityIndex);
+
+	g_engfuncs.pfnMessageEnd();
 }
