@@ -12,7 +12,7 @@ export using vec_t = float;
 export struct Vector2D
 {
 	constexpr inline Vector2D(void) noexcept = default;
-	constexpr inline Vector2D(float X, float Y) noexcept : x(0.0), y(0.0) { x = X; y = Y; }
+	constexpr inline Vector2D(double X, double Y) noexcept : x{ (float)X }, y{ (float)Y } {}
 	constexpr inline Vector2D(const Vector2D &rhs) noexcept = default;
 
 	inline Vector2D operator+(const Vector2D &v) const noexcept { return Vector2D(x + v.x, y + v.y); }
@@ -20,22 +20,17 @@ export struct Vector2D
 	inline Vector2D operator*(float fl) const noexcept { return Vector2D(x * fl, y * fl); }
 	inline Vector2D operator/(float fl) const noexcept { fl = 1 / fl; return Vector2D(x * fl, y * fl); }
 
-	inline float Length(void) const noexcept { return (float)sqrt(x * x + y * y); }
+	inline double LengthSquared(void) const noexcept { return x * x + y * y; }
+	inline double Length(void) const noexcept { return sqrt(LengthSquared()); }
 
 	inline Vector2D Normalize(void) const noexcept
 	{
-		// Vector2D vec2;
+		auto const flLength = Length();
 
-		float flLen = Length();
-		if (flLen == 0)
-		{
-			return Vector2D(0, 0);
-		}
-		else
-		{
-			flLen = 1 / flLen;
-			return Vector2D(x * flLen, y * flLen);
-		}
+		if (flLength <= std::numeric_limits<vec_t>::epsilon())
+			return Vector2D();
+
+		return Vector2D(x / flLength, y / flLength);
 	}
 
 	vec_t x{}, y{};
@@ -52,6 +47,7 @@ export struct Vector                                            // same data-lay
 	// Construction/destruction
 	constexpr inline Vector(void) noexcept = default;
 	constexpr inline Vector(double X, double Y, double Z) noexcept : x{ (float)X }, y{ (float)Y }, z{ (float)Z } {}
+	constexpr inline Vector(Vector2D const &v2, double Z) noexcept : x{ v2.x }, y{ v2.y }, z{ (float)Z } {}
 	constexpr inline Vector(const Vector &rhs) noexcept = default;
 
 	// Special status
