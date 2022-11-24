@@ -15,6 +15,13 @@ export struct Vector2D
 	constexpr inline Vector2D(double X, double Y) noexcept : x{ (float)X }, y{ (float)Y } {}
 	constexpr inline Vector2D(const Vector2D &rhs) noexcept = default;
 
+	// Special status
+	static inline consteval Vector2D Zero(void) noexcept { return Vector2D(0, 0); }
+	static inline consteval Vector2D Right(void) noexcept { return Vector2D(0, -1); }
+	static inline consteval Vector2D Left(void) noexcept { return Vector2D(0, 1); }
+	static inline consteval Vector2D Forward(void) noexcept { return Vector2D(1, 0); }
+	static inline consteval Vector2D Rearward(void) noexcept { return Vector2D(-1, 0); }
+
 	inline Vector2D operator+(const Vector2D &v) const noexcept { return Vector2D(x + v.x, y + v.y); }
 	inline Vector2D operator-(const Vector2D &v) const noexcept { return Vector2D(x - v.x, y - v.y); }
 	inline Vector2D operator*(float fl) const noexcept { return Vector2D(x * fl, y * fl); }
