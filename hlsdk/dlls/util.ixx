@@ -659,3 +659,14 @@ export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 
 	g_engfuncs.pfnMessageEnd();
 }
+
+// Get player head!
+// Note that it must be a player model, as the bone index was fixed.
+[[nodiscard]]
+Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
+{
+	static Vector vecOrigin{}, vecAngles{};
+	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
+
+	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
+}
