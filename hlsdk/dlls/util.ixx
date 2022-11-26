@@ -663,8 +663,8 @@ export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 
 // Get player head!
 // Note that it must be a player model, as the bone index was fixed.
-[[nodiscard]]
-export Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
+export [[nodiscard]]
+Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 {
 	static Vector vecOrigin{}, vecAngles{};
 	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
@@ -697,7 +697,7 @@ export void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, con
 	g_engfuncs.pfnMessageEnd();
 };
 
-export void UTIL_ExplodeModel(const Vector &vecOrigin, byte iSpeed, short iModel, byte iCount, float flLife) noexcept
+export void UTIL_ExplodeModel(const Vector &vecOrigin, float flSpeed, short iModel, byte iCount, float flLife) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(TE_EXPLODEMODEL);
@@ -706,11 +706,40 @@ export void UTIL_ExplodeModel(const Vector &vecOrigin, byte iSpeed, short iModel
 	g_engfuncs.pfnWriteCoord(vecOrigin.y);
 	g_engfuncs.pfnWriteCoord(vecOrigin.z);
 
-	g_engfuncs.pfnWriteCoord(iSpeed);
+	g_engfuncs.pfnWriteCoord(flSpeed);
 
 	g_engfuncs.pfnWriteShort(iModel);
-	g_engfuncs.pfnWriteByte(iCount);
-	g_engfuncs.pfnWriteShort((int)std::roundf(flLife * 10.f));
+	g_engfuncs.pfnWriteShort(iCount);
+	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
 
 	g_engfuncs.pfnMessageEnd();
 };
+
+export void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprite, byte iStartingFrame, float flFrameRate, float flLife, float flLineWidth, float flNoiseAmp, color24 Color, byte iBrightness, float flScrollSpeed) noexcept
+{
+	g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, vecOrigin, nullptr);
+	g_engfuncs.pfnWriteByte(TE_BEAMCYLINDER);
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z);
+
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z + flRadius);
+
+	g_engfuncs.pfnWriteShort(iSprite);
+	g_engfuncs.pfnWriteByte(iStartingFrame);
+	g_engfuncs.pfnWriteByte((int)std::roundf(flFrameRate * 10.f));
+	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
+	g_engfuncs.pfnWriteByte((int)std::roundf(flLineWidth * 10.f));
+	g_engfuncs.pfnWriteByte((int)std::roundf(flNoiseAmp * 100.f));
+
+	g_engfuncs.pfnWriteByte(Color.r);
+	g_engfuncs.pfnWriteByte(Color.g);
+	g_engfuncs.pfnWriteByte(Color.b);
+	g_engfuncs.pfnWriteByte(iBrightness);
+
+	g_engfuncs.pfnWriteByte((int)std::roundf(flScrollSpeed * 10.f));
+
+	g_engfuncs.pfnMessageEnd();
+}
