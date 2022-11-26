@@ -58,13 +58,13 @@ export struct Vector                                            // same data-lay
 	constexpr inline Vector(const Vector &rhs) noexcept = default;
 
 	// Special status
-	static inline consteval Vector Zero(void) noexcept { return Vector(0, 0, 0); }
-	static inline consteval Vector Up(void) noexcept { return Vector(0, 0, 1); }
-	static inline consteval Vector Down(void) noexcept { return Vector(0, 0, -1); }
-	static inline consteval Vector Right(void) noexcept { return Vector(0, -1, 0); }
-	static inline consteval Vector Left(void) noexcept { return Vector(0, 1, 0); }
-	static inline consteval Vector Forward(void) noexcept { return Vector(1, 0, 0); }
-	static inline consteval Vector Rearward(void) noexcept { return Vector(-1, 0, 0); }
+	static inline constexpr Vector Zero(void) noexcept { return Vector(0, 0, 0); }	// #UPDATE_AT_CPP23 P2564R0 "consteval needs to propagate up"
+	static inline constexpr Vector Up(void) noexcept { return Vector(0, 0, 1); }
+	static inline constexpr Vector Down(void) noexcept { return Vector(0, 0, -1); }
+	static inline constexpr Vector Right(void) noexcept { return Vector(0, -1, 0); }
+	static inline constexpr Vector Left(void) noexcept { return Vector(0, 1, 0); }
+	static inline constexpr Vector Forward(void) noexcept { return Vector(1, 0, 0); }
+	static inline constexpr Vector Rearward(void) noexcept { return Vector(-1, 0, 0); }
 
 	// Operators
 	inline Vector operator-(void) const noexcept { return Vector(-x, -y, -z); }

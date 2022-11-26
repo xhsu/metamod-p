@@ -1,5 +1,6 @@
 export module util;
 
+import <cmath>;
 import <cstddef>;
 import <cstdint>;
 import <cstring>;
@@ -663,10 +664,53 @@ export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 // Get player head!
 // Note that it must be a player model, as the bone index was fixed.
 [[nodiscard]]
-Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
+export Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 {
 	static Vector vecOrigin{}, vecAngles{};
 	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
 
 	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
 }
+
+export void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, byte iCount, float flLife, byte bitsFlags) noexcept
+{
+	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
+	g_engfuncs.pfnWriteByte(TE_BREAKMODEL);
+
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z);
+
+	g_engfuncs.pfnWriteCoord(vecScale.x);
+	g_engfuncs.pfnWriteCoord(vecScale.y);
+	g_engfuncs.pfnWriteCoord(vecScale.z);
+
+	g_engfuncs.pfnWriteCoord(vecVelocity.x);
+	g_engfuncs.pfnWriteCoord(vecVelocity.y);
+	g_engfuncs.pfnWriteCoord(vecVelocity.z);
+
+	g_engfuncs.pfnWriteByte((int)std::roundf(flRandSpeedVar * 10.f));
+	g_engfuncs.pfnWriteShort(iModel);
+	g_engfuncs.pfnWriteByte(iCount);
+	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
+	g_engfuncs.pfnWriteByte(bitsFlags);
+	g_engfuncs.pfnMessageEnd();
+};
+
+export void UTIL_ExplodeModel(const Vector &vecOrigin, byte iSpeed, short iModel, byte iCount, float flLife) noexcept
+{
+	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
+	g_engfuncs.pfnWriteByte(TE_EXPLODEMODEL);
+
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z);
+
+	g_engfuncs.pfnWriteCoord(iSpeed);
+
+	g_engfuncs.pfnWriteShort(iModel);
+	g_engfuncs.pfnWriteByte(iCount);
+	g_engfuncs.pfnWriteShort((int)std::roundf(flLife * 10.f));
+
+	g_engfuncs.pfnMessageEnd();
+};
