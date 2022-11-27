@@ -2,6 +2,7 @@ export module vector;
 
 import <cmath>;
 import <limits>;
+import <numbers>;
 
 export using vec_t = float;
 
@@ -116,6 +117,24 @@ export struct Quaternion
 	constexpr inline Quaternion(void) noexcept = default;
 	constexpr inline Quaternion(double W, double X, double Y, double Z) noexcept : a(W), b(X), c(Y), d(Z) {}
 	constexpr inline Quaternion(const Quaternion &rhs) noexcept = default;
+	inline Quaternion(double yaw, double pitch, double roll) noexcept // yaw (Z), pitch (Y), roll (X)
+	{
+		yaw *= std::numbers::pi / 180.0;
+		pitch *= std::numbers::pi / 180.0;
+		roll *= std::numbers::pi / 180.0;
+
+		auto const cy = cos(yaw * 0.5);
+		auto const sy = sin(yaw * 0.5);
+		auto const cp = cos(pitch * 0.5);
+		auto const sp = sin(pitch * 0.5);
+		auto const cr = cos(roll * 0.5);
+		auto const sr = sin(roll * 0.5);
+
+		a = cr * cp * cy + sr * sp * sy;
+		b = sr * cp * cy - cr * sp * sy;
+		c = cr * sp * cy + sr * cp * sy;
+		d = cr * cp * sy - sr * sp * cy;
+	}
 
 	static inline consteval Quaternion Identity(void) noexcept { return Quaternion{ 1, 0, 0, 0 }; }
 
