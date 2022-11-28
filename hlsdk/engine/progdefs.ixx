@@ -23,10 +23,10 @@ export struct entvars_s
 	//  client can predict conveyors correctly.  Server zeroes it, so we need to store here, too.
 	vec3_t		movedir;
 
-	vec3_t		angles;			// Model angles
-	vec3_t		avelocity;		// angle velocity (degrees per second)
-	vec3_t		punchangle;		// auto-decaying view angle adjustment
-	vec3_t		v_angle;		// Viewing angle (player only)
+	ang3_t		angles;			// Model angles
+	ang3_t		avelocity;		// angle velocity (degrees per second)
+	ang3_t		punchangle;		// auto-decaying view angle adjustment
+	ang3_t		v_angle;		// Viewing angle (player only)
 
 	// For parametric entities
 	vec3_t		endpos;
@@ -230,7 +230,7 @@ export struct globalvars_t
 	vec3_t		trace_endpos;
 	vec3_t		trace_plane_normal;
 	float		trace_plane_dist;
-	edict_t *trace_ent;
+	edict_t *	trace_ent;
 	float		trace_inopen;
 	float		trace_inwater;
 	int			trace_hitgroup;
