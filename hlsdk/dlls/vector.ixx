@@ -105,6 +105,9 @@ export struct Vector                                            // same data-lay
 		return Vector(x / flLength, y / flLength, z / flLength);
 	}
 	inline Angles VectorAngles(void) const noexcept;
+	inline double Pitch(void) const noexcept;
+	inline double Yaw(void) const noexcept;
+	static inline consteval double Roll(void) noexcept { return 0; }	// It make ABSOLUTELY no sense to ask 'roll' of a vector.
 
 	// Methods as Vector2D
 	inline Vector2D Make2D(void) const noexcept { return Vector2D(x, y); }
@@ -284,9 +287,9 @@ inline Angles Vector::VectorAngles(void) const noexcept
 	{
 		angles.yaw = 0;
 		if (z > 0)
-			angles.roll = 90;
+			angles.pitch = 90;
 		else
-			angles.roll = 270;
+			angles.pitch = -90;
 	}
 	else
 	{
@@ -300,6 +303,30 @@ inline Angles Vector::VectorAngles(void) const noexcept
 	}
 
 	return angles;
+}
+
+inline double Vector::Pitch(void) const noexcept
+{
+	if (y == 0 && x == 0)
+	{
+		return (z > 0) ? 90 : -90;
+	}
+	else
+	{
+		return atan2(z, Length2D()) * Angles::rad_to_deg;
+	}
+}
+
+inline double Vector::Yaw(void) const noexcept
+{
+	if (y == 0 && x == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return atan2(y, x) * Angles::rad_to_deg;
+	}
 }
 
 export using ang3_t = Angles;
