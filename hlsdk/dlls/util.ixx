@@ -7,6 +7,7 @@ import <cstring>;
 
 export import <array>;
 export import <concepts>;
+export import <unordered_map>;
 export import <vector>;
 
 export import <experimental/generator>;
@@ -751,8 +752,35 @@ export void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 export [[nodiscard]]
 Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 {
+	static std::unordered_map<int, int> rgModelHeadIndex{};
 	static Vector vecOrigin{}, vecAngles{};
-	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
+
+	// -1 means model has no head.
+	if (pPlayer->v.modelindex <= 0 || rgModelHeadIndex[pPlayer->v.modelindex] == -1)
+		return Vector::Zero();
+
+	[[unlikely]]
+	if (rgModelHeadIndex[pPlayer->v.modelindex] == 0)
+	{
+		int iCount = 0;
+		auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pPlayer);
+
+		for (auto pBone = (mstudiobone_t *)((std::uintptr_t)pstudiohdr + pstudiohdr->boneindex); iCount < pstudiohdr->numbones; ++iCount, ++pBone)
+		{
+			if (strstr(pBone->name, "Head"))
+				break;
+		}
+
+		if (iCount >= pstudiohdr->numbones)
+		{
+			rgModelHeadIndex[pPlayer->v.modelindex] = -1;	// model contains no head.
+			return Vector::Zero();
+		}
+
+		rgModelHeadIndex[pPlayer->v.modelindex] = iCount;
+	}
+
+	g_engfuncs.pfnGetBonePosition(pPlayer, rgModelHeadIndex[pPlayer->v.modelindex], vecOrigin, vecAngles);
 
 	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
 }
