@@ -5,10 +5,11 @@ import <cstddef>;
 import <cstdint>;
 import <cstring>;
 
+export import <array>;
+export import <concepts>;
 export import <vector>;
-import <concepts>;
 
-import <experimental/generator>;
+export import <experimental/generator>;
 
 export import const_;
 export import eiface;
@@ -558,6 +559,10 @@ export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max numbe
 // LUNA's extension
 //
 
+/*
+* Part I: Trace Helper
+*/
+
 // for pfnSetGroupMask
 // The engine will skip entity for physent[], before executing PM_Move.
 // Some hack can be done if we do PlayerPreThink(), groupinfo, for example.
@@ -627,6 +632,10 @@ inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum
 	g_engfuncs.pfnSetGroupMask(0, 0);
 }
 
+/*
+* Part II: Message Helper
+*/
+
 // Decal Helper
 export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextureIndex) noexcept
 {
@@ -659,17 +668,6 @@ export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 		g_engfuncs.pfnWriteShort(iEntityIndex);
 
 	g_engfuncs.pfnMessageEnd();
-}
-
-// Get player head!
-// Note that it must be a player model, as the bone index was fixed.
-export [[nodiscard]]
-Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
-{
-	static Vector vecOrigin{}, vecAngles{};
-	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
-
-	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
 }
 
 export void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, byte iCount, float flLife, byte bitsFlags) noexcept
@@ -742,4 +740,112 @@ export void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 	g_engfuncs.pfnWriteByte((int)std::roundf(flScrollSpeed * 10.f));
 
 	g_engfuncs.pfnMessageEnd();
+}
+
+/*
+* Part III: Model Helper
+*/
+
+// Get player head!
+// Note that it must be a player model, as the bone index was fixed.
+export [[nodiscard]]
+Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
+{
+	static Vector vecOrigin{}, vecAngles{};
+	g_engfuncs.pfnGetBonePosition(pPlayer, 8, vecOrigin, vecAngles);
+
+	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
+}
+
+export struct BodyEnumInfo_t
+{
+	int m_index{};
+	int m_total{};
+};
+
+export
+template <size_t N> [[nodiscard]]
+decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> const &info) noexcept
+{
+	for (auto ret = 0; ret < std::numeric_limits<decltype(entvars_t::body)>::max(); ++ret)
+	{
+		for (auto base = 1; auto && [index, total] : info)
+		{
+			if (ret / base % total != index)
+			{
+				goto LAB_CONTINUE;
+			}
+
+			base *= total;
+		}
+
+		return ret;
+	LAB_CONTINUE:;
+	}
+
+	return 0;
+}
+
+export
+inline float UTIL_SetController(uint8_t *const piController, mstudiobonecontroller_t *const pbonecontroller, double degree) noexcept
+{
+	// wrap 0..360 if it's a rotational controller
+	if (pbonecontroller->type & (STUDIO_XR | STUDIO_YR | STUDIO_ZR))
+	{
+		// ugly hack, invert value if end < start
+		if (pbonecontroller->end < pbonecontroller->start)
+			degree = -degree;
+
+		// does the controller not wrap?
+		if (pbonecontroller->start + 359.0 >= pbonecontroller->end)
+		{
+			if (degree > ((pbonecontroller->start + pbonecontroller->end) / 2.0) + 180)
+				degree = degree - 360;
+			if (degree < ((pbonecontroller->start + pbonecontroller->end) / 2.0) - 180)
+				degree = degree + 360;
+		}
+		else
+		{
+			if (degree > 360)
+				degree = degree - (int)(degree / 360.0) * 360.0;
+			else if (degree < 0)
+				degree = degree + (int)((degree / -360.0) + 1) * 360.0;
+		}
+	}
+
+	auto setting = round(255.0 * (degree - pbonecontroller->start) / (pbonecontroller->end - pbonecontroller->start));
+
+	if (setting < 0)
+		setting = 0;
+
+	if (setting > 255)
+		setting = 255;
+
+	*piController = static_cast<uint8_t>(setting);
+
+	return static_cast<float>(setting * (1.0 / 255.0) * (pbonecontroller->end - pbonecontroller->start) + pbonecontroller->start);
+}
+
+export
+inline float UTIL_SetController(edict_t *pEdict, byte iController, double flValue) noexcept
+{
+	int i{};
+	auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pEdict);
+
+	if (!pstudiohdr)
+		return (float)flValue;
+
+	mstudiobonecontroller_t *pbonecontroller = (mstudiobonecontroller_t *)((byte *)pstudiohdr + pstudiohdr->bonecontrollerindex);
+
+	// find first controller that matches the index
+	for (i = 0; i < pstudiohdr->numbonecontrollers; i++, pbonecontroller++)
+	{
+		if (pbonecontroller->index == iController)
+			break;
+	}
+
+	if (i >= pstudiohdr->numbonecontrollers)
+		return (float)flValue;
+
+	return UTIL_SetController(&pEdict->v.controller[iController], pbonecontroller, flValue);
 }
