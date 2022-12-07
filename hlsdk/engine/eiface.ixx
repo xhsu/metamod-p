@@ -11,6 +11,7 @@ export import entity_state;
 export import netadr;
 export import pm_defs;
 export import progdefs;
+export import studio;
 
 #ifdef HLDEMO_BUILD
 export inline constexpr auto INTERFACE_VERSION = 001;
@@ -165,7 +166,7 @@ export struct enginefuncs_s
 	int			(*pfnIndexOfEdict)			(const edict_t *pEdict);
 	edict_t *	(*pfnPEntityOfEntIndex)		(int iEntIndex);
 	edict_t *	(*pfnFindEntityByVars)		(entvars_t *pvars);
-	void *		(*pfnGetModelPtr)			(edict_t *pEdict);	// #FIXME is this returning model_t??
+	studiohdr_t*(*pfnGetModelPtr)			(edict_t *pEdict);
 	int			(*pfnRegUserMsg)			(const char *pszName, int iSize);
 	void		(*pfnAnimationAutomove)		(const edict_t *pEdict, float flTime);
 	void		(*pfnGetBonePosition)		(const edict_t *pEdict, int iBone, float *rgflOrigin, float *rgflAngles);
