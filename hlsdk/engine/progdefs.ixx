@@ -10,7 +10,7 @@ typedef int string_t;
 
 using std::uint8_t;
 
-export struct entvars_s
+export struct entvars_t
 {
 	string_t	classname;
 	string_t	globalname;
@@ -93,12 +93,12 @@ export struct entvars_s
 	int			button;
 	int			impulse;
 
-	struct edict_s *chain;			// Entity pointer when linked into a linked list
-	struct edict_s *dmg_inflictor;
-	struct edict_s *enemy;
-	struct edict_s *aiment;		// entity pointer when MOVETYPE_FOLLOW
-	struct edict_s *owner;
-	struct edict_s *groundentity;
+	struct edict_t *chain;			// Entity pointer when linked into a linked list
+	struct edict_t *dmg_inflictor;
+	struct edict_t *enemy;
+	struct edict_t *aiment;		// entity pointer when MOVETYPE_FOLLOW
+	struct edict_t *owner;
+	struct edict_t *groundentity;
 
 	int			spawnflags;
 	int			flags;
@@ -133,7 +133,7 @@ export struct entvars_s
 	float		pain_finished;
 	float		radsuit_finished;
 
-	struct edict_s *pContainingEntity;
+	struct edict_t *pContainingEntity;
 
 	int			playerclass;
 	float		maxspeed;
@@ -169,26 +169,22 @@ export struct entvars_s
 	vec3_t		vuser2;
 	vec3_t		vuser3;
 	vec3_t		vuser4;
-	struct edict_s *euser1;
-	struct edict_s *euser2;
-	struct edict_s *euser3;
-	struct edict_s *euser4;
+	struct edict_t *euser1;
+	struct edict_t *euser2;
+	struct edict_t *euser3;
+	struct edict_t *euser4;
 };
-
-export using entvars_t = entvars_s;
 
 export inline constexpr auto MAX_ENT_LEAFS = 48;
 
-export struct link_s
+export struct link_t
 {
-	link_s *prev, *next;
+	link_t *prev, *next;
 };
-
-export using link_t = link_s;
 
 typedef int qboolean;
 
-struct edict_s
+export struct edict_t
 {
 	qboolean	free;
 	int			serialnumber;
@@ -206,8 +202,6 @@ struct edict_s
 
 	// other fields from progs come immediately after
 };
-
-export using edict_t = edict_s;
 
 export struct globalvars_t
 {

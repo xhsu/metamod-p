@@ -27,8 +27,8 @@ export struct Vector2D
 	static inline consteval Vector2D Zero(void) noexcept { return Vector2D(0, 0); }
 	static inline consteval Vector2D Right(void) noexcept { return Vector2D(0, -1); }
 	static inline consteval Vector2D Left(void) noexcept { return Vector2D(0, 1); }
-	static inline consteval Vector2D Forward(void) noexcept { return Vector2D(1, 0); }
-	static inline consteval Vector2D Rearward(void) noexcept { return Vector2D(-1, 0); }
+	static inline consteval Vector2D Front(void) noexcept { return Vector2D(1, 0); }
+	static inline consteval Vector2D Back(void) noexcept { return Vector2D(-1, 0); }
 
 	inline Vector2D operator+(const Vector2D &v) const noexcept { return Vector2D(x + v.x, y + v.y); }
 	inline Vector2D operator-(const Vector2D &v) const noexcept { return Vector2D(x - v.x, y - v.y); }
@@ -71,8 +71,8 @@ export struct Vector                                            // same data-lay
 	static inline constexpr Vector Down(void) noexcept { return Vector(0, 0, -1); }
 	static inline constexpr Vector Right(void) noexcept { return Vector(0, -1, 0); }
 	static inline constexpr Vector Left(void) noexcept { return Vector(0, 1, 0); }
-	static inline constexpr Vector Forward(void) noexcept { return Vector(1, 0, 0); }
-	static inline constexpr Vector Rearward(void) noexcept { return Vector(-1, 0, 0); }
+	static inline constexpr Vector Front(void) noexcept { return Vector(1, 0, 0); }
+	static inline constexpr Vector Back(void) noexcept { return Vector(-1, 0, 0); }
 
 	// Operators
 	inline Vector operator-(void) const noexcept { return Vector(-x, -y, -z); }
@@ -131,6 +131,14 @@ export struct Angles	// same data-layout as engine's vec3_t
 	constexpr inline Angles(void) noexcept = default;	// == Foward()
 	constexpr inline Angles(double P, double Y, double R) noexcept : pitch{ (float)P }, yaw{ (float)Y }, roll{ (float)R } {}
 	constexpr inline Angles(const Angles &rhs) noexcept = default;
+
+	// Special status
+	static inline consteval Angles Upwards(void) noexcept { return Angles(90, 0, 0); }
+	static inline consteval Angles Downwards(void) noexcept { return Angles(-90, 0, 0); }
+	static inline consteval Angles Rightward(void) noexcept { return Angles(0, 270, 0); }
+	static inline consteval Angles Leftward(void) noexcept { return Angles(0, 90, 0); }
+	static inline consteval Angles Forward(void) noexcept { return Angles(0, 0, 0); }
+	static inline consteval Angles Rearward(void) noexcept { return Angles(0, 180, 0); }
 
 	// Operators
 	inline Angles operator-(void) const noexcept { return Angles(-pitch, -yaw, -roll); }
@@ -246,7 +254,7 @@ export struct Angles	// same data-layout as engine's vec3_t
 	{
 		return -Right();
 	}
-	inline Vector Forward(void) const noexcept
+	inline Vector Front(void) const noexcept
 	{
 		const auto sp = sin(pitch * deg_to_rad), sy = sin(yaw * deg_to_rad);
 		const auto cp = cos(pitch * deg_to_rad), cy = cos(yaw * deg_to_rad);
@@ -257,9 +265,9 @@ export struct Angles	// same data-layout as engine's vec3_t
 			-sp		// z
 		);
 	}
-	inline Vector Rearward(void) const noexcept
+	inline Vector Back(void) const noexcept
 	{
-		return -Forward();
+		return -Front();
 	}
 
 	// Members
@@ -339,7 +347,17 @@ export struct Quaternion
 	inline decltype(auto) Real() const noexcept { return a; }
 	inline decltype(auto) Pure() const noexcept { return Vector(b, c, d); }
 
-	inline Vector operator* (const Vector &v) const noexcept
+	inline decltype(auto) operator*(const Quaternion &q) const noexcept
+	{
+		return Quaternion{
+			a * q.a - b * q.b - c * q.c - d * q.d,
+			b * q.a + a * q.b + c * q.d - d * q.c,
+			a * q.c - b * q.d + c * q.a + d * q.b,
+			a * q.d + b * q.c - c * q.b + d * q.a
+		};
+	}
+	inline decltype(auto) operator*=(const Quaternion &q) noexcept { return (*this = *this * q); }
+	inline decltype(auto) operator* (const Vector &v) const noexcept
 	{
 		return 2.0 * DotProduct(Pure(), v) * Pure() + (a * a - Pure().LengthSquared()) * v + 2.0 * a * CrossProduct(Pure(), v);
 	}
@@ -355,25 +373,53 @@ export struct Quaternion
 			vecCross.z
 		).Versor();
 	}
+	static inline Quaternion AxisAngle(const Vector &vecAxis, double degree) noexcept	// Axis must be a unit vector. In clockwise if works in right-handed coordinate system.
+	{
+		degree *= std::numbers::pi / 180.0;
+		auto const cosine = cos(0.5 * degree);
+		auto const sine = sin(0.5 * degree);
 
-	inline Vector Euler() const noexcept
+		return Quaternion(cosine,
+			vecAxis.x * sine,
+			vecAxis.y * sine,
+			vecAxis.z * sine
+		);
+	}
+	static inline Quaternion Euler(const Angles &vecAngles) noexcept	// Input must be radian!
+	{
+		auto const cy = cos(vecAngles.yaw * 0.5);
+		auto const sy = sin(vecAngles.yaw * 0.5);
+		auto const cp = cos(vecAngles.pitch * 0.5);
+		auto const sp = sin(vecAngles.pitch * 0.5);
+		auto const cr = cos(vecAngles.roll * 0.5);
+		auto const sr = sin(vecAngles.roll * 0.5);
+
+		return Quaternion(
+			cr * cp * cy + sr * sp * sy,
+			sr * cp * cy - cr * sp * sy,
+			cr * sp * cy + sr * cp * sy,
+			cr * cp * sy - sr * sp * cy
+		);
+	}
+
+	inline Angles Euler() const noexcept
 	{
 		static constexpr auto rad_to_deg = 180.0 / std::numbers::pi;
-		Vector vecAngles{};
+		Angles vecAngles{};
 
 		// roll (x-axis rotation)
 		auto const sinr_cosp = 2 * (a * b + c * d);
 		auto const cosr_cosp = 1 - 2 * (b * b + c * c);
-		vecAngles[2] = static_cast<vec_t>(atan2(sinr_cosp, cosr_cosp) * rad_to_deg);
+		vecAngles.roll = static_cast<vec_t>(atan2(sinr_cosp, cosr_cosp) * rad_to_deg);
 
 		// pitch (y-axis rotation)
 		auto const sinp = 2 * (a * c - d * b);
-		vecAngles[0] = static_cast<vec_t>(asin(std::clamp(sinp, -1.0, 1.0)) * rad_to_deg); // use 90 degrees if out of range
+		vecAngles.pitch = static_cast<vec_t>(asin(std::clamp(sinp, -1.0, 1.0)) * rad_to_deg); // use 90 degrees if out of range
 
 		// yaw (z-axis rotation)
 		auto const siny_cosp = 2 * (a * d + b * c);
 		auto const cosy_cosp = 1 - 2 * (c * c + d * d);
-		vecAngles[1] = static_cast<vec_t>(atan2(siny_cosp, cosy_cosp) * rad_to_deg);
+		vecAngles.yaw = static_cast<vec_t>(atan2(siny_cosp, cosy_cosp) * rad_to_deg);
 
 		return vecAngles;
 	}
