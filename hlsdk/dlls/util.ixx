@@ -793,7 +793,7 @@ export struct BodyEnumInfo_t
 
 export
 template <size_t N> [[nodiscard]]
-decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> const &info) noexcept
+constexpr decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> const &info) noexcept
 {
 	for (auto ret = 0; ret < std::numeric_limits<decltype(entvars_t::body)>::max(); ++ret)
 	{
