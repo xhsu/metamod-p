@@ -20,11 +20,7 @@ inline constexpr plugin_info_t gPluginInfo =
 	.unloadable	= PT_ANYPAUSE,
 };
 
-// From SDK dlls/h_export.cpp:
-
-//! Holds engine functionality callbacks
-inline enginefuncs_t g_engfuncs = {};
-inline globalvars_t *gpGlobals = nullptr;
+inline constexpr auto PLID = &gPluginInfo;
 
 // Receive engine function table from engine.
 // This appears to be the _first_ DLL routine called by the engine, so we do some setup operations here.
@@ -102,12 +98,12 @@ int HookGameDLLExportedFn(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion) 
 {
 	if (!pFunctionTable) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'HookGameDLLExportedFn' called with null 'pFunctionTable' parameter.");
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'HookGameDLLExportedFn' called with null 'pFunctionTable' parameter.");
 		return false;
 	}
 	else if (*interfaceVersion != INTERFACE_VERSION) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'HookGameDLLExportedFn' called with version mismatch. Expected: %d, receiving: %d.", INTERFACE_VERSION, *interfaceVersion);
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'HookGameDLLExportedFn' called with version mismatch. Expected: %d, receiving: %d.", INTERFACE_VERSION, *interfaceVersion);
 
 		//! Tell metamod what version we had, so it can figure out who is out of date.
 		*interfaceVersion = INTERFACE_VERSION;
@@ -334,12 +330,12 @@ int HookEngineAPI(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion) noe
 {
 	if (!pengfuncsFromEngine) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'HookEngineAPI' called with null 'pengfuncsFromEngine' parameter.");
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'HookEngineAPI' called with null 'pengfuncsFromEngine' parameter.");
 		return false;
 	}
 	else if (*interfaceVersion != ENGINE_INTERFACE_VERSION) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'HookEngineAPI' called with version mismatch. Expected: %d, receiving: %d.", ENGINE_INTERFACE_VERSION, *interfaceVersion);
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'HookEngineAPI' called with version mismatch. Expected: %d, receiving: %d.", ENGINE_INTERFACE_VERSION, *interfaceVersion);
 
 		// Tell metamod what version we had, so it can figure out who is out of date.
 		*interfaceVersion = ENGINE_INTERFACE_VERSION;
@@ -369,7 +365,7 @@ inline constexpr META_FUNCTIONS gMetaFunctionTable =
 //  pMetaUtilFuncs	(given) table of utility functions provided by metamod
 int Meta_Query(const char *pszInterfaceVersion, plugin_info_t const **pPlugInfo, mutil_funcs_t *pMetaUtilFuncs) noexcept
 {
-	*pPlugInfo = &gPluginInfo;
+	*pPlugInfo = PLID;
 	gpMetaUtilFuncs = pMetaUtilFuncs;
 
 	return true;
@@ -385,7 +381,7 @@ int Meta_Attach(PLUG_LOADTIME iCurrentPhase, META_FUNCTIONS *pFunctionTable, met
 {
 	if (!pMGlobals) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'Meta_Attach' called with null 'pMGlobals' parameter.");
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'Meta_Attach' called with null 'pMGlobals' parameter.");
 		return false;
 	}
 
@@ -393,7 +389,7 @@ int Meta_Attach(PLUG_LOADTIME iCurrentPhase, META_FUNCTIONS *pFunctionTable, met
 
 	if (!pFunctionTable) [[unlikely]]
 	{
-		gpMetaUtilFuncs->pfnLogError(&gPluginInfo, "Function 'Meta_Attach' called with null 'pFunctionTable' parameter.");
+		gpMetaUtilFuncs->pfnLogError(PLID, "Function 'Meta_Attach' called with null 'pFunctionTable' parameter.");
 		return false;
 	}
 
