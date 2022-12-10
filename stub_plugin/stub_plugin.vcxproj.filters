@@ -24,11 +24,11 @@
     <Filter Include="HLSDK\cl_dll">
       <UniqueIdentifier>{541671f5-b9a3-441c-808d-18aec0e16e2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="metamod">
-      <UniqueIdentifier>{7123522a-b507-4db5-b5b1-a2a3f91a9e77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSDK\engine">
       <UniqueIdentifier>{7fe3e166-d1f0-4c96-9c77-090bb6d8af19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MetaMod">
+      <UniqueIdentifier>{7123522a-b507-4db5-b5b1-a2a3f91a9e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,19 +204,19 @@
       <Filter>HLSDK\pm_shared</Filter>
     </ClCompile>
     <ClCompile Include="..\metamod\dllapi.ixx">
-      <Filter>metamod</Filter>
+      <Filter>MetaMod</Filter>
     </ClCompile>
     <ClCompile Include="..\metamod\engine_api.ixx">
-      <Filter>metamod</Filter>
+      <Filter>MetaMod</Filter>
     </ClCompile>
     <ClCompile Include="..\metamod\meta_api.ixx">
-      <Filter>metamod</Filter>
+      <Filter>MetaMod</Filter>
     </ClCompile>
     <ClCompile Include="..\metamod\mutil.ixx">
-      <Filter>metamod</Filter>
+      <Filter>MetaMod</Filter>
     </ClCompile>
     <ClCompile Include="..\metamod\plinfo.ixx">
-      <Filter>metamod</Filter>
+      <Filter>MetaMod</Filter>
     </ClCompile>
     <ClCompile Include="..\hlsdk\dlls\util.ixx">
       <Filter>HLSDK\dlls</Filter>
