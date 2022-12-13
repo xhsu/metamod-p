@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx" />
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx" />
     <ClCompile Include="..\..\hlsdk\cl_dll\hud_iface.ixx" />
     <ClCompile Include="..\..\hlsdk\cl_dll\wrect.ixx" />
     <ClCompile Include="..\..\hlsdk\common\beamdef.ixx" />

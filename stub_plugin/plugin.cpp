@@ -1,6 +1,4 @@
-import <cstring>;
-
-import <concepts>;
+import std;
 
 import eiface;
 import engine_api;

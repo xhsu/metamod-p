@@ -2,7 +2,7 @@ export module mathlib;
 
 export import vector;
 
-import <concepts>;
+import std;
 
 //typedef float vec_t;
 //typedef vec_t vec3_t[3];

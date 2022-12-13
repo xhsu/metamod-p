@@ -1,6 +1,6 @@
 export module r_studioint;
 
-import <cstddef>;
+import std;
 
 export import com_model;
 export import cl_entity;

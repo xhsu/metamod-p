@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx" />
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx" />
     <ClCompile Include="..\..\metamod\dllapi.ixx" />
     <ClCompile Include="..\..\metamod\engine_api.ixx" />
     <ClCompile Include="..\..\metamod\meta_api.ixx" />

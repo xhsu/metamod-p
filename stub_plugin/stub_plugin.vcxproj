@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx" />
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx" />
     <ClCompile Include="..\hlsdk\cl_dll\hud_iface.ixx" />
     <ClCompile Include="..\hlsdk\cl_dll\wrect.ixx" />
     <ClCompile Include="..\hlsdk\common\beamdef.ixx" />
@@ -125,14 +127,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <AdditionalOptions>/Zc:char8_t- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,15 +149,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);FMT_HEADER_ONLY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;STUBPLUGIN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\hlsdk\common\;..\hlsdk\dlls\;..\hlsdk\engine\;..\hlsdk\pm_shared\;..\metamod\;..\..\fmt\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <AdditionalOptions>/Zc:char8_t- /utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

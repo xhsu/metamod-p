@@ -1,6 +1,6 @@
 export module eiface;
 
-import <cstdint>;
+import std;
 
 export import Sequence;
 export import const_;

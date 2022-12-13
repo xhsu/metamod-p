@@ -23,6 +23,9 @@
     <Filter Include="metamod">
       <UniqueIdentifier>{73f4bb86-7353-452f-aa40-47917caabf8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STL">
+      <UniqueIdentifier>{63cd3d3a-a561-40f7-a21e-1f5d142c8117}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hlsdk-cpp23.cpp">
@@ -219,6 +222,12 @@
     </ClCompile>
     <ClCompile Include="..\dlls\activity.ixx">
       <Filter>dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx">
+      <Filter>STL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx">
+      <Filter>STL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

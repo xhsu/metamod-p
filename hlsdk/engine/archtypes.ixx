@@ -1,7 +1,7 @@
 // LUNA: module not recommanded. Just directly use std types instead.
 export module archtypes;
 
-import <cstdint>;
+import std;
 
 export using int16 = std::int16_t;
 export using uint16 = std::uint16_t;

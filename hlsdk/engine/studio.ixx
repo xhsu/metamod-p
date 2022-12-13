@@ -1,6 +1,6 @@
 export module studio;
 
-import <numbers>;
+import std;
 
 export import vector;
 export import com_model;

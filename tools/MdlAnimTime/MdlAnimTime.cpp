@@ -1,16 +1,9 @@
 // MdlAnimTime.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <cassert>
-#include <cstdio>
+import std;
 
 #include <fmt/color.h>
-
-import <filesystem>;
-import <iostream>;
-import <string>;
-
-import studio;
 
 using std::string;
 

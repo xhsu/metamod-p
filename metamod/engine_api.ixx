@@ -1,6 +1,6 @@
 export module engine_api;
 
-import <cstdint>;
+import std;
 
 export import eiface;
 

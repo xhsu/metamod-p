@@ -9,10 +9,8 @@ export module extdll;
 //#define NOIME
 //export import <Windows.h>;
 
-// Misc C-runtime library headers
-export import <cstdio>;
-export import <cstdlib>;
-export import <cmath>;
+// C++ Standard Library
+export import std;
 
 // Header file containing definition of globalvars_t and entvars_t
 //typedef int	func_t;					//

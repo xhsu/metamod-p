@@ -19,6 +19,9 @@
     <Filter Include="HLSDK\pm_shared">
       <UniqueIdentifier>{513de3c2-956a-4a04-8f2f-b32b08970a23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STL">
+      <UniqueIdentifier>{15cb5573-dc70-4223-ba9c-4e6e0d891b17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\hlsdk\dlls\cdll_dll.ixx">
@@ -199,5 +202,11 @@
       <Filter>HLSDK\dlls</Filter>
     </ClCompile>
     <ClCompile Include="MdlAnimTime.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\VC\Tools\MSVC\14.35.32019\modules\std.compat.ixx">
+      <Filter>STL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\VC\Tools\MSVC\14.35.32019\modules\std.ixx">
+      <Filter>STL</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

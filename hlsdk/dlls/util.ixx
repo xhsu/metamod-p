@@ -1,25 +1,156 @@
 export module util;
 
-import <cmath>;
-import <cstddef>;
-import <cstdint>;
-import <cstring>;
-
-export import <array>;
-export import <concepts>;
-export import <unordered_map>;
-export import <vector>;
-
-export import <experimental/generator>;
+export import std.compat;
 
 export import const_;
 export import eiface;
 export import progdefs;
 
+// #UPDATE_AT_CPP23 real std::generator
+namespace std::experimental {
+	// NOTE WELL: _CPPUNWIND currently affects the ABI of generator.
+	template <class _Ty, class _Alloc = allocator<char>>
+	struct generator {
+		struct promise_type {
+			const _Ty *_Value;
+
+			generator get_return_object() noexcept {
+				return generator{ *this };
+			}
+
+			suspend_always initial_suspend() noexcept {
+				return {};
+			}
+
+			suspend_always final_suspend() noexcept {
+				return {};
+			}
+
+			void unhandled_exception() noexcept {}
+
+			suspend_always yield_value(const _Ty &_Val) noexcept {
+				_Value = std::addressof(_Val);
+				return {};
+			}
+
+			void return_void() noexcept {}
+
+			template <class _Uty>
+			_Uty &&await_transform(_Uty &&_Whatever) {
+				static_assert(_Always_false<_Uty>,
+					"co_await is not supported in coroutines of type std::experimental::generator");
+				return std::forward<_Uty>(_Whatever);
+			}
+
+			template <class _Alloc, class _Value_type>
+			using _Rebind_alloc_t = typename allocator_traits<_Alloc>::template rebind_alloc<_Value_type>;
+
+			using _Alloc_char = _Rebind_alloc_t<_Alloc, char>;
+			static_assert(is_same_v<char *, typename allocator_traits<_Alloc_char>::pointer>,
+				"generator does not support allocators with fancy pointer types");
+			static_assert(
+				allocator_traits<_Alloc_char>::is_always_equal::value &&is_default_constructible_v<_Alloc_char>,
+				"generator supports only stateless allocators");
+
+			static void *operator new(size_t _Size) {
+				_Alloc_char _Al{};
+				return allocator_traits<_Alloc_char>::allocate(_Al, _Size);
+			}
+
+			static void operator delete(void *_Ptr, size_t _Size) noexcept {
+				_Alloc_char _Al{};
+				return allocator_traits<_Alloc_char>::deallocate(_Al, static_cast<char *>(_Ptr), _Size);
+			}
+		};
+
+		struct iterator {
+			using iterator_category = input_iterator_tag;
+			using difference_type = ptrdiff_t;
+			using value_type = _Ty;
+			using reference = const _Ty &;
+			using pointer = const _Ty *;
+
+			coroutine_handle<promise_type> _Coro = nullptr;
+
+			iterator() = default;
+			explicit iterator(coroutine_handle<promise_type> _Coro_) noexcept : _Coro(_Coro_) {}
+
+			iterator &operator++() {
+				_Coro.resume();
+				if (_Coro.done()) {
+					_Coro = nullptr;
+				}
+
+				return *this;
+			}
+
+			void operator++(int) {
+				// This operator meets the requirements of the C++20 input_iterator concept,
+				// but not the Cpp17InputIterator requirements.
+				++ *this;
+			}
+
+			[[nodiscard]] bool operator==(const iterator &_Right) const noexcept {
+				return _Coro == _Right._Coro;
+			}
+
+			[[nodiscard]] bool operator!=(const iterator &_Right) const noexcept {
+				return !(*this == _Right);
+			}
+
+			[[nodiscard]] reference operator*() const noexcept {
+				return *_Coro.promise()._Value;
+			}
+
+			[[nodiscard]] pointer operator->() const noexcept {
+				return _Coro.promise()._Value;
+			}
+		};
+
+		[[nodiscard]] iterator begin() {
+			if (_Coro) {
+				_Coro.resume();
+				if (_Coro.done()) {
+					return {};
+				}
+			}
+
+			return iterator{ _Coro };
+		}
+
+		[[nodiscard]] iterator end() noexcept {
+			return {};
+		}
+
+		explicit generator(promise_type &_Prom) noexcept : _Coro(coroutine_handle<promise_type>::from_promise(_Prom)) {}
+
+		generator() = default;
+
+		generator(generator &&_Right) noexcept : _Coro(std::exchange(_Right._Coro, nullptr)) {}
+
+		generator &operator=(generator &&_Right) noexcept {
+			_Coro = std::exchange(_Right._Coro, nullptr);
+			return *this;
+		}
+
+		~generator() {
+			if (_Coro) {
+				_Coro.destroy();
+			}
+		}
+
+	private:
+		coroutine_handle<promise_type> _Coro = nullptr;
+	};
+} // namespace experimental
+
 //
 // Misc utility code
 //
 export inline constexpr auto SVC_DIRECTOR = 51;
+
+template <typename T>
+inline constexpr bool AlwaysFalse = false;
 
 //
 // Conversion among the three types of "entity", including identity-conversions.
@@ -38,7 +169,7 @@ export template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// entindex -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(g_engfuncs.pfnPEntityOfEntIndex(ent)->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(AlwaysFalse<new_t>, "Casting to a unsupported type.");
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
 	{
@@ -51,7 +182,7 @@ export template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// entvars_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pContainingEntity->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(AlwaysFalse<new_t>, "Casting to a unsupported type.");
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
 	{
@@ -64,7 +195,7 @@ export template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// edict_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(AlwaysFalse<new_t>, "Casting to a unsupported type.");
 	}
 
 	// This is for CBaseEntity, but we are not going to restricting class name nor import CBase.
@@ -73,7 +204,7 @@ export template <typename new_t, typename org_t>
 		return ent_cast<new_t>(ent->pev);
 	}
 	else
-		static_assert(std::_Always_false<new_t>, "Casting from a unsupported type.");
+		static_assert(AlwaysFalse<new_t>, "Casting from a unsupported type.");
 }
 
 export inline auto ENTOFFSET(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnEntOffsetOfPEntity)(pEdict); }	// eoffset is different from entindex!!

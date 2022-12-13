@@ -1,10 +1,6 @@
 export module vector;
 
-import <cmath>;
-
-import <algorithm>;
-import <limits>;
-import <numbers>;
+import std;
 
 export using vec_t = float;
 
@@ -36,7 +32,7 @@ export struct Vector2D
 	inline Vector2D operator/(float fl) const noexcept { fl = 1 / fl; return Vector2D(x * fl, y * fl); }
 
 	inline double LengthSquared(void) const noexcept { return x * x + y * y; }
-	inline double Length(void) const noexcept { return sqrt(LengthSquared()); }
+	inline double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
 
 	inline Vector2D Normalize(void) const noexcept
 	{
@@ -94,7 +90,7 @@ export struct Vector                                            // same data-lay
 
 	// Methods as Vector
 	inline double LengthSquared(void) const noexcept { return x * x + y * y + z * z; }
-	inline double Length(void) const noexcept { return sqrt(LengthSquared()); }
+	inline double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
 	inline Vector Normalize(void) const noexcept
 	{
 		auto const flLength = Length();
@@ -112,7 +108,7 @@ export struct Vector                                            // same data-lay
 	// Methods as Vector2D
 	inline Vector2D Make2D(void) const noexcept { return Vector2D(x, y); }
 	inline double LengthSquared2D(void) const noexcept { return x * x + y * y; }
-	inline double Length2D(void) const noexcept { return sqrt(LengthSquared2D()); }
+	inline double Length2D(void) const noexcept { return std::sqrt(LengthSquared2D()); }
 
 	// Members
 	vec_t x{}, y{}, z{};
@@ -200,8 +196,8 @@ export struct Angles	// same data-layout as engine's vec3_t
 	}
 	inline std::tuple<Vector, Vector, Vector> AngleVectors() const noexcept
 	{
-		const auto sp = sin(pitch * deg_to_rad), sy = sin(yaw * deg_to_rad), sr = sin(roll * deg_to_rad);
-		const auto cp = cos(pitch * deg_to_rad), cy = cos(yaw * deg_to_rad), cr = cos(roll * deg_to_rad);
+		const auto sp = std::sin(pitch * deg_to_rad), sy = std::sin(yaw * deg_to_rad), sr = std::sin(roll * deg_to_rad);
+		const auto cp = std::cos(pitch * deg_to_rad), cy = std::cos(yaw * deg_to_rad), cr = std::cos(roll * deg_to_rad);
 
 		return std::make_tuple(
 
@@ -229,8 +225,8 @@ export struct Angles	// same data-layout as engine's vec3_t
 	}
 	inline Vector Up(void) const noexcept
 	{
-		const auto sp = sin(pitch * deg_to_rad), sy = sin(yaw * deg_to_rad), sr = sin(roll * deg_to_rad);
-		const auto cp = cos(pitch * deg_to_rad), cy = cos(yaw * deg_to_rad), cr = cos(roll * deg_to_rad);
+		const auto sp = std::sin(pitch * deg_to_rad), sy = std::sin(yaw * deg_to_rad), sr = std::sin(roll * deg_to_rad);
+		const auto cp = std::cos(pitch * deg_to_rad), cy = std::cos(yaw * deg_to_rad), cr = std::cos(roll * deg_to_rad);
 
 		return Vector(
 			cr * sp * cy + sr * sy,	// x
@@ -244,8 +240,8 @@ export struct Angles	// same data-layout as engine's vec3_t
 	}
 	inline Vector Right(void) const noexcept
 	{
-		const auto sp = sin(pitch * deg_to_rad), sy = sin(yaw * deg_to_rad), sr = sin(roll * deg_to_rad);
-		const auto cp = cos(pitch * deg_to_rad), cy = cos(yaw * deg_to_rad), cr = cos(roll * deg_to_rad);
+		const auto sp = std::sin(pitch * deg_to_rad), sy = std::sin(yaw * deg_to_rad), sr = std::sin(roll * deg_to_rad);
+		const auto cp = std::cos(pitch * deg_to_rad), cy = std::cos(yaw * deg_to_rad), cr = std::cos(roll * deg_to_rad);
 
 		return Vector(
 			-(sr * sp * cy) + cr * sy,	// x
@@ -259,8 +255,8 @@ export struct Angles	// same data-layout as engine's vec3_t
 	}
 	inline Vector Front(void) const noexcept
 	{
-		const auto sp = sin(pitch * deg_to_rad), sy = sin(yaw * deg_to_rad);
-		const auto cp = cos(pitch * deg_to_rad), cy = cos(yaw * deg_to_rad);
+		const auto sp = std::sin(pitch * deg_to_rad), sy = std::sin(yaw * deg_to_rad);
+		const auto cp = std::cos(pitch * deg_to_rad), cy = std::cos(yaw * deg_to_rad);
 
 		return Vector(
 			cp * cy,	// x
@@ -293,11 +289,11 @@ inline Angles Vector::VectorAngles(void) const noexcept
 	}
 	else
 	{
-		angles.yaw = static_cast<float>(atan2(y, x) * Angles::rad_to_deg);
+		angles.yaw = static_cast<float>(std::atan2(y, x) * Angles::rad_to_deg);
 		if (angles.yaw < 0)
 			angles.yaw += 360;
 
-		angles.pitch = static_cast<float>(atan2(z, Length2D()) * Angles::rad_to_deg);
+		angles.pitch = static_cast<float>(std::atan2(z, Length2D()) * Angles::rad_to_deg);
 		if (angles.pitch < 0)
 			angles.pitch += 360;
 	}
@@ -313,7 +309,7 @@ inline double Vector::Pitch(void) const noexcept
 	}
 	else
 	{
-		return atan2(z, Length2D()) * Angles::rad_to_deg;
+		return std::atan2(z, Length2D()) * Angles::rad_to_deg;
 	}
 }
 
@@ -325,7 +321,7 @@ inline double Vector::Yaw(void) const noexcept
 	}
 	else
 	{
-		return atan2(y, x) * Angles::rad_to_deg;
+		return std::atan2(y, x) * Angles::rad_to_deg;
 	}
 }
 
@@ -345,12 +341,12 @@ export struct Quaternion
 		pitch *= std::numbers::pi / 180.0;
 		roll *= std::numbers::pi / 180.0;
 
-		auto const cy = cos(yaw * 0.5);
-		auto const sy = sin(yaw * 0.5);
-		auto const cp = cos(pitch * 0.5);
-		auto const sp = sin(pitch * 0.5);
-		auto const cr = cos(roll * 0.5);
-		auto const sr = sin(roll * 0.5);
+		auto const cy = std::cos(yaw * 0.5);
+		auto const sy = std::sin(yaw * 0.5);
+		auto const cp = std::cos(pitch * 0.5);
+		auto const sp = std::sin(pitch * 0.5);
+		auto const cr = std::cos(roll * 0.5);
+		auto const sr = std::sin(roll * 0.5);
 
 		a = cr * cp * cy + sr * sp * sy;
 		b = sr * cp * cy - cr * sp * sy;
@@ -360,7 +356,7 @@ export struct Quaternion
 
 	static inline consteval Quaternion Identity(void) noexcept { return Quaternion{ 1, 0, 0, 0 }; }
 
-	inline decltype(auto) Magnitude(void) const noexcept { return sqrt(a * a + b * b + c * c + d * d); }
+	inline decltype(auto) Magnitude(void) const noexcept { return std::sqrt(a * a + b * b + c * c + d * d); }
 	inline decltype(auto) Versor(void) const noexcept
 	{
 		auto const mag = Magnitude();
@@ -384,17 +380,14 @@ export struct Quaternion
 		};
 	}
 	inline decltype(auto) operator*=(const Quaternion &q) noexcept { return (*this = *this * q); }
-	inline decltype(auto) operator* (const Vector &v) const noexcept
-	{
-		return 2.0 * DotProduct(Pure(), v) * Pure() + (a * a - Pure().LengthSquared()) * v + 2.0 * a * CrossProduct(Pure(), v);
-	}
+	inline decltype(auto) operator* (const Vector &v) const noexcept { return 2.0 * DotProduct(Pure(), v) * Pure() + (a * a - Pure().LengthSquared()) * v + 2.0 * a * CrossProduct(Pure(), v); }
 
 	static inline Quaternion Rotate(const Vector &vecFrom, const Vector &vecTo) noexcept
 	{
 		auto const vecCross = CrossProduct(vecFrom, vecTo);
 
 		return Quaternion(
-			sqrt(vecFrom.LengthSquared() * vecTo.LengthSquared()) + DotProduct(vecFrom, vecTo),
+			std::sqrt(vecFrom.LengthSquared() * vecTo.LengthSquared()) + DotProduct(vecFrom, vecTo),
 			vecCross.x,
 			vecCross.y,
 			vecCross.z
@@ -403,8 +396,8 @@ export struct Quaternion
 	static inline Quaternion AxisAngle(const Vector &vecAxis, double degree) noexcept	// Axis must be a unit vector. In clockwise if works in right-handed coordinate system.
 	{
 		degree *= std::numbers::pi / 180.0;
-		auto const cosine = cos(0.5 * degree);
-		auto const sine = sin(0.5 * degree);
+		auto const cosine = std::cos(0.5 * degree);
+		auto const sine = std::sin(0.5 * degree);
 
 		return Quaternion(cosine,
 			vecAxis.x * sine,
@@ -414,12 +407,12 @@ export struct Quaternion
 	}
 	static inline Quaternion Euler(const Angles &vecAngles) noexcept	// Input must be radian!
 	{
-		auto const cy = cos(vecAngles.yaw * 0.5);
-		auto const sy = sin(vecAngles.yaw * 0.5);
-		auto const cp = cos(vecAngles.pitch * 0.5);
-		auto const sp = sin(vecAngles.pitch * 0.5);
-		auto const cr = cos(vecAngles.roll * 0.5);
-		auto const sr = sin(vecAngles.roll * 0.5);
+		auto const cy = std::cos(vecAngles.yaw * 0.5);
+		auto const sy = std::sin(vecAngles.yaw * 0.5);
+		auto const cp = std::cos(vecAngles.pitch * 0.5);
+		auto const sp = std::sin(vecAngles.pitch * 0.5);
+		auto const cr = std::cos(vecAngles.roll * 0.5);
+		auto const sr = std::sin(vecAngles.roll * 0.5);
 
 		return Quaternion(
 			cr * cp * cy + sr * sp * sy,
@@ -437,16 +430,16 @@ export struct Quaternion
 		// roll (x-axis rotation)
 		auto const sinr_cosp = 2 * (a * b + c * d);
 		auto const cosr_cosp = 1 - 2 * (b * b + c * c);
-		vecAngles.roll = static_cast<vec_t>(atan2(sinr_cosp, cosr_cosp) * rad_to_deg);
+		vecAngles.roll = static_cast<vec_t>(std::atan2(sinr_cosp, cosr_cosp) * rad_to_deg);
 
 		// pitch (y-axis rotation)
 		auto const sinp = 2 * (a * c - d * b);
-		vecAngles.pitch = static_cast<vec_t>(asin(std::clamp(sinp, -1.0, 1.0)) * rad_to_deg); // use 90 degrees if out of range
+		vecAngles.pitch = static_cast<vec_t>(std::asin(std::clamp(sinp, -1.0, 1.0)) * rad_to_deg); // use 90 degrees if out of range
 
 		// yaw (z-axis rotation)
 		auto const siny_cosp = 2 * (a * d + b * c);
 		auto const cosy_cosp = 1 - 2 * (c * c + d * d);
-		vecAngles.yaw = static_cast<vec_t>(atan2(siny_cosp, cosy_cosp) * rad_to_deg);
+		vecAngles.yaw = static_cast<vec_t>(std::atan2(siny_cosp, cosy_cosp) * rad_to_deg);
 
 		return vecAngles;
 	}
