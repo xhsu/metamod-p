@@ -1,7 +1,5 @@
 export module engine_api;
 
-import std;
-
 export import eiface;
 
 // Plugin's GetEngineFunctions, called by metamod.

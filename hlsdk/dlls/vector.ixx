@@ -1,6 +1,10 @@
 export module vector;
 
-import std;
+export import <cmath>;
+
+export import <algorithm>;
+export import <numbers>;
+export import <string>;
 
 export using vec_t = float;
 

@@ -1,6 +1,5 @@
 export module extdll;
 
-// #UNDONE
 // Prevent tons of unused windows definitions
 //#define WIN32_LEAN_AND_MEAN
 //#define NOWINRES
@@ -8,9 +7,6 @@ export module extdll;
 //#define NOMCX
 //#define NOIME
 //export import <Windows.h>;
-
-// C++ Standard Library
-export import std;
 
 // Header file containing definition of globalvars_t and entvars_t
 //typedef int	func_t;					//

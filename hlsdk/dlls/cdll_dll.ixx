@@ -11,6 +11,9 @@ export inline constexpr auto HIDEHUD_WEAPONS = (1 << 0);
 export inline constexpr auto HIDEHUD_FLASHLIGHT = (1 << 1);
 export inline constexpr auto HIDEHUD_ALL = (1 << 2);
 export inline constexpr auto HIDEHUD_HEALTH = (1 << 3);
+export inline constexpr auto HIDEHUD_TIMER = (1 << 4);
+export inline constexpr auto HIDEHUD_MONEY = (1 << 5);
+export inline constexpr auto HIDEHUD_CROSSHAIR = (1 << 6);
 
 export inline constexpr auto MAX_AMMO_TYPES = 32;		// ???
 export inline constexpr auto MAX_AMMO_SLOTS = 32;		// not really slots

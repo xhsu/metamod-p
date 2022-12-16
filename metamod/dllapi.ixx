@@ -8,7 +8,7 @@ export using GETENTITYAPI_FN = int (*) (DLL_FUNCTIONS *pFunctionTable, int inter
 export using GETENTITYAPI2_FN = int (*) (DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
 export using GETNEWDLLFUNCTIONS_FN = int (*) (NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
 
-// #FN_STUB
+// #STUB_FN
 // From SDK dlls/cbase.h:
 //C_DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);
 //C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);

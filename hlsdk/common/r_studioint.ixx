@@ -1,7 +1,5 @@
 export module r_studioint;
 
-import std;
-
 export import com_model;
 export import cl_entity;
 export import cvardef;
