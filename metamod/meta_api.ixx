@@ -111,11 +111,11 @@ export using META_ATTACH_FN = int (*) (PLUG_LOADTIME now,
 // Detach the plugin; tell why and when.
 export using META_DETACH_FN = int (*) (PLUG_LOADTIME now, PL_UNLOAD_REASON reason) noexcept;
 
-// Standard HL SDK interface function prototypes. #FN_STUB
+// Standard HL SDK interface function prototypes. #STUB_FN
 //C_DLLEXPORT int GetEntityAPI_Post(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);
 //C_DLLEXPORT int GetEntityAPI2_Post(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
 
-// Additional SDK-like interface function prototypes. #FN_STUB
+// Additional SDK-like interface function prototypes. #STUB_FN
 //C_DLLEXPORT int GetNewDLLFunctions_Post(NEW_DLL_FUNCTIONS *pNewFunctionTable, int *interfaceVersion);
 //C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion);
 //C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine,int *interfaceVersion);

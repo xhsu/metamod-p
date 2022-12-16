@@ -10,5 +10,5 @@ export struct demo_api_s
 
 export using demo_api_t = demo_api_s;
 
-// #UNDONE
+// #STUB_API
 //extern demo_api_t demoapi;

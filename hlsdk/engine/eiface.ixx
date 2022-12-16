@@ -1,7 +1,5 @@
 export module eiface;
 
-import std;
-
 export import Sequence;
 export import const_;
 export import crc;

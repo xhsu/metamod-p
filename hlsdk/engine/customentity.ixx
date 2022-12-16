@@ -1,6 +1,8 @@
 export module customentity;
 
-import std;
+export import <cstdint>;
+
+export import <concepts>;
 
 // Custom Entities
 

@@ -2,8 +2,6 @@ export module mathlib;
 
 export import vector;
 
-import std;
-
 //typedef float vec_t;
 //typedef vec_t vec3_t[3];
 export using vec4_t = vec_t[4];	// x,y,z,w
@@ -18,7 +16,6 @@ export using fixed4_t = int;
 export using fixed8_t = int;
 export using fixed16_t = int;
 
-// #UNDONE
 //#ifndef M_PI
 //#define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
 //#endif
