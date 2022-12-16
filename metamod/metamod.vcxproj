@@ -55,16 +55,17 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\hlsdk\common;..\hlsdk\dlls;..\hlsdk\engine;..\hlsdk\pm_shared;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;_CRT_SECURE_NO_DEPRECATE;__METAMOD_BUILD__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\fmt\include\;..\hlsdk\common;..\hlsdk\dlls;..\hlsdk\engine;..\hlsdk\pm_shared;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;FMT_HEADER_ONLY;_DEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;_CRT_SECURE_NO_DEPRECATE;__METAMOD_BUILD__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>false</ExceptionHandling>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>metamod.def</ModuleDefinitionFile>
@@ -75,15 +76,17 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\hlsdk\common;..\hlsdk\dlls;..\hlsdk\engine;..\hlsdk\pm_shared;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;_CRT_SECURE_NO_DEPRECATE;__METAMOD_BUILD__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\fmt\include\;..\hlsdk\common;..\hlsdk\dlls;..\hlsdk\engine;..\hlsdk\pm_shared;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;FMT_HEADER_ONLY;NDEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;_CRT_SECURE_NO_DEPRECATE;__METAMOD_BUILD__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <CompileAs>Default</CompileAs>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>false</ExceptionHandling>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -94,38 +97,119 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\hlsdk\cl_dll\hud_iface.ixx" />
+    <ClCompile Include="..\hlsdk\cl_dll\wrect.ixx" />
+    <ClCompile Include="..\hlsdk\common\beamdef.ixx" />
+    <ClCompile Include="..\hlsdk\common\cl_entity.ixx" />
+    <ClCompile Include="..\hlsdk\common\com_model.ixx" />
+    <ClCompile Include="..\hlsdk\common\const_.ixx" />
+    <ClCompile Include="..\hlsdk\common\con_nprint.ixx" />
+    <ClCompile Include="..\hlsdk\common\crc.ixx" />
+    <ClCompile Include="..\hlsdk\common\cvardef.ixx" />
+    <ClCompile Include="..\hlsdk\common\demo_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\director_cmds.ixx" />
+    <ClCompile Include="..\hlsdk\common\dlight.ixx" />
+    <ClCompile Include="..\hlsdk\common\dll_state.ixx" />
+    <ClCompile Include="..\hlsdk\common\engine_launcher_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\entity_state.ixx" />
+    <ClCompile Include="..\hlsdk\common\entity_types.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_args.ixx" />
+    <ClCompile Include="..\hlsdk\common\event_flags.ixx" />
+    <ClCompile Include="..\hlsdk\common\exefuncs.ixx" />
+    <ClCompile Include="..\hlsdk\common\hltv.ixx" />
+    <ClCompile Include="..\hlsdk\common\in_buttons.ixx" />
+    <ClCompile Include="..\hlsdk\common\ivoicetweak.ixx" />
+    <ClCompile Include="..\hlsdk\common\mathlib.ixx" />
+    <ClCompile Include="..\hlsdk\common\netadr.ixx" />
+    <ClCompile Include="..\hlsdk\common\net_api.ixx" />
+    <ClCompile Include="..\hlsdk\common\particledef.ixx" />
+    <ClCompile Include="..\hlsdk\common\pmtrace.ixx" />
+    <ClCompile Include="..\hlsdk\common\qfont.ixx" />
+    <ClCompile Include="..\hlsdk\common\ref_params.ixx" />
+    <ClCompile Include="..\hlsdk\common\r_efx.ixx" />
+    <ClCompile Include="..\hlsdk\common\r_studioint.ixx" />
+    <ClCompile Include="..\hlsdk\common\screenfade.ixx" />
+    <ClCompile Include="..\hlsdk\common\studio_event.ixx" />
+    <ClCompile Include="..\hlsdk\common\triangleapi.ixx" />
+    <ClCompile Include="..\hlsdk\common\usercmd.ixx" />
+    <ClCompile Include="..\hlsdk\common\weaponinfo.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\activity.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\cdll_dll.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\extdll.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\util.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\vector.ixx" />
+    <ClCompile Include="..\hlsdk\engine\archtypes.ixx" />
+    <ClCompile Include="..\hlsdk\engine\cdll_int.ixx" />
+    <ClCompile Include="..\hlsdk\engine\custom.ixx" />
+    <ClCompile Include="..\hlsdk\engine\customentity.ixx" />
+    <ClCompile Include="..\hlsdk\engine\edict.ixx" />
+    <ClCompile Include="..\hlsdk\engine\eiface.ixx" />
+    <ClCompile Include="..\hlsdk\engine\keydefs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\progdefs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\progs.ixx" />
+    <ClCompile Include="..\hlsdk\engine\Sequence.ixx" />
+    <ClCompile Include="..\hlsdk\engine\shake.ixx" />
+    <ClCompile Include="..\hlsdk\engine\studio.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_defs.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_info.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_materials.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_movevars.ixx" />
+    <ClCompile Include="..\hlsdk\pm_shared\pm_shared.ixx" />
     <ClCompile Include="api_hook.cpp" />
-    <ClCompile Include="api_info.cpp" />
+    <ClCompile Include="api_info.ixx" />
     <ClCompile Include="commands_meta.cpp" />
+    <ClCompile Include="commands_meta.ixx" />
     <ClCompile Include="conf_meta.cpp" />
+    <ClCompile Include="conf_meta.ixx" />
     <ClCompile Include="dllapi.cpp" />
+    <ClCompile Include="dllapi.ixx" />
     <ClCompile Include="engineinfo.cpp" />
+    <ClCompile Include="engineinfo.ixx" />
     <ClCompile Include="engine_api.cpp" />
+    <ClCompile Include="engine_api.ixx" />
+    <ClCompile Include="engine_t.ixx" />
     <ClCompile Include="game_autodetect.cpp" />
     <ClCompile Include="game_support.cpp" />
     <ClCompile Include="h_export.cpp" />
+    <ClCompile Include="h_export.ixx" />
+    <ClCompile Include="info_name.ixx" />
     <ClCompile Include="linkgame.cpp" />
     <ClCompile Include="linkplug.cpp" />
     <ClCompile Include="log_meta.cpp" />
     <ClCompile Include="metamod.cpp" />
+    <ClCompile Include="metamod.ixx" />
+    <ClCompile Include="meta_api.ixx" />
     <ClCompile Include="meta_eiface.cpp" />
+    <ClCompile Include="meta_eiface.ixx" />
     <ClCompile Include="mhook.cpp" />
     <ClCompile Include="mlist.cpp" />
+    <ClCompile Include="mlist.ixx" />
     <ClCompile Include="mplayer.cpp" />
+    <ClCompile Include="mplayer.ixx" />
     <ClCompile Include="mplugin.cpp" />
+    <ClCompile Include="mplugin.ixx" />
     <ClCompile Include="mqueue.cpp" />
     <ClCompile Include="mreg.cpp" />
+    <ClCompile Include="mreg.ixx" />
     <ClCompile Include="mutil.cpp" />
+    <ClCompile Include="mutil.ixx" />
+    <ClCompile Include="new_baseclass.ixx" />
     <ClCompile Include="osdep.cpp" />
+    <ClCompile Include="osdep.ixx" />
     <ClCompile Include="osdep_detect_gamedll_win32.cpp" />
     <ClCompile Include="osdep_linkent_win32.cpp" />
     <ClCompile Include="osdep_p.cpp" />
+    <ClCompile Include="plinfo.ixx" />
     <ClCompile Include="reg_support.cpp" />
+    <ClCompile Include="ret_type.ixx" />
     <ClCompile Include="sdk_util.cpp" />
     <ClCompile Include="studioapi.cpp" />
     <ClCompile Include="support_meta.cpp" />
+    <ClCompile Include="support_meta.ixx" />
     <ClCompile Include="thread_logparse.cpp" />
-    <ClCompile Include="vdate.cpp" />
+    <ClCompile Include="types_meta.ixx" />
+    <ClCompile Include="vers_meta.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="api_hook.h" />

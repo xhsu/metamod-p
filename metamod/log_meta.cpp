@@ -45,7 +45,7 @@
 #include "osdep.h"				// win32 vsnprintf, etc
 #include "support_meta.h"		// MAX
 
-cvar_t meta_debug = {"meta_debug", "0", FCVAR_EXTDLL, 0, NULL};
+inline cvar_t meta_debug = {"meta_debug", "0", FCVAR_EXTDLL, 0, nullptr};
 
 int meta_debug_value = 0; //meta_debug_value is converted from float(meta_debug.value) to int on every frame
 

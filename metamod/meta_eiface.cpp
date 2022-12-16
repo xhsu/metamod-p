@@ -50,10 +50,6 @@
 // meta_new_dll_functions_t 
 // ------------------------------------------------------------------------
 
-// static member initialisation
-int meta_new_dll_functions_t::sm_version DLLHIDDEN = 0;
-
-
 meta_new_dll_functions_t::meta_new_dll_functions_t(
 	void  (*_pfnOnFreeEntPrivateData) (edict_t*),
 	void  (*_pfnGameShutdown)         (void),
@@ -165,10 +161,6 @@ size_t DLLINTERNAL meta_new_dll_functions_t::get_size( int _version )
 // --------------------------------------------------------------
 // meta_enginefuncs_t
 // --------------------------------------------------------------
-
-// static member initialisation
-int meta_enginefuncs_t::sm_version = 0;
-
 
 
 meta_enginefuncs_t::meta_enginefuncs_t(
