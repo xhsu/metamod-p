@@ -15,9 +15,6 @@ export import progdefs;
 //
 export inline constexpr auto SVC_DIRECTOR = 51;
 
-//template <typename T>
-//inline constexpr bool AlwaysFalse = false;
-
 //
 // Conversion among the three types of "entity", including identity-conversions.
 //
