@@ -49,7 +49,7 @@ export struct meta_globals_s
 
 export using meta_globals_t = meta_globals_s;
 
-export inline meta_globals_t *gpMetaGlobals = nullptr;
+export extern "C++" inline meta_globals_t * gpMetaGlobals = nullptr;
 
 export inline void SET_META_RESULT(META_RES res) noexcept { gpMetaGlobals->mres = res; }
 // #MARCO_NOT_REPLACABLE
@@ -83,8 +83,8 @@ export struct gamedll_funcs_t
 };
 
 // Declared in plugin; referenced in macros.
-export inline gamedll_funcs_t *gpGamedllFuncs = nullptr;
-export inline mutil_funcs_t *gpMetaUtilFuncs = nullptr;
+export extern "C++" inline gamedll_funcs_t *gpGamedllFuncs = nullptr;
+export extern "C++" inline mutil_funcs_t *gpMetaUtilFuncs = nullptr;
 
 // Tell the dll that we'll be loading it as a metamod plugin, in case it
 // needs to do something special prior to the standard query/attach

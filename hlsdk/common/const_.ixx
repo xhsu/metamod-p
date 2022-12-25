@@ -1,8 +1,6 @@
-module;
-
-#include <cstdint>
-
 export module const_;
+
+export import <cstdint>;
 
 export import edict;
 export import vector;
