@@ -99,7 +99,7 @@ export inline std::ptrdiff_t MAKE_STRING(const char *psz) noexcept { return psz 
 //
 // Search Entity
 //
-export std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept	// #REPORT_TO_MSVC_inline here will cause C1001
+export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
 		pev_valid(pEdict) == 2;
