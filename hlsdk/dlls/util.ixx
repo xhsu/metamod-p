@@ -94,7 +94,7 @@ export __forceinline byte pev_valid(edict_t *pEdict) noexcept { return pEdict ? 
 
 // Use this instead of ALLOC_STRING on constant strings
 export inline const char *STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
-export inline std::ptrdiff_t MAKE_STRING(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
+export template <size_t N> inline std::ptrdiff_t MAKE_STRING(const char (&rgsz)[N]) noexcept { return (&rgsz[0]) - gpGlobals->pStringBase; }
 
 //
 // Search Entity
