@@ -32,8 +32,8 @@ export struct Vector2D
 
 	inline Vector2D operator+(const Vector2D &v) const noexcept { return Vector2D(x + v.x, y + v.y); }
 	inline Vector2D operator-(const Vector2D &v) const noexcept { return Vector2D(x - v.x, y - v.y); }
-	inline Vector2D operator*(float fl) const noexcept { return Vector2D(x * fl, y * fl); }
-	inline Vector2D operator/(float fl) const noexcept { fl = 1 / fl; return Vector2D(x * fl, y * fl); }
+	inline Vector2D operator*(double fl) const noexcept { return Vector2D(x * fl, y * fl); }
+	inline Vector2D operator/(double fl) const noexcept { fl = 1 / fl; return Vector2D(x * fl, y * fl); }
 
 	inline double LengthSquared(void) const noexcept { return x * x + y * y; }
 	inline double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
@@ -48,11 +48,24 @@ export struct Vector2D
 		return Vector2D(x / flLength, y / flLength);
 	}
 
+	// Rotate in counter-clockwise. Angle is in degree.
+	inline Vector2D Rotate(const double angle) const noexcept
+	{
+		const auto a = (angle * std::numbers::pi / 180.0);
+		const auto c = std::cos(a);
+		const auto s = std::sin(a);
+
+		return Vector2D(
+			c * x - s * y,
+			s * x + c * y
+		);
+	}
+
 	vec_t x{}, y{};
 };
 
-export float DotProduct(const Vector2D &a, const Vector2D &b) noexcept { return a.x * b.x + a.y * b.y; }
-export Vector2D operator*(float fl, const Vector2D &v) noexcept { return v * fl; }
+export double DotProduct(const Vector2D &a, const Vector2D &b) noexcept { return a.x * b.x + a.y * b.y; }
+export Vector2D operator*(double fl, const Vector2D &v) noexcept { return v * fl; }
 
 //=========================================================
 // 3D Vector
