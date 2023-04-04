@@ -871,3 +871,15 @@ inline float UTIL_SetController(edict_t *pEdict, byte iController, double flValu
 
 	return UTIL_SetController(&pEdict->v.controller[iController], pbonecontroller, flValue);
 }
+
+export
+std::pair<Vector, Vector> UTIL_ExtractBbox(edict_t *pEdict, int const iSequence) noexcept
+{
+	auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pEdict);
+
+	if (!pstudiohdr)
+		return {};
+
+	auto const pseqdesc = (mstudioseqdesc_t *)((byte *)pstudiohdr + pstudiohdr->seqindex);
+	return { pseqdesc[iSequence].bbmin, pseqdesc[iSequence].bbmax };
+}
