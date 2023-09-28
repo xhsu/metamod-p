@@ -371,7 +371,7 @@ export struct Quaternion
 		d = cr * cp * sy - sr * sp * cy;
 	}
 
-	static inline consteval Quaternion Identity(void) noexcept { return Quaternion{ 1, 0, 0, 0 }; }
+	static inline constexpr Quaternion Identity(void) noexcept { return Quaternion{ 1, 0, 0, 0 }; }	// #UPDATE_AT_CPP23 P2564R0 maybe??
 
 	inline decltype(auto) Magnitude(void) const noexcept { return std::sqrt(a * a + b * b + c * c + d * d); }
 	inline decltype(auto) Versor(void) const noexcept

@@ -122,7 +122,7 @@ export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(c
 //	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
 //}
 
-export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector &vecOrigin, float const flRadius) noexcept
+export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector vecOrigin, float const flRadius) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
 		pev_valid(pEdict) == 2;
