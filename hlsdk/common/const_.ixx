@@ -13,6 +13,9 @@ export using word = std::uint16_t;
 
 export using qboolean = int;
 
+// LUNA: const ver of g_vecZero
+export inline const auto g_vecZero = Vector::Zero();
+
 //
 // Constants shared by the engine and dlls
 // This header file included by engine files and DLL files.

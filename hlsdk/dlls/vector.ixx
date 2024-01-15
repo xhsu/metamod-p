@@ -1,3 +1,9 @@
+module;
+
+#ifdef __INTELLISENSE__	// for the sake of my sanity.
+#include <numbers>
+#endif
+
 export module vector;
 
 export import <cmath>;
