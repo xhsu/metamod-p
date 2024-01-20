@@ -23,5 +23,6 @@ export inline constexpr auto HUD_PRINTCONSOLE = 2;
 export inline constexpr auto HUD_PRINTTALK = 3;
 export inline constexpr auto HUD_PRINTCENTER = 4;
 
+export inline constexpr auto DEFAULT_FOV = 90;	// the default field of view
 
 export inline constexpr auto WEAPON_SUIT = 31;

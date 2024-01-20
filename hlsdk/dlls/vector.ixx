@@ -1,16 +1,22 @@
 module;
 
 #ifdef __INTELLISENSE__	// for the sake of my sanity.
+#include <cmath>
+
+#include <algorithm>
 #include <numbers>
+#include <string>
 #endif
 
 export module vector;
 
+#ifndef __INTELLISENSE__
 export import <cmath>;
 
 export import <algorithm>;
 export import <numbers>;
 export import <string>;
+#endif
 
 export using vec_t = float;
 
