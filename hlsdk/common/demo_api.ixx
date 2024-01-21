@@ -10,5 +10,5 @@ export struct demo_api_s
 
 export using demo_api_t = demo_api_s;
 
-// #STUB_API
+// #NO_URGENT
 //extern demo_api_t demoapi;

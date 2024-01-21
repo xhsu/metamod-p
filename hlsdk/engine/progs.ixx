@@ -35,7 +35,7 @@ export struct event_state_s
 
 export using event_state_t = event_state_s;
 
-// #UNDONE
+// #GIVEN_UP macros
 //#define	STRUCT_FROM_LINK(l,t,m) ((t *)((byte *)l - (int)&(((t *)0)->m)))
 //#define	EDICT_FROM_AREA(l) STRUCT_FROM_LINK(l,edict_t,area)
 

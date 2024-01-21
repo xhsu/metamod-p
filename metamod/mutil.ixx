@@ -51,7 +51,7 @@ export struct meta_util_funcs_s
 
 export using mutil_funcs_t = meta_util_funcs_s;
 
-// Convenience macros for MetaUtil functions #MARCO_NOT_REPLACABLE
+// Convenience macros for MetaUtil functions
 //#define LOG_CONSOLE			(*gpMetaUtilFuncs->pfnLogConsole)
 //#define LOG_MESSAGE			(*gpMetaUtilFuncs->pfnLogMessage)
 //#define LOG_ERROR			(*gpMetaUtilFuncs->pfnLogError)

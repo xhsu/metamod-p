@@ -79,7 +79,7 @@ export struct engine_api_s
 	// Only filled in by rendertype RENDERTYPE_HARDWARE
 	void *_PAD_ADDR[6]{};
 
-	// #UNDONE header unknown.
+	// #NO_URGENT header unknown.
 	//void	(*GL_Init)					(void);
 	//int		(*GL_SetMode)				(HWND hwndGame, HDC *pmaindc, HGLRC *pbaseRC, int fD3D, const char *p, const char *pszCmdLine);
 	//void	(*GL_Shutdown)				(HWND hwnd, HDC hdc, HGLRC hglrc);

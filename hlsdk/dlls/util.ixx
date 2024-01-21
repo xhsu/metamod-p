@@ -455,7 +455,7 @@ export inline constexpr auto SF_PUSH_BREAKABLE = 128;
 export inline constexpr auto SF_LIGHT_START_OFF = 1;
 
 export inline constexpr auto SPAWNFLAG_NOMESSAGE = 1;
-export inline constexpr auto SPAWNFLAG_NOTOUCH = 1;	// LUNA: #POTENTIAL_BUG #INVESTIGATE should be 2?
+export inline constexpr auto SPAWNFLAG_NOTOUCH = 2;	// LUNA: #NO_URGENT original value = 1
 export inline constexpr auto SPAWNFLAG_DROIDONLY = 4;
 
 export inline constexpr auto SPAWNFLAG_USEONLY = 1;	// can't be touched, must be used (buttons)

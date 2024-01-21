@@ -242,7 +242,7 @@ export struct cl_enginefuncs_s
 	// (but it might not get there).
 	int							(*pfnServerCmdUnreliable)(char *szCmdString);
 
-	void						(*pfnGetMousePos)		(struct tagPOINT *ppt);	// #UNDONE requires <windef>
+	void						(*pfnGetMousePos)		(struct tagPOINT *ppt);	// #NO_URGENT requires <windef>
 	void						(*pfnSetMousePos)		(int x, int y);
 	void						(*pfnSetMouseEnable)	(qboolean fEnable);
 };
@@ -251,7 +251,7 @@ export using cl_enginefunc_t = cl_enginefuncs_s;
 
 export inline constexpr auto CLDLL_INTERFACE_VERSION = 7;
 
-// #UNDONE
+// #STUB_FN
 //extern void ClientDLL_Init(void); // from cdll_int.c
 //extern void ClientDLL_Shutdown(void);
 //extern void ClientDLL_HudInit(void);

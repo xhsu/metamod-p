@@ -2,6 +2,8 @@ export module mathlib;
 
 export import vector;
 
+// #SHOULD_DO_ON_FREE this file should be abolished.
+
 //typedef float vec_t;
 //typedef vec_t vec3_t[3];
 export using vec4_t = vec_t[4];	// x,y,z,w
@@ -102,7 +104,7 @@ export int GreatestCommonDivisor(int i1, int i2);
 
 export void AngleVectors(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
 export void AngleVectorsTranspose(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
-//export inline constexpr auto AngleIVectors = AngleVectorsTranspose; #UNDONE
+//export inline constexpr auto AngleIVectors = AngleVectorsTranspose; #GIVEN_UP
 
 export void AngleMatrix(const vec3_t angles, float(*matrix)[4]);
 export void AngleIMatrix(const vec3_t angles, float(*matrix)[4]);

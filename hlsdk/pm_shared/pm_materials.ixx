@@ -1,6 +1,6 @@
 export module pm_materials;
 
-export inline constexpr auto CBTEXTURENAMEMAX = 17;			// only load first n chars of name #INVESTIGATE #POTENTIAL_BUG original: 13 (HLSDK)
+export inline constexpr auto CBTEXTURENAMEMAX = 17;			// only load first n chars of name #NO_URGENT original: 13 (HLSDK)
 
 export inline constexpr auto CHAR_TEX_CONCRETE = 'C';			// texture types
 export inline constexpr auto CHAR_TEX_METAL = 'M';

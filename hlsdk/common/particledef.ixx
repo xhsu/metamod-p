@@ -17,7 +17,7 @@ export enum ptype_t
 	pt_clientcustom   // Must have callback function specified
 };
 
-// !!! if this is changed, it must be changed in d_ifacea.h too !!! #UNDONE #POTENTIAL_BUG file no found.
+// !!! if this is changed, it must be changed in d_ifacea.h too !!! #NO_URGENT #INVESTIGATE file no found.
 export struct particle_s
 {
 	// driver-usable fields

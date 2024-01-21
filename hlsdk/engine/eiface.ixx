@@ -233,7 +233,7 @@ export struct enginefuncs_s
 
 	void		(*pfnDeltaSetField)			(struct delta_s *pFields, const char *fieldname);
 	void		(*pfnDeltaUnsetField)		(struct delta_s *pFields, const char *fieldname);
-	void		(*pfnDeltaAddEncoder)		(char *name, void (*conditionalencode)(struct delta_s *pFields, const unsigned char *from, const unsigned char *to));	// #UNDONE unknown type delta_s
+	void		(*pfnDeltaAddEncoder)		(char *name, void (*conditionalencode)(struct delta_s *pFields, const unsigned char *from, const unsigned char *to));	// #NO_URGENT unknown type delta_s
 	int			(*pfnGetCurrentPlayer)		(void);
 	int			(*pfnCanSkipPlayer)			(const edict_t *player);
 	int			(*pfnDeltaFindField)		(struct delta_s *pFields, const char *fieldname);
@@ -401,7 +401,7 @@ export enum FIELDTYPE
 
 export inline constexpr auto FTYPEDESC_GLOBAL = 0x0001;		// This field is masked for global entity save/restore
 
-// #UNDONE
+// #GIVEN_UP fucking macros...
 #define _FIELD(type,name,fieldtype,count,flags)		{ fieldtype, #name, offsetof(type, name), count, flags }
 #define DEFINE_FIELD(type,name,fieldtype)			_FIELD(type, name, fieldtype, 1, 0)
 #define DEFINE_ARRAY(type,name,fieldtype,count)		_FIELD(type, name, fieldtype, count, 0)

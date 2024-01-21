@@ -52,11 +52,12 @@ export using meta_globals_t = meta_globals_s;
 export extern "C++" inline meta_globals_t * gpMetaGlobals = nullptr;
 
 export inline void SET_META_RESULT(META_RES res) noexcept { gpMetaGlobals->mres = res; }
-// #MARCO_NOT_REPLACABLE
+
 //#define RETURN_META(result) \
 //	do { gpMetaGlobals->mres=result; return; } while(0)
 //#define RETURN_META_VALUE(result, value) \
 //	do { gpMetaGlobals->mres=result; return(value); } while(0)
+
 export inline decltype(auto) META_RESULT_STATUS(void) noexcept { return gpMetaGlobals->status; }
 export inline decltype(auto) META_RESULT_PREVIOUS(void) noexcept { return gpMetaGlobals->prev_mres; }
 export template <typename T> inline decltype(auto) META_RESULT_ORIG_RET(void) noexcept { return *reinterpret_cast<T *>(gpMetaGlobals->orig_ret); }
