@@ -62,7 +62,7 @@ export template <typename new_t, typename org_t>
 	}
 
 	// This is for CBaseEntity, but we are not going to restricting class name nor import CBase.
-	else if constexpr (requires(std::remove_cvref_t<org_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })
+	else if constexpr (requires { { ent->pev } -> std::convertible_to<entvars_t *>; })
 	{
 		return ent_cast<new_t>(ent->pev);
 	}
