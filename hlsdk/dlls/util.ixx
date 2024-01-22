@@ -884,3 +884,24 @@ std::pair<Vector, Vector> UTIL_ExtractBbox(edict_t *pEdict, int const iSequence)
 	auto const pseqdesc = (mstudioseqdesc_t *)((byte *)pstudiohdr + pstudiohdr->seqindex);
 	return { pseqdesc[iSequence].bbmin, pseqdesc[iSequence].bbmax };
 }
+
+// Credit: Sneaky@GlobalModders.net
+// Source: BonePosFix AMXX module
+export inline
+Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) noexcept
+{
+	Vector ret{};
+	//pEdict->v.angles.pitch = -pEdict->v.angles.pitch;	// infamous quake swap.
+	g_engfuncs.pfnGetAttachment(pEdict, iAttachment, ret, nullptr);	// the angles are actually not implemented.
+	//pEdict->v.angles.pitch = -pEdict->v.angles.pitch;
+
+	// Fix CS angles
+	auto const vecLocalOrigin = ret -= pEdict->v.origin;
+	auto const c = std::cos(pEdict->v.angles.yaw * (std::numbers::pi / 180));
+	auto const s = std::sin(pEdict->v.angles.yaw * (std::numbers::pi / 180));
+
+	ret.x = static_cast<vec_t>(vecLocalOrigin.x * c - vecLocalOrigin.y * s);
+	ret.y = static_cast<vec_t>(vecLocalOrigin.y * c + vecLocalOrigin.x * s);
+
+	return ret + pEdict->v.origin;
+}
