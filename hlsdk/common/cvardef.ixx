@@ -12,11 +12,11 @@ export inline constexpr auto FCVAR_UNLOGGED = (1 << 8);  // If this is a FCVAR_S
 
 export struct cvar_s
 {
-	const char *name;
-	const char *string;
-	int flags;
-	float value;
-	cvar_s *next;
+	const char* name{};
+	const char* string{};
+	int flags{};
+	float value{};
+	cvar_s* next{};
 };
 
 export using cvar_t = cvar_s;
