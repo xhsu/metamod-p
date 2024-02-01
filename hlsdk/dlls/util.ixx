@@ -1,5 +1,6 @@
 export module util;
 
+export import <span>;
 export import <unordered_map>;
 export import <vector>;
 
@@ -564,6 +565,10 @@ export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max numbe
 // Some hack can be done if we do PlayerPreThink(), groupinfo, for example.
 // Adjust Groupinfo op function to achieve these.
 // As for non-players, use ShouldCollide() instead.
+// LUNA 1/29/2024: the first parameter of pfnSetGroupMask was for global mask.
+// Only involved in functions invoking SV_LinkContents. pfnPointContents, for one example.
+// In the case of pfnPointContents, the global mask work as if it were the mask of ignoreEntity->v.groupinfo in pfnTraceLine.
+// In the cases of when operator checks out, the point contented in such masked entity will not be checked.
 export enum ESetGroupMaskOp
 {
 	/*
@@ -579,22 +584,26 @@ export enum ESetGroupMaskOp
 	GROUP_OP_NAND
 };
 
+export inline constexpr uint32_t GROUPMASK_GROUP_TRACE = (1 << 8);
+
 // Allows you to set a bunch of entities to skip.
 export
-inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *pPlayer, std::vector<edict_t *> const &rgpEntsToSkip, TraceResult *pTr) noexcept
+inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
 {
 	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
 
 	auto const iPlayerLastGroupInfo = pPlayer->v.groupinfo;
-	pPlayer->v.groupinfo = (1 << 1);
+	pPlayer->v.groupinfo |= GROUPMASK_GROUP_TRACE;
 
 	std::vector<int> rgiEdictsLastGroupInfo(rgpEntsToSkip.size());
 	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
 	{
 		rgiEdictsLastGroupInfo[i] = rgpEntsToSkip[i]->v.groupinfo;
-		rgpEntsToSkip[i]->v.groupinfo = (1 << 1);
+		rgpEntsToSkip[i]->v.groupinfo |= GROUPMASK_GROUP_TRACE;
 	}
 
+	// Player goes into param ignoreEntity, therefore ignored by default.
+	// After that, the engine will also use ignoreEntity->v.groupinfo to compare with other entities it encountered.
 	g_engfuncs.pfnTraceLine(vecSrc, vecEnd, dont_ignore_monsters, pPlayer, pTr);
 
 	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
@@ -605,20 +614,22 @@ inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *
 }
 
 export
-inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum iHullIndex, edict_t *pPlayer, std::vector<edict_t *> const &rgpEntsToSkip, TraceResult *pTr) noexcept
+inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum iHullIndex, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
 {
 	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
 
 	auto const iPlayerLastGroupInfo = pPlayer->v.groupinfo;
-	pPlayer->v.groupinfo = (1 << 1);
+	pPlayer->v.groupinfo |= GROUPMASK_GROUP_TRACE;
 
 	std::vector<int> rgiEdictsLastGroupInfo(rgpEntsToSkip.size());
 	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
 	{
 		rgiEdictsLastGroupInfo[i] = rgpEntsToSkip[i]->v.groupinfo;
-		rgpEntsToSkip[i]->v.groupinfo = (1 << 1);
+		rgpEntsToSkip[i]->v.groupinfo |= GROUPMASK_GROUP_TRACE;
 	}
 
+	// Player goes into param ignoreEntity, therefore ignored by default.
+	// After that, the engine will also use ignoreEntity->v.groupinfo to compare with other entities it encountered.
 	g_engfuncs.pfnTraceHull(vecSrc, vecEnd, dont_ignore_monsters, iHullIndex, pPlayer, pTr);
 
 	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
