@@ -33,7 +33,6 @@ export struct Vector2D
 {
 	constexpr Vector2D(void) noexcept = default;
 	constexpr Vector2D(double X, double Y) noexcept : x{ (float)X }, y{ (float)Y } {}
-	constexpr Vector2D(const Vector2D &rhs) noexcept = default;
 
 	// Special status
 	static consteval Vector2D Zero(void) noexcept { return Vector2D(0, 0); }
@@ -116,6 +115,15 @@ export struct Vector                                            // same data-lay
 	constexpr operator float *() noexcept { return &x; } // Vectors will now automatically convert to float * when needed
 	constexpr operator const float *() const noexcept { return &x; } // Vectors will now automatically convert to float * when needed
 
+	// Methods
+	inline	bool Approx(Vector const& v, vec_t const delta = std::numeric_limits<vec_t>::epsilon()) const noexcept
+	{
+		// #UPDATE_AT_CPP23 constexpr math
+		return std::abs(this->x - v.x) <= delta
+			&& std::abs(this->y - v.y) <= delta
+			&& std::abs(this->z - v.z) <= delta;
+	}
+
 	// Methods as Vector
 	constexpr	double LengthSquared(void) const noexcept { return x * x + y * y + z * z; }
 	inline		double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
@@ -148,6 +156,7 @@ export constexpr Vector CrossProduct(const Vector &a, const Vector &b)	noexcept 
 
 // LUNA: watchout for the freaking marcos.
 export using vec3_t = Vector;
+static_assert(sizeof(Vector2D) == sizeof(float[2]) && sizeof(Vector) == sizeof(float[3]));
 
 //=========================================================
 // Euler Angles
@@ -353,6 +362,7 @@ inline double Vector::Yaw(void) const noexcept
 }
 
 export using ang3_t = Angles;
+static_assert(sizeof(Angles) == sizeof(float[3]));
 
 //=========================================================
 // Quaternion
