@@ -53,6 +53,7 @@
     <ClCompile Include="..\hlsdk\dlls\activity.ixx" />
     <ClCompile Include="..\hlsdk\dlls\cdll_dll.ixx" />
     <ClCompile Include="..\hlsdk\dlls\extdll.ixx" />
+    <ClCompile Include="..\hlsdk\dlls\monsterevent.ixx" />
     <ClCompile Include="..\hlsdk\dlls\util.ixx" />
     <ClCompile Include="..\hlsdk\dlls\vector.ixx" />
     <ClCompile Include="..\hlsdk\engine\archtypes.ixx" />
@@ -66,6 +67,7 @@
     <ClCompile Include="..\hlsdk\engine\progs.ixx" />
     <ClCompile Include="..\hlsdk\engine\Sequence.ixx" />
     <ClCompile Include="..\hlsdk\engine\shake.ixx" />
+    <ClCompile Include="..\hlsdk\engine\sizebuf.ixx" />
     <ClCompile Include="..\hlsdk\engine\studio.ixx" />
     <ClCompile Include="..\hlsdk\pm_shared\pm_defs.ixx" />
     <ClCompile Include="..\hlsdk\pm_shared\pm_info.ixx" />

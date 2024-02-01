@@ -236,6 +236,12 @@
     <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx">
       <Filter>STL</Filter>
     </ClCompile>
+    <ClCompile Include="..\hlsdk\dlls\monsterevent.ixx">
+      <Filter>HLSDK\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hlsdk\engine\sizebuf.ixx">
+      <Filter>HLSDK\engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="export.def">
