@@ -5,7 +5,6 @@ module;
 
 #include <algorithm>
 #include <numbers>
-#include <string>
 #endif
 
 export module vector;
@@ -15,7 +14,6 @@ export import <cmath>;
 
 export import <algorithm>;
 export import <numbers>;
-export import <string>;
 #endif
 
 export using vec_t = float;

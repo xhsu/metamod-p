@@ -1,9 +1,3 @@
-module;
-
-#ifdef _DEBUG
-#include <cstdint>
-#endif
-
 export module progdefs;
 
 export import <cstdint>;
