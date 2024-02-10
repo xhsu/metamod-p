@@ -4,15 +4,16 @@ export import com_model;
 export import entity_state;
 export import progs;
 
-export struct efrag_s
-{
-	mleaf_t *leaf;
-	struct efrag_s *leafnext;
-	struct cl_entity_s *entity;
-	struct efrag_s *entnext;
-};
 
-export using efrag_t = efrag_s;
+struct cl_entity_t;
+
+export struct efrag_t
+{
+	mleaf_t* leaf;
+	efrag_t* leafnext;
+	cl_entity_t* entity;
+	efrag_t* entnext;
+};
 
 export struct mouth_t
 {
@@ -48,7 +49,7 @@ export struct position_history_t
 export inline constexpr auto HISTORY_MAX = 64;  // Must be power of 2
 export inline constexpr auto HISTORY_MASK = (HISTORY_MAX - 1);
 
-export struct cl_entity_s
+export struct cl_entity_t
 {
 	int						index;      // Index into cl_entities ( should match actual slot, but not necessarily )
 
@@ -87,5 +88,3 @@ export struct cl_entity_s
 	int						visframe;		// last frame this entity was found in an active leaf
 	colorVec				cvFloorColor;
 };
-
-export using cl_entity_t = cl_entity_s;

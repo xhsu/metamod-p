@@ -1,11 +1,13 @@
 export module progdefs;
 
 export import <cstdint>;
+export import <cstddef>;
 
 export import vector;
 
 
-typedef int string_t;
+export using string_t = std::ptrdiff_t;
+static_assert(sizeof(string_t) == 4, "To compatible with GoldSrc Engine, the string_t must be 4 bytes wide.");
 
 using std::uint8_t;
 
@@ -181,7 +183,7 @@ export struct link_t
 	link_t *prev, *next;
 };
 
-typedef int qboolean;
+export using qboolean = std::int32_t;
 
 export struct edict_t
 {

@@ -5,13 +5,10 @@ export import <cstdint>;
 export import edict;
 export import vector;
 
-export using func_t = int;
-export using string_t = int;
 
 export using byte = std::uint8_t;
 export using word = std::uint16_t;
 
-export using qboolean = int;
 
 // LUNA: const ver of g_vecZero
 export inline const auto g_vecZero = Vector::Zero();

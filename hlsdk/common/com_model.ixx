@@ -57,7 +57,7 @@ export struct dmodel_t
 };
 
 // plane_t structure
-export struct mplane_s
+export struct mplane_t
 {
 	vec3_t	normal;			// surface normal
 	float	dist;			// closest appoach to origin
@@ -65,8 +65,6 @@ export struct mplane_s
 	byte	signbits;		// signx + signy<<1 + signz<<1
 	byte	pad[2];
 };
-
-export using mplane_t = mplane_s;
 
 export struct mvertex_t
 {
@@ -79,19 +77,17 @@ export struct medge_t
 	unsigned int	cachededgeoffset;
 };
 
-export struct texture_s
+export struct texture_t
 {
 	char		name[16];
 	unsigned	width, height;
 	int			anim_total;				// total tenths in sequence ( 0 = no)
 	int			anim_min, anim_max;		// time for this frame min <=time< max
-	struct texture_s *anim_next;		// in the animation sequence
-	struct texture_s *alternate_anims;	// bmodels in frame 1 use these
+	texture_t	*anim_next;		// in the animation sequence
+	texture_t	*alternate_anims;	// bmodels in frame 1 use these
 	unsigned	offsets[MIPLEVELS];		// four mip maps stored
 	unsigned	paloffset;
 };
-
-export using texture_t = texture_s;
 
 export struct mtexinfo_t
 {
@@ -99,35 +95,14 @@ export struct mtexinfo_t
 	// [i][3] is the s/t offset relative to the origin.
 	// s or t = dot(3Dpoint,vecs[i])+vecs[i][3]
 	float		mipadjust;		// ?? mipmap limits for very small surfaces
-	texture_t *texture;
+	texture_t	*texture;
 	int			flags;			// sky or slime, no lightmap or 256 subdivision
 };
 
-export struct mnode_s
-{
-	// common with leaf
-	int			contents;		// 0, to differentiate from leafs
-	int			visframe;		// node needs to be traversed if current
-
-	short		minmaxs[6];		// for bounding box culling
-
-	struct mnode_s *parent;
-
-	// node specific
-	mplane_t *plane;
-	struct mnode_s *children[2];
-
-	unsigned short		firstsurface;
-	unsigned short		numsurfaces;
-};
-
-export using mnode_t = mnode_s;
-
-export using msurface_t = struct msurface_s;
-export using decal_t = struct decal_s;
+struct msurface_t;
 
 // JAY: Compress this as much as possible
-export struct decal_s
+export struct decal_t
 {
 	decal_t *pnext;			// linked list for each surface
 	msurface_t *psurface;		// Surface id for persistence / unlinking
@@ -140,29 +115,63 @@ export struct decal_s
 	short		entityIndex;	// Entity this is attached to
 };
 
-export struct mleaf_s
+struct efrag_t;	// check cl_entity.ixx
+
+export struct mnode_t
 {
-	// common with node
-	int			contents;		// wil be a negative contents number
+	// common with leaf
+	int			contents;		// 0, to differentiate from leafs
 	int			visframe;		// node needs to be traversed if current
 
 	short		minmaxs[6];		// for bounding box culling
 
-	struct mnode_s *parent;
+	mnode_t*	parent;
 
-	// leaf specific
-	byte *compressed_vis;
-	struct efrag_s *efrags;
+	// node specific
+	mplane_t*	plane;
+	mnode_t*	children[2];
 
-	msurface_t **firstmarksurface;
-	int			nummarksurfaces;
-	int			key;			// BSP sequence number for leaf's contents
-	byte		ambient_sound_level[NUM_AMBIENTS];
+	unsigned short	firstsurface;
+	unsigned short	numsurfaces;
 };
 
-export using mleaf_t = mleaf_s;
+export struct mleaf_t
+{
+	// common with node
+	int				contents;		// wil be a negative contents number
+	int				visframe;		// node needs to be traversed if current
 
-struct msurface_s
+	short			minmaxs[6];		// for bounding box culling
+
+	mnode_t*		parent;
+
+	// leaf specific
+	byte*			compressed_vis;
+	efrag_t*		efrags;
+
+	msurface_t**	firstmarksurface;
+	int				nummarksurfaces;
+	int				key;			// BSP sequence number for leaf's contents
+	byte			ambient_sound_level[NUM_AMBIENTS];
+};
+
+struct texture_t;	// #SHOULD_DO_ON_FREE
+
+export struct surfcache_t
+{
+	surfcache_t*	next;
+	surfcache_t**	owner;
+	int				lightadj[4];
+	int				dlight;
+	int				size;
+	unsigned		width;
+	unsigned		height;
+	float			mipscale;
+	texture_t*		texture;
+	unsigned char	data[4];
+};
+
+export struct msurface_t
 {
 	int			visframe;		// should be drawn when node is crossed
 
@@ -170,27 +179,27 @@ struct msurface_s
 	int			dlightbits;		// dynamically generated. Indicates if the surface illumination 
 	// is modified by an animated light.
 
-	mplane_t *plane;			// pointer to shared plane			
+	mplane_t	*plane;			// pointer to shared plane			
 	int			flags;			// see SURF_ #defines
 
 	int			firstedge;	// look up in model->surfedges[], negative numbers
 	int			numedges;	// are backwards edges
 
 	// surface generation data
-	struct surfcache_s *cachespots[MIPLEVELS];
+	surfcache_t	*cachespots[MIPLEVELS];
 
 	short		texturemins[2]; // smallest s/t position on the surface.
 	short		extents[2];		// ?? s/t texture size, 1..256 for all non-sky surfaces
 
-	mtexinfo_t *texinfo;
+	mtexinfo_t	*texinfo;
 
 	// lighting info
 	byte		styles[MAXLIGHTMAPS]; // index into d_lightstylevalue[] for animated lights 
 	// no one surface can be effected by more than 4 
 	// animated lights.
-	color24 *samples;
+	color24		*samples;
 
-	decal_t *pdecals;
+	decal_t		*pdecals;
 };
 
 export struct dclipnode_t
@@ -199,26 +208,22 @@ export struct dclipnode_t
 	short		children[2];	// negative numbers are contents
 };
 
-export struct hull_s
+export struct hull_t
 {
-	dclipnode_t *clipnodes;
-	mplane_t *planes;
+	dclipnode_t	*clipnodes;
+	mplane_t	*planes;
 	int			firstclipnode;
 	int			lastclipnode;
 	vec3_t		clip_mins;
 	vec3_t		clip_maxs;
 };
 
-export using hull_t = hull_s;
-
-export struct cache_user_s
+export struct cache_user_t
 {
 	void *data;
 };
 
-export using cache_user_t = cache_user_s;
-
-export struct model_s
+export struct model_t
 {
 	char		name[MAX_MODEL_NAME];
 	qboolean	needload;		// bmodels and sprites don't cache normally
@@ -241,48 +246,48 @@ export struct model_s
 	int			firstmodelsurface, nummodelsurfaces;
 
 	int			numsubmodels;
-	dmodel_t *submodels;
+	dmodel_t	*submodels;
 
 	int			numplanes;
-	mplane_t *planes;
+	mplane_t	*planes;
 
 	int			numleafs;		// number of visible leafs, not counting 0
-	struct mleaf_s *leafs;
+	mleaf_t		*leafs;
 
 	int			numvertexes;
-	mvertex_t *vertexes;
+	mvertex_t	*vertexes;
 
 	int			numedges;
-	medge_t *edges;
+	medge_t		*edges;
 
 	int			numnodes;
-	mnode_t *nodes;
+	mnode_t		*nodes;
 
 	int			numtexinfo;
-	mtexinfo_t *texinfo;
+	mtexinfo_t	*texinfo;
 
 	int			numsurfaces;
-	msurface_t *surfaces;
+	msurface_t	*surfaces;
 
 	int			numsurfedges;
-	int *surfedges;
+	int			*surfedges;
 
 	int			numclipnodes;
 	dclipnode_t *clipnodes;
 
 	int			nummarksurfaces;
-	msurface_t **marksurfaces;
+	msurface_t	**marksurfaces;
 
 	hull_t		hulls[MAX_MAP_HULLS];
 
 	int			numtextures;
-	texture_t **textures;
+	texture_t	**textures;
 
-	byte *visdata;
+	byte		*visdata;
 
-	color24 *lightdata;
+	color24		*lightdata;
 
-	char *entities;
+	char		*entities;
 
 	//
 	// additional model data
@@ -291,29 +296,24 @@ export struct model_s
 
 };
 
-export using model_t = model_s;
-
-export struct alight_s
+export struct alight_t
 {
 	int			ambientlight;	// clip at 128
 	int			shadelight;		// clip at 192 - ambientlight
 	vec3_t		color;
-	float *plightvec;
+	float		*plightvec;
 };
 
-export using alight_t = alight_s;
-
-export struct auxvert_s
+export struct auxvert_t
 {
 	float	fv[3];		// viewspace x, y
 };
 
-export using auxvert_t = auxvert_s;
 
 export inline constexpr auto MAX_INFO_STRING = 256;
 export inline constexpr auto MAX_SCOREBOARDNAME = 32;
 
-export struct player_info_s
+export struct player_info_t
 {
 	// User id on server
 	int		userid;
@@ -346,5 +346,3 @@ export struct player_info_s
 
 	customization_t customdata;
 };
-
-export using player_info_t = player_info_s;
