@@ -202,11 +202,7 @@
       <Filter>HLSDK\dlls</Filter>
     </ClCompile>
     <ClCompile Include="MdlAnimTime.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\VC\Tools\MSVC\14.35.32019\modules\std.compat.ixx">
-      <Filter>STL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\VC\Tools\MSVC\14.35.32019\modules\std.ixx">
-      <Filter>STL</Filter>
-    </ClCompile>
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx" />
+    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,8 @@
-export module sizebuf;
+export module hlsdk:decompiled;
 
-import <cstdint>;
-import <cstddef>;
+import std.compat;
+
+#pragma region sizebuf.h
 
 export struct sizebuf_t
 {
@@ -11,3 +12,5 @@ export struct sizebuf_t
 	uint32_t maxsize{};
 	uint32_t cursize{};
 };
+
+#pragma endregion sizebuf.h

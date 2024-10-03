@@ -1,69 +1,75 @@
-export module util;
+#if !defined(INCLUDED_IN_MODULE) || defined(__INTELLISENSE__)
+#pragma once
 
-export import <span>;
-export import <unordered_map>;
-export import <vector>;
+#include <span>
+#include <unordered_map>
+#include <vector>
 
-export import <experimental/generator>;
+#include <experimental/generator>	// #UPDATE_AT_CPP23 generator
 
-export import const_;
-export import eiface;
-export import progdefs;
+#include "../engine/hlsdk.engine.hpp"
 
+#else
 
-//
-// Misc utility code
-//
-export inline constexpr auto SVC_DIRECTOR = 51;
+import std;
+import <experimental/generator>;
+
+import :engine;
+
+#endif
+
+#ifndef EXPORT
+#define EXPORT
+#endif
 
 //
 // Conversion among the three types of "entity", including identity-conversions.
 //
-export template <typename new_t, typename org_t>
-[[nodiscard]] inline std::remove_cvref_t<new_t> ent_cast(org_t const &ent) noexcept
+EXPORT template <typename new_t, typename org_t>
+[[nodiscard]] inline std::remove_cvref_t<new_t> ent_cast(org_t const& ent) noexcept
 {
 	if constexpr (std::integral<org_t>)
 	{
 		if constexpr (std::integral<new_t>)	// entindex -> entindex
 			return ent;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entindex -> entvars_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t*>)	// entindex -> entvars_t*
 			return &g_engfuncs.pfnPEntityOfEntIndex(ent)->v;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entindex -> edict_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t*>)	// entindex -> edict_t*
 			return g_engfuncs.pfnPEntityOfEntIndex(ent);
-		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// entindex -> CBase/EHANDLE
+		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// entindex -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(g_engfuncs.pfnPEntityOfEntIndex(ent)->pvPrivateData);
 		else
 			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
 	}
-	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t *>)
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t*>)
 	{
 		if constexpr (std::integral<new_t>)	// entvars_t* -> entindex
 			return g_engfuncs.pfnIndexOfEdict(ent->pContainingEntity);
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// entvars_t* -> entvars_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t*>)	// entvars_t* -> entvars_t*
 			return ent;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// entvars_t* -> edict_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t*>)	// entvars_t* -> edict_t*
 			return ent->pContainingEntity;
-		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// entvars_t* -> CBase/EHANDLE
+		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// entvars_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pContainingEntity->pvPrivateData);
 		else
 			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
 	}
-	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t *>)
+	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t*>)
 	{
 		if constexpr (std::integral<new_t>)	// edict_t* -> entindex
 			return g_engfuncs.pfnIndexOfEdict(ent);
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t *>)	// edict_t* -> entvars_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, entvars_t*>)	// edict_t* -> entvars_t*
 			return &ent->v;
-		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t *>)	// edict_t* -> edict_t*
+		else if constexpr (std::is_same_v<std::remove_cvref_t<new_t>, edict_t*>)	// edict_t* -> edict_t*
 			return ent;
-		else if constexpr (requires(std::remove_cvref_t<new_t> org) { {org->pev} -> std::convertible_to<entvars_t *>; })	// edict_t* -> CBase/EHANDLE
+		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// edict_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pvPrivateData);
 		else
 			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
 	}
 
 	// This is for CBaseEntity, but we are not going to restricting class name nor import CBase.
-	else if constexpr (requires { { ent->pev } -> std::convertible_to<entvars_t *>; })
+	else if constexpr (requires { { ent->pev } -> std::convertible_to<entvars_t*>; })
 	{
 		return ent_cast<new_t>(ent->pev);
 	}
@@ -71,40 +77,48 @@ export template <typename new_t, typename org_t>
 		static_assert(std::_Always_false<new_t>, "Casting from a unsupported type.");
 }
 
-export inline auto ENTOFFSET(edict_t *pEdict) noexcept { return (*g_engfuncs.pfnEntOffsetOfPEntity)(pEdict); }	// eoffset is different from entindex!!
-export inline auto OFFSETENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntOffset)(iEdictNum); }
+EXPORT inline auto ENTOFFSET(edict_t* pEdict) noexcept { return (*g_engfuncs.pfnEntOffsetOfPEntity)(pEdict); }	// eoffset is different from entindex!!
+EXPORT inline auto OFFSETENT(int iEdictNum) noexcept { return (*g_engfuncs.pfnPEntityOfEntOffset)(iEdictNum); }
 
 // Testing the three types of "entity" for nullity
 //#define eoNullEntity 0
 //inline BOOL FNullEnt(EOFFSET eoffset) { return eoffset == 0; }
 //inline BOOL FNullEnt(const edict_t *pent) { return pent == NULL || FNullEnt(OFFSET(pent)); }
 //inline BOOL FNullEnt(entvars_t *pev) { return pev == NULL || FNullEnt(OFFSET(pev)); }
-export inline byte pev_valid(entvars_t *pev) noexcept
+EXPORT enum struct EValidity
+{
+	Not = 0,
+	Unmanaged = 1,
+	Full = 2,
+};
+
+EXPORT inline EValidity pev_valid(entvars_t* pev) noexcept
 {
 	if (pev == nullptr || ent_cast<int>(pev->pContainingEntity) <= 0)
-		return 0;
+		return EValidity::Not;
 
-	if (auto const pEdict = ent_cast<edict_t *>(pev); pEdict && pEdict->pvPrivateData != nullptr)
-		return 2;
+	if (auto const pEdict = ent_cast<edict_t*>(pev); pEdict && pEdict->pvPrivateData != nullptr)
+		return EValidity::Full;
 
-	return 1;
+	return EValidity::Unmanaged;
 }
 
-export __forceinline byte pev_valid(edict_t *pEdict) noexcept { return pEdict ? pev_valid(&pEdict->v) : 0; }
-
+EXPORT __forceinline EValidity pev_valid(edict_t* pEdict) noexcept { return pEdict ? pev_valid(&pEdict->v) : EValidity::Not; }
 
 // Use this instead of ALLOC_STRING on constant strings
-export inline const char *STRING(std::ptrdiff_t iOffset) noexcept { return reinterpret_cast<const char *>(gpGlobals->pStringBase + iOffset); }
-export template <size_t N> inline std::ptrdiff_t MAKE_STRING(const char (&rgsz)[N]) noexcept { return (&rgsz[0]) - gpGlobals->pStringBase; }
-export inline std::ptrdiff_t MAKE_STRING_UNSAFE(const char *psz) noexcept { return psz - gpGlobals->pStringBase; }
+EXPORT inline const char* STRING(std::ptrdiff_t iOffset) noexcept { return gpGlobals->pStringBase + iOffset; }
+EXPORT template <size_t N> inline std::ptrdiff_t MAKE_STRING(const char(&rgsz)[N]) noexcept { return (&rgsz[0]) - gpGlobals->pStringBase; }
+EXPORT inline std::ptrdiff_t MAKE_STRING_UNSAFE(const char* psz) noexcept { return psz - gpGlobals->pStringBase; }
 
 //
 // Search Entity
 //
-export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(const char *pszName) noexcept
+
+// LUNA: Try Query lib from CSDK instead.
+EXPORT inline std::experimental::generator<edict_t*> FIND_ENTITY_BY_CLASSNAME(const char* pszName) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
-		pev_valid(pEdict) == 2;
+		pev_valid(pEdict) == EValidity::Full;
 		pEdict = g_engfuncs.pfnFindEntityByString(pEdict, "classname", pszName))
 	{
 		co_yield pEdict;
@@ -124,10 +138,11 @@ export inline std::experimental::generator<edict_t *> FIND_ENTITY_BY_CLASSNAME(c
 //	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
 //}
 
-export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vector vecOrigin, float const flRadius) noexcept
+// LUNA: Try Query lib from CSDK instead.
+EXPORT std::experimental::generator<edict_t*> FIND_ENTITY_IN_SPHERE(const Vector vecOrigin, float const flRadius) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
-		pev_valid(pEdict) == 2;
+		pev_valid(pEdict) == EValidity::Full;
 		pEdict = g_engfuncs.pfnFindEntityInSphere(pEdict, vecOrigin, flRadius))
 	{
 		co_yield pEdict;
@@ -137,13 +152,25 @@ export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vecto
 }
 
 // Keeps clutter down a bit, when writing key-value pairs
-//#define WRITEKEY_INT(pf, szKeyName, iKeyValue) ENGINE_FPRINTF(pf, "\"%s\" \"%d\"\n", szKeyName, iKeyValue)
-//#define WRITEKEY_FLOAT(pf, szKeyName, flKeyValue)                                                               \
-//                ENGINE_FPRINTF(pf, "\"%s\" \"%f\"\n", szKeyName, flKeyValue)
-//#define WRITEKEY_STRING(pf, szKeyName, szKeyValue)                                                              \
-//                ENGINE_FPRINTF(pf, "\"%s\" \"%s\"\n", szKeyName, szKeyValue)
-//#define WRITEKEY_VECTOR(pf, szKeyName, flX, flY, flZ)                                                   \
-//                ENGINE_FPRINTF(pf, "\"%s\" \"%f %f %f\"\n", szKeyName, flX, flY, flZ)
+EXPORT inline void WRITEKEY_INT(void* pf, const char* szKeyName, int iKeyValue) noexcept
+{
+	g_engfuncs.pfnEngineFprintf(pf, "\"%s\" \"%d\"\n", szKeyName, iKeyValue);
+}
+
+EXPORT inline void WRITEKEY_FLOAT(void* pf, const char* szKeyName, float flKeyValue) noexcept
+{
+	g_engfuncs.pfnEngineFprintf(pf, "\"%s\" \"%f\"\n", szKeyName, flKeyValue);
+}
+
+EXPORT inline void WRITEKEY_STRING(void* pf, const char* szKeyName, const char* szKeyValue) noexcept
+{
+	g_engfuncs.pfnEngineFprintf(pf, "\"%s\" \"%s\"\n", szKeyName, szKeyValue);
+}
+
+EXPORT inline void WRITEKEY_VECTOR(void* pf, const char* szKeyName, Vector const& vKeyValue) noexcept
+{
+	g_engfuncs.pfnEngineFprintf(pf, "\"%s\" \"%f %f %f\"\n", szKeyName, vKeyValue.x, vKeyValue.y, vKeyValue.z);
+}
 
 // Keeps clutter down a bit, when using a float as a bit-vector
 //#define SetBits(flBitVector, bits)              ((flBitVector) = (int)(flBitVector) | (bits))
@@ -164,7 +191,7 @@ export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vecto
 // In case it's not alread defined
 //typedef int BOOL;
 
-// In case this ever changes
+// In case this ever changes // LUNA: try std::numbers::pi
 //#define M_PI                    3.14159265358979323846
 
 // Keeps clutter down a bit, when declaring external entity/global method prototypes
@@ -188,23 +215,23 @@ export std::experimental::generator<edict_t *> FIND_ENTITY_IN_SPHERE(const Vecto
 
 // Testing strings for nullity
 //#define iStringNull 0
-//inline BOOL FStringNull(int iString) { return iString == iStringNull; }
+EXPORT inline qboolean FStringNull(string_t iString) noexcept { return iString == 0; }
 
-export inline constexpr auto cchMapNameMost = 32;
+EXPORT inline constexpr size_t cchMapNameMost = 32;
 
 // Dot products for view cone checking
-export inline constexpr auto VIEW_FIELD_FULL = (float)-1.0; // +-180 degrees
-export inline constexpr auto VIEW_FIELD_WIDE = (float)-0.7; // +-135 degrees 0.1 // +-85 degrees, used for full FOV checks 
-export inline constexpr auto VIEW_FIELD_NARROW = (float)0.7; // +-45 degrees, more narrow check used to set up ranged attacks
-export inline constexpr auto VIEW_FIELD_ULTRA_NARROW = (float)0.9; // +-25 degrees, more narrow check used to set up ranged attacks
+EXPORT inline constexpr float VIEW_FIELD_FULL = -1.f; // +-180 degrees
+EXPORT inline constexpr float VIEW_FIELD_WIDE = -0.7f; // +-135 degrees 0.1 // +-85 degrees, used for full FOV checks 
+EXPORT inline constexpr float VIEW_FIELD_NARROW = 0.7f; // +-45 degrees, more narrow check used to set up ranged attacks
+EXPORT inline constexpr float VIEW_FIELD_ULTRA_NARROW = 0.9f; // +-25 degrees, more narrow check used to set up ranged attacks
 
 // All monsters need this data
-export inline constexpr auto DONT_BLEED = -1;
-export inline constexpr auto BLOOD_COLOR_RED = (byte)247;
-export inline constexpr auto BLOOD_COLOR_YELLOW = (byte)195;
-export inline constexpr auto BLOOD_COLOR_GREEN = BLOOD_COLOR_YELLOW;
+EXPORT inline constexpr uint8_t DONT_BLEED = -1;
+EXPORT inline constexpr uint8_t BLOOD_COLOR_RED = 247;
+EXPORT inline constexpr uint8_t BLOOD_COLOR_YELLOW = 195;
+EXPORT inline constexpr uint8_t BLOOD_COLOR_GREEN = BLOOD_COLOR_YELLOW;	// LUNA: WTF??
 
-export enum MONSTERSTATE
+EXPORT enum MONSTERSTATE : uint32_t
 {
 	MONSTERSTATE_NONE = 0,
 	MONSTERSTATE_IDLE,
@@ -218,7 +245,7 @@ export enum MONSTERSTATE
 };
 
 // Things that toggle (buttons/triggers/doors) need this
-export enum TOGGLE_STATE
+EXPORT enum TOGGLE_STATE : uint32_t
 {
 	TS_AT_TOP,
 	TS_AT_BOTTOM,
@@ -227,27 +254,27 @@ export enum TOGGLE_STATE
 };
 
 // Misc useful
-export inline bool FStrEq(const char *psz1, const char *psz2) noexcept { return !strcmp(psz1, psz2); }
-export inline bool FClassnameIs(entvars_t *pent, const char *szClassname) noexcept { return !strcmp(STRING(pent->classname), szClassname); }
+EXPORT inline bool FStrEq(const char* psz1, const char* psz2) noexcept { return strcmp(psz1, psz2) == 0; }
+EXPORT inline bool FClassnameIs(entvars_t* pent, const char* szClassname) noexcept { return strcmp(STRING(pent->classname), szClassname) == 0; }
 
 // Misc. Prototypes
-//extern void                     UTIL_SetSize(entvars_t *pev, const Vector &vecMin, const Vector &vecMax);
+//extern void             UTIL_SetSize(entvars_t *pev, const Vector &vecMin, const Vector &vecMax);
 //extern float            UTIL_VecToYaw(const Vector &vec);
 //extern Vector           UTIL_VecToAngles(const Vector &vec);
 //extern float            UTIL_AngleMod(float a);
 //extern float            UTIL_AngleDiff(float destAngle, float srcAngle);
-//
+
 //#define UTIL_EntitiesInPVS(pent)                        (*g_engfuncs.pfnEntitiesInPVS)(pent)
 //extern void                     UTIL_MakeVectors(const Vector &vecAngles);
-//
+
 //inline void UTIL_MakeVectorsPrivate(Vector &vecAngles, float *p_vForward, float *p_vRight, float *p_vUp)
 //{
 //	g_engfuncs.pfnAngleVectors(vecAngles, p_vForward, p_vRight, p_vUp);
 //}
-//
+
 //extern void                     UTIL_MakeAimVectors(const Vector &vecAngles); // like MakeVectors, but assumes pitch isn't inverted
 //extern void                     UTIL_MakeInvVectors(const Vector &vec, globalvars_t *pgv);
-//
+
 //extern void                     UTIL_SetOrigin(entvars_t *pev, const Vector &vecOrigin);
 //extern void                     UTIL_EmitAmbientSound(edict_t *entity, const Vector &vecOrigin, const char *samp, float vol, float attenuation, int fFlags, int pitch);
 //extern void                     UTIL_ParticleEffect(const Vector &vecOrigin, const Vector &vecDirection, ULONG ulColor, ULONG ulCount);
@@ -255,53 +282,54 @@ export inline bool FClassnameIs(entvars_t *pent, const char *szClassname) noexce
 //extern void                     UTIL_ScreenShakeAll(const Vector &center, float amplitude, float frequency, float duration);
 //extern void                     UTIL_ShowMessageAll(const char *pString);
 //extern void                     UTIL_ScreenFadeAll(const Vector &color, float fadeTime, float holdTime, int alpha, int flags);
-//
-export enum IGNORE_MONSTERS { ignore_monsters = 1, dont_ignore_monsters = 0, missile = 2 };
-export enum IGNORE_GLASS { ignore_glass = 0x100, dont_ignore_glass = 0 };
+
+// LUNA: trace line flags moved to hlsdk.engine.hpp
+
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 //extern void                     UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
-export enum hull_enum { point_hull = 0, human_hull = 1, large_hull = 2, head_hull = 3 };
-//extern void                     UTIL_TraceHull(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
+
+
+//extern void             UTIL_TraceHull(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
 //extern TraceResult      UTIL_GetGlobalTrace(void);
-//extern void                     UTIL_TraceModel(const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr);
+//extern void             UTIL_TraceModel(const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr);
 //extern Vector           UTIL_GetAimVector(edict_t *pent, float flSpeed);
-//extern int                      UTIL_PointContents(const Vector &vec);
-//
-//extern void                     UTIL_BloodStream(const Vector &origin, const Vector &direction, int color, int amount);
-//extern void                     UTIL_BloodDrips(const Vector &origin, const Vector &direction, int color, int amount);
+//extern int              UTIL_PointContents(const Vector &vec);
+
+//extern void             UTIL_BloodStream(const Vector &origin, const Vector &direction, int color, int amount);
+//extern void             UTIL_BloodDrips(const Vector &origin, const Vector &direction, int color, int amount);
 //extern Vector           UTIL_RandomBloodVector(void);
-//extern BOOL                     UTIL_ShouldShowBlood(int bloodColor);
-//extern void                     UTIL_BloodDecalTrace(TraceResult *pTrace, int bloodColor);
-//extern void                     UTIL_DecalTrace(TraceResult *pTrace, int decalNumber);
-//extern void                     UTIL_PlayerDecalTrace(TraceResult *pTrace, int playernum, int decalNumber, BOOL bIsCustom);
-//extern void                     UTIL_GunshotDecalTrace(TraceResult *pTrace, int decalNumber);
-//extern void                     UTIL_Sparks(const Vector &position);
-//extern void                     UTIL_Ricochet(const Vector &position, float scale);
-//extern void                     UTIL_StringToVector(float *pVector, const char *pString);
-//extern void                     UTIL_StringToIntArray(int *pVector, int count, const char *pString);
+//extern BOOL             UTIL_ShouldShowBlood(int bloodColor);
+//extern void             UTIL_BloodDecalTrace(TraceResult *pTrace, int bloodColor);
+//extern void             UTIL_DecalTrace(TraceResult *pTrace, int decalNumber);
+//extern void             UTIL_PlayerDecalTrace(TraceResult *pTrace, int playernum, int decalNumber, BOOL bIsCustom);
+//extern void             UTIL_GunshotDecalTrace(TraceResult *pTrace, int decalNumber);
+//extern void             UTIL_Sparks(const Vector &position);
+//extern void             UTIL_Ricochet(const Vector &position, float scale);
+//extern void             UTIL_StringToVector(float *pVector, const char *pString);
+//extern void             UTIL_StringToIntArray(int *pVector, int count, const char *pString);
 //extern Vector           UTIL_ClampVectorToBox(const Vector &input, const Vector &clampSize);
 //extern float            UTIL_Approach(float target, float value, float speed);
 //extern float            UTIL_ApproachAngle(float target, float value, float speed);
 //extern float            UTIL_AngleDistance(float next, float cur);
-//
-//extern char *UTIL_VarArgs(char *format, ...);
-//extern BOOL                     UTIL_IsValidEntity(edict_t *pent);
-//extern BOOL                     UTIL_TeamsMatch(const char *pTeamName1, const char *pTeamName2);
+
+//extern char*            UTIL_VarArgs(char *format, ...);
+//extern BOOL             UTIL_IsValidEntity(edict_t *pent);
+//extern BOOL             UTIL_TeamsMatch(const char *pTeamName1, const char *pTeamName2);
 
 // Use for ease-in, ease-out style interpolation (accel/decel)
 //extern float            UTIL_SplineFraction(float value, float scale);
 
 // Search for water transition along a vertical line
 //extern float            UTIL_WaterLevel(const Vector &position, float minz, float maxz);
-//extern void                     UTIL_Bubbles(Vector mins, Vector maxs, int count);
-//extern void                     UTIL_BubbleTrail(Vector from, Vector to, int count);
+//extern void             UTIL_Bubbles(Vector mins, Vector maxs, int count);
+//extern void             UTIL_BubbleTrail(Vector from, Vector to, int count);
 
 // allows precacheing of other entities
-//extern void                     UTIL_PrecacheOther(const char *szClassname);
+//extern void             UTIL_PrecacheOther(const char *szClassname);
 
 // prints a message to each client
-//extern void                     UTIL_ClientPrintAll(int msg_dest, const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL);
-//inline void                     UTIL_CenterPrintAll(const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL)
+//extern void             UTIL_ClientPrintAll(int msg_dest, const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL);
+//inline void             UTIL_CenterPrintAll(const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL)
 //{
 //	UTIL_ClientPrintAll(HUD_PRINTCENTER, msg_name, param1, param2, param3, param4);
 //}
@@ -313,21 +341,19 @@ export enum hull_enum { point_hull = 0, human_hull = 1, large_hull = 2, head_hul
 // prints messages through the HUD
 //extern void ClientPrint(entvars_t *client, int msg_dest, const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL);
 
-export struct hudtextparms_s
+EXPORT struct hudtextparms_t
 {
-	float           x;
-	float           y;
-	int				effect;
-	byte            r1, g1, b1, a1;
-	byte            r2, g2, b2, a2;
-	float           fadeinTime;
-	float           fadeoutTime;
-	float           holdTime;
-	float           fxTime;
-	int				channel;
+	float		x;
+	float		y;
+	int			effect;
+	uint8_t		r1, g1, b1, a1;
+	uint8_t		r2, g2, b2, a2;
+	float		fadeinTime;
+	float		fadeoutTime;
+	float		holdTime;
+	float		fxTime;
+	int			channel;
 };
-
-export using hudtextparms_t = hudtextparms_s;
 
 // prints as transparent 'title' to the HUD
 //extern void                     UTIL_HudMessageAll(const hudtextparms_t &textparms, const char *pMessage);
@@ -363,117 +389,107 @@ export using hudtextparms_t = hudtextparms_s;
 //#define ASSERTSZ(f, sz)
 //#endif  // !DEBUG
 
-
-//extern DLL_GLOBAL const Vector g_vecZero;
+EXPORT inline constexpr Vector g_vecZero = Vector::Zero();
 
 //
 // Constants that were used only by QC (maybe not used at all now)
 //
 // Un-comment only as needed
 //
-export inline constexpr auto LANGUAGE_ENGLISH = 0;
-export inline constexpr auto LANGUAGE_GERMAN = 1;
-export inline constexpr auto LANGUAGE_FRENCH = 2;
-export inline constexpr auto LANGUAGE_BRITISH = 3;
+EXPORT inline constexpr auto LANGUAGE_ENGLISH = 0;
+EXPORT inline constexpr auto LANGUAGE_GERMAN = 1;
+EXPORT inline constexpr auto LANGUAGE_FRENCH = 2;
+EXPORT inline constexpr auto LANGUAGE_BRITISH = 3;
 
 //extern DLL_GLOBAL int                   g_Language;
 
-export inline constexpr auto AMBIENT_SOUND_STATIC = 0;	// medium radius attenuation
-export inline constexpr auto AMBIENT_SOUND_EVERYWHERE = 1;
-export inline constexpr auto AMBIENT_SOUND_SMALLRADIUS = 2;
-export inline constexpr auto AMBIENT_SOUND_MEDIUMRADIUS = 4;
-export inline constexpr auto AMBIENT_SOUND_LARGERADIUS = 8;
-export inline constexpr auto AMBIENT_SOUND_START_SILENT = 16;
-export inline constexpr auto AMBIENT_SOUND_NOT_LOOPING = 32;
+EXPORT inline constexpr auto AMBIENT_SOUND_STATIC = 0;	// medium radius attenuation
+EXPORT inline constexpr auto AMBIENT_SOUND_EVERYWHERE = 1;
+EXPORT inline constexpr auto AMBIENT_SOUND_SMALLRADIUS = 2;
+EXPORT inline constexpr auto AMBIENT_SOUND_MEDIUMRADIUS = 4;
+EXPORT inline constexpr auto AMBIENT_SOUND_LARGERADIUS = 8;
+EXPORT inline constexpr auto AMBIENT_SOUND_START_SILENT = 16;
+EXPORT inline constexpr auto AMBIENT_SOUND_NOT_LOOPING = 32;
 
-export inline constexpr auto SPEAKER_START_SILENT = 1;	// wait for trigger 'on' to start announcements
+EXPORT inline constexpr auto SPEAKER_START_SILENT = 1;	// wait for trigger 'on' to start announcements
 
-export inline constexpr auto SND_SPAWNING = (1 << 8);		// duplicated in protocol.h we're spawing, used in some cases for ambients 
-export inline constexpr auto SND_STOP = (1 << 5);			// duplicated in protocol.h stop sound
-export inline constexpr auto SND_CHANGE_VOL = (1 << 6);		// duplicated in protocol.h change sound vol
-export inline constexpr auto SND_CHANGE_PITCH = (1 << 7);	// duplicated in protocol.h change sound pitch
+// LUNA: sound flags moved to hlsdk.engine.hpp
 
-export inline constexpr auto LFO_SQUARE = 1;
-export inline constexpr auto LFO_TRIANGLE = 2;
-export inline constexpr auto LFO_RANDOM = 3;
+EXPORT inline constexpr auto LFO_SQUARE = 1;
+EXPORT inline constexpr auto LFO_TRIANGLE = 2;
+EXPORT inline constexpr auto LFO_RANDOM = 3;
 
 // func_rotating
-export inline constexpr auto SF_BRUSH_ROTATE_Y_AXIS = 0;
-export inline constexpr auto SF_BRUSH_ROTATE_INSTANT = 1;
-export inline constexpr auto SF_BRUSH_ROTATE_BACKWARDS = 2;
-export inline constexpr auto SF_BRUSH_ROTATE_Z_AXIS = 4;
-export inline constexpr auto SF_BRUSH_ROTATE_X_AXIS = 8;
-export inline constexpr auto SF_PENDULUM_AUTO_RETURN = 16;
-export inline constexpr auto SF_PENDULUM_PASSABLE = 32;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_Y_AXIS = 0;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_INSTANT = 1;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_BACKWARDS = 2;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_Z_AXIS = 4;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_X_AXIS = 8;
+EXPORT inline constexpr auto SF_PENDULUM_AUTO_RETURN = 16;
+EXPORT inline constexpr auto SF_PENDULUM_PASSABLE = 32;
 
 
-export inline constexpr auto SF_BRUSH_ROTATE_SMALLRADIUS = 128;
-export inline constexpr auto SF_BRUSH_ROTATE_MEDIUMRADIUS = 256;
-export inline constexpr auto SF_BRUSH_ROTATE_LARGERADIUS = 512;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_SMALLRADIUS = 128;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_MEDIUMRADIUS = 256;
+EXPORT inline constexpr auto SF_BRUSH_ROTATE_LARGERADIUS = 512;
 
-export inline constexpr auto PUSH_BLOCK_ONLY_X = 1;
-export inline constexpr auto PUSH_BLOCK_ONLY_Y = 2;
+EXPORT inline constexpr auto PUSH_BLOCK_ONLY_X = 1;
+EXPORT inline constexpr auto PUSH_BLOCK_ONLY_Y = 2;
 
-export inline constexpr auto VEC_HULL_MIN = Vector(-16, -16, -36);
-export inline constexpr auto VEC_HULL_MAX = Vector(16, 16, 36);
-export inline constexpr auto VEC_HUMAN_HULL_MIN = Vector(-16, -16, 0);
-export inline constexpr auto VEC_HUMAN_HULL_MAX = Vector(16, 16, 72);
-export inline constexpr auto VEC_HUMAN_HULL_DUCK = Vector(16, 16, 36);
+EXPORT inline constexpr auto VEC_HULL_MIN = Vector(-16, -16, -36);
+EXPORT inline constexpr auto VEC_HULL_MAX = Vector(16, 16, 36);
+EXPORT inline constexpr auto VEC_HUMAN_HULL_MIN = Vector(-16, -16, 0);
+EXPORT inline constexpr auto VEC_HUMAN_HULL_MAX = Vector(16, 16, 72);
+EXPORT inline constexpr auto VEC_HUMAN_HULL_DUCK = Vector(16, 16, 36);
 
-export inline constexpr auto VEC_VIEW = Vector(0, 0, 28);
+EXPORT inline constexpr auto VEC_VIEW = Vector(0, 0, 28);
 
-export inline constexpr auto VEC_DUCK_HULL_MIN = Vector(-16, -16, -18);
-export inline constexpr auto VEC_DUCK_HULL_MAX = Vector(16, 16, 18);
-export inline constexpr auto VEC_DUCK_VIEW = Vector(0, 0, 12);
+EXPORT inline constexpr auto VEC_DUCK_HULL_MIN = Vector(-16, -16, -18);
+EXPORT inline constexpr auto VEC_DUCK_HULL_MAX = Vector(16, 16, 18);
+EXPORT inline constexpr auto VEC_DUCK_VIEW = Vector(0, 0, 12);
 
-export inline constexpr auto SVC_LIGHTSTYLE = 12;
-export inline constexpr auto SVC_TEMPENTITY = 23;
-export inline constexpr auto SVC_INTERMISSION = 30;
-export inline constexpr auto SVC_CDTRACK = 32;
-export inline constexpr auto SVC_WEAPONANIM = 35;
-export inline constexpr auto SVC_ROOMTYPE = 37;
-export inline constexpr auto SVC_HLTV = 50;
+// LUNA: SVC_ moved to hlsdk.engine.hpp
 
 // prxoy director stuff
-export inline constexpr auto DRC_EVENT = 3;       // informs the dircetor about ann important game event
+EXPORT inline constexpr auto DRC_EVENT = 3;       // informs the dircetor about ann important game event
 
-export inline constexpr auto DRC_FLAG_PRIO_MASK = 0x0F;    //      priorities between 0 and 15 (15 most important)
-export inline constexpr auto DRC_FLAG_DRAMATIC = (1 << 5);
+EXPORT inline constexpr auto DRC_FLAG_PRIO_MASK = 0x0F;    //      priorities between 0 and 15 (15 most important)
+EXPORT inline constexpr auto DRC_FLAG_DRAMATIC = (1 << 5);
 
 // triggers
-export inline constexpr auto SF_TRIGGER_ALLOWMONSTERS = 1;// monsters allowed to fire this trigger
-export inline constexpr auto SF_TRIGGER_NOCLIENTS = 2;// players not allowed to fire this trigger
-export inline constexpr auto SF_TRIGGER_PUSHABLES = 4;// only pushables can fire this trigger
+EXPORT inline constexpr auto SF_TRIGGER_ALLOWMONSTERS = 1;// monsters allowed to fire this trigger
+EXPORT inline constexpr auto SF_TRIGGER_NOCLIENTS = 2;// players not allowed to fire this trigger
+EXPORT inline constexpr auto SF_TRIGGER_PUSHABLES = 4;// only pushables can fire this trigger
 
 // func breakable
-export inline constexpr auto SF_BREAK_TRIGGER_ONLY = 1;// may only be broken by trigger
-export inline constexpr auto SF_BREAK_TOUCH = 2;// can be 'crashed through' by running player (plate glass)
-export inline constexpr auto SF_BREAK_PRESSURE = 4;// can be broken by a player standing on it
-export inline constexpr auto SF_BREAK_CROWBAR = 256;// instant break if hit with crowbar
+EXPORT inline constexpr auto SF_BREAK_TRIGGER_ONLY = 1;// may only be broken by trigger
+EXPORT inline constexpr auto SF_BREAK_TOUCH = 2;// can be 'crashed through' by running player (plate glass)
+EXPORT inline constexpr auto SF_BREAK_PRESSURE = 4;// can be broken by a player standing on it
+EXPORT inline constexpr auto SF_BREAK_CROWBAR = 256;// instant break if hit with crowbar
 
 // func_pushable (it's also func_breakable, so don't collide with those flags)
-export inline constexpr auto SF_PUSH_BREAKABLE = 128;
+EXPORT inline constexpr auto SF_PUSH_BREAKABLE = 128;
 
-export inline constexpr auto SF_LIGHT_START_OFF = 1;
+EXPORT inline constexpr auto SF_LIGHT_START_OFF = 1;
 
-export inline constexpr auto SPAWNFLAG_NOMESSAGE = 1;
-export inline constexpr auto SPAWNFLAG_NOTOUCH = 2;	// LUNA: #NO_URGENT original value = 1
-export inline constexpr auto SPAWNFLAG_DROIDONLY = 4;
+EXPORT inline constexpr auto SPAWNFLAG_NOMESSAGE = 1;
+EXPORT inline constexpr auto SPAWNFLAG_NOTOUCH = 2;	// LUNA: #NO_URGENT original value = 1
+EXPORT inline constexpr auto SPAWNFLAG_DROIDONLY = 4;
 
-export inline constexpr auto SPAWNFLAG_USEONLY = 1;	// can't be touched, must be used (buttons)
+EXPORT inline constexpr auto SPAWNFLAG_USEONLY = 1;	// can't be touched, must be used (buttons)
 
-export inline constexpr auto TELE_PLAYER_ONLY = 1;
-export inline constexpr auto TELE_SILENT = 2;
+EXPORT inline constexpr auto TELE_PLAYER_ONLY = 1;
+EXPORT inline constexpr auto TELE_SILENT = 2;
 
-export inline constexpr auto SF_TRIG_PUSH_ONCE = 1;
+EXPORT inline constexpr auto SF_TRIG_PUSH_ONCE = 1;
 
 
 // Sound Utilities
 
 // sentence groups
-export inline constexpr auto CBSENTENCENAME_MAX = 16;
-export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max number of sentences in game. NOTE: this must match
-																						// CVOXFILESENTENCEMAX in engine\sound.h!!!
+EXPORT inline constexpr size_t CBSENTENCENAME_MAX = 16;
+EXPORT inline constexpr size_t CVOXFILESENTENCEMAX = 1536;            // max number of sentences in game. NOTE: this must match
+// CVOXFILESENTENCEMAX in engine\sound.h!!!
 
 //extern char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
 //extern int gcallsentences;
@@ -552,7 +568,6 @@ export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max numbe
 //float UTIL_SharedRandomFloat(unsigned int seed, float low, float high);
 //
 //float UTIL_WeaponTimeBase(void);
-
 //
 // LUNA's extension
 //
@@ -570,7 +585,7 @@ export inline constexpr auto CVOXFILESENTENCEMAX = 1536;            // max numbe
 // Only involved in functions invoking SV_LinkContents. pfnPointContents, for one example.
 // In the case of pfnPointContents, the global mask work as if it were the mask of ignoreEntity->v.groupinfo in pfnTraceLine.
 // In the cases of when operator checks out, the point contented in such masked entity will not be checked.
-export enum ESetGroupMaskOp
+EXPORT enum ESetGroupMaskOp
 {
 	/*
 	* if ( mode == GROUP_OP_AND && (check->pev->groupinfo & player->pev->groupinfo) == 0 )
@@ -585,11 +600,10 @@ export enum ESetGroupMaskOp
 	GROUP_OP_NAND
 };
 
-export inline constexpr uint32_t GROUPMASK_GROUP_TRACE = (1 << 8);
+EXPORT inline constexpr uint32_t GROUPMASK_GROUP_TRACE = (1 << 8);
 
 // Allows you to set a bunch of entities to skip.
-export
-inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
+EXPORT inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
 {
 	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
 
@@ -605,7 +619,7 @@ inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *
 
 	// Player goes into param ignoreEntity, therefore ignored by default.
 	// After that, the engine will also use ignoreEntity->v.groupinfo to compare with other entities it encountered.
-	g_engfuncs.pfnTraceLine(vecSrc, vecEnd, dont_ignore_monsters, pPlayer, pTr);
+	g_engfuncs.pfnTraceLine(vecSrc, vecEnd, dont_ignore_monsters | dont_ignore_glass, pPlayer, pTr);
 
 	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
 	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
@@ -614,8 +628,7 @@ inline void UTIL_TraceLine(Vector const &vecSrc, Vector const &vecEnd, edict_t *
 	g_engfuncs.pfnSetGroupMask(0, 0);
 }
 
-export
-inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum iHullIndex, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
+EXPORT inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, HULL_TYPES iHullIndex, edict_t *pPlayer, std::span<edict_t *const> rgpEntsToSkip, TraceResult *pTr) noexcept
 {
 	g_engfuncs.pfnSetGroupMask(0, GROUP_OP_NAND);
 
@@ -631,7 +644,7 @@ inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum
 
 	// Player goes into param ignoreEntity, therefore ignored by default.
 	// After that, the engine will also use ignoreEntity->v.groupinfo to compare with other entities it encountered.
-	g_engfuncs.pfnTraceHull(vecSrc, vecEnd, dont_ignore_monsters, iHullIndex, pPlayer, pTr);
+	g_engfuncs.pfnTraceHull(vecSrc, vecEnd, dont_ignore_monsters | dont_ignore_glass, iHullIndex, pPlayer, pTr);
 
 	pPlayer->v.groupinfo = iPlayerLastGroupInfo;
 	for (size_t i = 0; i < rgpEntsToSkip.size(); ++i)
@@ -645,7 +658,7 @@ inline void UTIL_TraceHull(Vector const &vecSrc, Vector const &vecEnd, hull_enum
 */
 
 // Decal Helper
-export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextureIndex) noexcept
+EXPORT void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextureIndex) noexcept
 {
 	auto const iEntityIndex = ent_cast<short>(pent);
 
@@ -678,7 +691,7 @@ export void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 	g_engfuncs.pfnMessageEnd();
 }
 
-export void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, byte iCount, float flLife, byte bitsFlags) noexcept
+EXPORT void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, uint8_t iCount, float flLife, uint8_t bitsFlags) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(TE_BREAKMODEL);
@@ -703,7 +716,7 @@ export void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, con
 	g_engfuncs.pfnMessageEnd();
 };
 
-export void UTIL_ExplodeModel(const Vector &vecOrigin, float flSpeed, short iModel, byte iCount, float flLife) noexcept
+EXPORT void UTIL_ExplodeModel(const Vector &vecOrigin, float flSpeed, short iModel, uint8_t iCount, float flLife) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(TE_EXPLODEMODEL);
@@ -721,7 +734,7 @@ export void UTIL_ExplodeModel(const Vector &vecOrigin, float flSpeed, short iMod
 	g_engfuncs.pfnMessageEnd();
 };
 
-export void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprite, byte iStartingFrame, float flFrameRate, float flLife, float flLineWidth, float flNoiseAmp, color24 Color, byte iBrightness, float flScrollSpeed) noexcept
+EXPORT void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprite, uint8_t iStartingFrame, float flFrameRate, float flLife, float flLineWidth, float flNoiseAmp, color24 Color, uint8_t iBrightness, float flScrollSpeed) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, vecOrigin, nullptr);
 	g_engfuncs.pfnWriteByte(TE_BEAMCYLINDER);
@@ -756,7 +769,7 @@ export void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 
 // Get player head!
 // Note that it must be a player model, as the bone index was fixed.
-export [[nodiscard]]
+EXPORT [[nodiscard]]
 Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 {
 	static std::unordered_map<int, int> rgModelHeadIndex{};
@@ -769,7 +782,7 @@ Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 	[[unlikely]]
 	if (rgModelHeadIndex[pPlayer->v.modelindex] == 0)
 	{
-		int iCount = 0;
+		unsigned iCount = 0;
 		auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pPlayer);
 
 		for (auto pBone = (mstudiobone_t *)((std::uintptr_t)pstudiohdr + pstudiohdr->boneindex); iCount < pstudiohdr->numbones; ++iCount, ++pBone)
@@ -792,13 +805,13 @@ Vector UTIL_GetHeadPosition(edict_t *pPlayer) noexcept
 	return vecOrigin;	// The vecAngles is discarded due to the fact that the engine didn't even impl it
 }
 
-export struct BodyEnumInfo_t
+EXPORT struct BodyEnumInfo_t
 {
 	int m_index{};
 	int m_total{};
 };
 
-export
+EXPORT
 template <size_t N> [[nodiscard]]
 constexpr decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> const &info) noexcept
 {
@@ -821,8 +834,7 @@ constexpr decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> 
 	return 0;
 }
 
-export
-inline float UTIL_SetController(uint8_t *const piController, mstudiobonecontroller_t *const pbonecontroller, double degree) noexcept
+EXPORT inline float UTIL_SetController(uint8_t *const piController, mstudiobonecontroller_t *const pbonecontroller, double degree) noexcept
 {
 	// wrap 0..360 if it's a rotational controller
 	if (pbonecontroller->type & (STUDIO_XR | STUDIO_YR | STUDIO_ZR))
@@ -861,16 +873,15 @@ inline float UTIL_SetController(uint8_t *const piController, mstudiobonecontroll
 	return static_cast<float>(setting * (1.0 / 255.0) * (pbonecontroller->end - pbonecontroller->start) + pbonecontroller->start);
 }
 
-export
-inline float UTIL_SetController(edict_t *pEdict, byte iController, double flValue) noexcept
+EXPORT inline float UTIL_SetController(edict_t *pEdict, uint8_t iController, double flValue) noexcept
 {
-	int i{};
+	unsigned i{};
 	auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pEdict);
 
 	if (!pstudiohdr)
 		return (float)flValue;
 
-	mstudiobonecontroller_t *pbonecontroller = (mstudiobonecontroller_t *)((byte *)pstudiohdr + pstudiohdr->bonecontrollerindex);
+	auto pbonecontroller = (mstudiobonecontroller_t *)((uint8_t*)pstudiohdr + pstudiohdr->bonecontrollerindex);
 
 	// find first controller that matches the index
 	for (i = 0; i < pstudiohdr->numbonecontrollers; i++, pbonecontroller++)
@@ -885,22 +896,20 @@ inline float UTIL_SetController(edict_t *pEdict, byte iController, double flValu
 	return UTIL_SetController(&pEdict->v.controller[iController], pbonecontroller, flValue);
 }
 
-export
-std::pair<Vector, Vector> UTIL_ExtractBbox(edict_t *pEdict, int const iSequence) noexcept
+EXPORT std::pair<Vector, Vector> UTIL_ExtractBbox(edict_t *pEdict, int const iSequence) noexcept
 {
 	auto const pstudiohdr = g_engfuncs.pfnGetModelPtr(pEdict);
 
 	if (!pstudiohdr)
 		return {};
 
-	auto const pseqdesc = (mstudioseqdesc_t *)((byte *)pstudiohdr + pstudiohdr->seqindex);
+	auto const pseqdesc = (mstudioseqdesc_t *)((uint8_t *)pstudiohdr + pstudiohdr->seqindex);
 	return { pseqdesc[iSequence].bbmin, pseqdesc[iSequence].bbmax };
 }
 
 // Credit: Sneaky@GlobalModders.net
 // Source: BonePosFix AMXX module
-export inline
-Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) noexcept
+EXPORT inline Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) noexcept
 {
 	Vector ret{};
 	//pEdict->v.angles.pitch = -pEdict->v.angles.pitch;	// infamous quake swap.

@@ -30,9 +30,6 @@
     <Filter Include="MetaMod">
       <UniqueIdentifier>{7123522a-b507-4db5-b5b1-a2a3f91a9e77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="STL">
-      <UniqueIdentifier>{1fcb1f0b-766e-4d6f-85ac-b57da399b117}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\hlsdk\common\beamdef.ixx">
@@ -229,12 +226,6 @@
     </ClCompile>
     <ClCompile Include="..\hlsdk\dlls\activity.ixx">
       <Filter>HLSDK\dlls</Filter>
-    </ClCompile>
-    <ClCompile Include="$(VCToolsInstallDir)modules\std.compat.ixx">
-      <Filter>STL</Filter>
-    </ClCompile>
-    <ClCompile Include="$(VCToolsInstallDir)modules\std.ixx">
-      <Filter>STL</Filter>
     </ClCompile>
     <ClCompile Include="..\hlsdk\dlls\monsterevent.ixx">
       <Filter>HLSDK\dlls</Filter>

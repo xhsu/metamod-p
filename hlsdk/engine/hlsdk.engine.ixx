@@ -1,4 +1,4 @@
-export module vector;
+export module hlsdk:engine;
 
 #ifdef EXPORT
 #undef EXPORT
@@ -13,5 +13,5 @@ export module vector;
 
 extern "C++"
 {
-#include "vector.hpp"
+#include "hlsdk.engine.hpp"
 }
