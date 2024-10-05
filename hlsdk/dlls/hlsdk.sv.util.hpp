@@ -909,7 +909,10 @@ EXPORT std::pair<Vector, Vector> UTIL_ExtractBbox(edict_t *pEdict, int const iSe
 
 // Credit: Sneaky@GlobalModders.net
 // Source: BonePosFix AMXX module
-EXPORT inline Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) noexcept
+
+EXPORT inline
+[[nodiscard]]
+Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) noexcept
 {
 	Vector ret{};
 	//pEdict->v.angles.pitch = -pEdict->v.angles.pitch;	// infamous quake swap.
@@ -925,4 +928,33 @@ EXPORT inline Vector UTIL_GetAttachment(edict_t* pEdict, uint16_t iAttachment) n
 	ret.y = static_cast<vec_t>(vecLocalOrigin.y * c + vecLocalOrigin.x * s);
 
 	return ret + pEdict->v.origin;
+}
+
+// Credit: Sneaky@GlobalModders.net
+// Source: BonePosFix AMXX module
+EXPORT inline
+[[nodiscard]]
+Vector UTIL_GetBonePosition(edict_t* pEdict, std::int32_t iBone) noexcept
+{
+	auto const iEntity = ent_cast<short>(pEdict);
+	auto const bIsPlayer = iEntity >= 1 && iEntity <= gpGlobals->maxClients;
+
+	Vector ret{};
+	pEdict->v.angles[0] = -pEdict->v.angles[0];
+	g_engfuncs.pfnGetBonePosition(pEdict, iBone, ret, nullptr);
+	pEdict->v.angles[0] = -pEdict->v.angles[0];
+
+	if (!bIsPlayer)
+	{
+		auto const vecLocalOrigin = ret -= pEdict->v.origin;
+		auto const c = std::cos(pEdict->v.angles.yaw * (std::numbers::pi / 180));
+		auto const s = std::sin(pEdict->v.angles.yaw * (std::numbers::pi / 180));
+
+		ret.x = static_cast<vec_t>(vecLocalOrigin.x * c - vecLocalOrigin.y * s);
+		ret.y = static_cast<vec_t>(vecLocalOrigin.y * c + vecLocalOrigin.x * s);
+
+		return ret + pEdict->v.origin;
+	}
+
+	return ret;
 }

@@ -1,6 +1,8 @@
 export module hlsdk:decompiled;
 
-import std.compat;
+import std;
+
+using std::uint32_t;	// #MSVC_BUG_INTELLISENSE
 
 #pragma region sizebuf.h
 
