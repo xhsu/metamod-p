@@ -457,6 +457,7 @@ EXPORT struct Quaternion
 		);
 	}
 
+	// LUNA: use pitch as -pitch if you are using GoldSrc or Quake stuff!!
 	inline Angles Euler() const noexcept
 	{
 		static constexpr auto rad_to_deg = 180.0 / std::numbers::pi;
@@ -477,6 +478,15 @@ EXPORT struct Quaternion
 		vecAngles.yaw = static_cast<vec_t>(std::atan2(siny_cosp, cosy_cosp) * rad_to_deg);
 
 		return vecAngles;
+	}
+
+	inline bool Approx(Quaternion const& q, double const delta = std::numeric_limits<double>::epsilon()) const noexcept
+	{
+		// #UPDATE_AT_CPP23 constexpr math
+		return std::abs(this->a - q.a) <= delta
+			&& std::abs(this->b - q.b) <= delta
+			&& std::abs(this->c - q.c) <= delta
+			&& std::abs(this->d - q.d) <= delta;
 	}
 
 	double a{ 1 }, b{}, c{}, d{};
