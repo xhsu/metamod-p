@@ -996,7 +996,9 @@ EXPORT inline constexpr size_t MAX_ENT_LEAFS = 48;
 
 EXPORT using qboolean = std::int32_t;
 EXPORT using string_t = std::ptrdiff_t;
+#ifndef HLSDK_SKIP_PTR_SIZE_CHECK
 static_assert(sizeof(string_t) == 4, "To compatible with GoldSrc Engine, the string_t (a.k.a. std::ptrdiff_t) must be 4 bytes wide.");
+#endif
 
 // forward declaration
 struct edict_t;
