@@ -811,9 +811,8 @@ EXPORT struct BodyEnumInfo_t
 	int m_total{};
 };
 
-EXPORT
-template <size_t N> [[nodiscard]]
-constexpr decltype(entvars_t::body) UTIL_CalcBody(std::array<BodyEnumInfo_t, N> const &info) noexcept
+EXPORT [[nodiscard]]	// #UPDATE_AT_CPP23 constexpr goto
+decltype(entvars_t::body) UTIL_CalcBody(std::span<BodyEnumInfo_t> info) noexcept
 {
 	for (auto ret = 0; ret < std::numeric_limits<decltype(entvars_t::body)>::max(); ++ret)
 	{

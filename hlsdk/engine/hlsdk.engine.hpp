@@ -3040,7 +3040,7 @@ EXPORT struct enginefuncs_t
 	void		(*pfnSetView)				(const edict_t* pClient, const edict_t* pViewent){};
 	float		(*pfnTime)					(void){};
 	void		(*pfnCrosshairAngle)		(const edict_t* pClient, float pitch, float yaw){};
-	std::byte*	(*pfnLoadFileForMe)         (char* filename, int* pLength){};
+	std::byte*	(*pfnLoadFileForMe)         (char const* filename, int* pLength){};
 	void        (*pfnFreeFile)              (void* buffer){};
 	void        (*pfnEndSection)            (const char* pszSectionName){}; // trigger_endsection
 	int 		(*pfnCompareFileTime)       (char* filename1, char* filename2, int* iCompare){};
@@ -3114,7 +3114,7 @@ EXPORT struct enginefuncs_t
 	sentenceEntry_s* (*pfnSequencePickSentence)		(const char* groupName, int pickMethod, int* picked){};
 
 	// LH: Give access to filesize via filesystem
-	int			(*pfnGetFileSize)						(char* filename){};
+	int			(*pfnGetFileSize)						(char const* filename){};
 
 	uint32_t	(*pfnGetApproxWavePlayLen)				(const char* filepath){};
 	// MDC: Added for CZ career-mode

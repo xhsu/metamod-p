@@ -121,7 +121,7 @@ export struct mutil_funcs_t
 	void		(*pfnCenterSay)			(plid_t plid, const char* fmt, ...);
 	void		(*pfnCenterSayParms)	(plid_t plid, hudtextparms_t tparms, const char* fmt, ...);
 	void		(*pfnCenterSayVarargs)	(plid_t plid, hudtextparms_t tparms, const char* fmt, va_list ap);
-	qboolean(*pfnCallGameEntity)	(plid_t plid, const char* entStr, entvars_t* pev);
+	qboolean	(*pfnCallGameEntity)	(plid_t plid, const char* entStr, entvars_t* pev);
 	ESvcCommands(*pfnGetUserMsgID)		(plid_t plid, const char* msgname, int* size);
 	const char* (*pfnGetUserMsgName)	(plid_t plid, int msgid, int* size);
 	const char* (*pfnGetPluginPath)		(plid_t plid);
