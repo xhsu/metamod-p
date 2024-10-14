@@ -46,6 +46,7 @@ EXPORT struct Vector2D
 
 	constexpr double LengthSquared(void) const noexcept { return x * x + y * y; }
 	inline double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
+	inline double Yaw(void) const noexcept;
 
 	inline Vector2D Normalize(void) const noexcept
 	{
@@ -344,6 +345,18 @@ inline double Vector::Pitch(void) const noexcept
 	else
 	{
 		return std::atan2(z, Length2D()) * Angles::rad_to_deg;
+	}
+}
+
+inline double Vector2D::Yaw(void) const noexcept
+{
+	if (y == 0 && x == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return std::atan2(y, x) * Angles::rad_to_deg;
 	}
 }
 

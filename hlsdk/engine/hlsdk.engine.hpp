@@ -2967,7 +2967,7 @@ EXPORT struct enginefuncs_t
 	void		(*pfnMakeStatic)			(edict_t* ent){};
 	int			(*pfnEntIsOnFloor)			(edict_t* e){};
 	int			(*pfnDropToFloor)			(edict_t* e){};
-	int			(*pfnWalkMove)				(edict_t* ent, float yaw, float dist, int iMode){};
+	int			(*pfnWalkMove)				(edict_t* ent, float yaw, float dist, WALKMOVE iMode){};
 	void		(*pfnSetOrigin)				(edict_t* e, const float* rgflOrigin){};
 	void		(*pfnEmitSound)				(edict_t* entity, SND_CHAN channel, const char* sample, /*int*/float volume, float attenuation, SOUND_FL fFlags, int pitch){};
 	void		(*pfnEmitAmbientSound)		(edict_t* entity, float* pos, const char* samp, float vol, float attenuation, SOUND_FL fFlags, int pitch){};
