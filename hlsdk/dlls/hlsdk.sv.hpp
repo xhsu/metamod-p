@@ -28,6 +28,26 @@ EXPORT inline constexpr auto MONSTER_EVENT_BODYDROP_HEAVY = 2002;
 EXPORT inline constexpr auto MONSTER_EVENT_SWISHSOUND = 2010;
 #pragma endregion monsterevent.h
 
+#pragma region scriptevent.h
+
+EXPORT enum EScriptEvents
+{
+	SCRIPT_EVENT_DEAD = 1000,	// character is now dead
+	SCRIPT_EVENT_NOINTERRUPT = 1001,	// does not allow interrupt
+	SCRIPT_EVENT_CANINTERRUPT = 1002,	// will allow interrupt
+	SCRIPT_EVENT_FIREEVENT = 1003,	// event now fires
+	SCRIPT_EVENT_SOUND = 1004,	// Play named wave file (on CHAN_BODY)
+	SCRIPT_EVENT_SENTENCE = 1005,	// Play named sentence
+	SCRIPT_EVENT_INAIR = 1006,	// Leave the character in air at the end of the sequence (don't find the floor)
+	SCRIPT_EVENT_ENDANIMATION = 1007,	// Set the animation by name after the sequence completes
+	SCRIPT_EVENT_SOUND_VOICE = 1008,	// Play named wave file (on CHAN_VOICE)
+	SCRIPT_EVENT_SENTENCE_RND1 = 1009,	// Play sentence group 25% of the time
+	SCRIPT_EVENT_NOT_DEAD = 1010,	// Bring back to life (for life/death sequences)
+};
+
+#pragma endregion scriptevent.h
+
+
 #pragma region activity.h
 EXPORT enum Activity
 {
@@ -134,7 +154,6 @@ EXPORT enum Activity
 	ACT_WAVE,
 	ACT_YES,
 	ACT_NO,
-
 };
 
 EXPORT struct activity_map_t

@@ -29,9 +29,6 @@ struct Quaternion;
 //=========================================================
 EXPORT struct Vector2D
 {
-	constexpr Vector2D(void) noexcept = default;
-	constexpr Vector2D(double X, double Y) noexcept : x{ (float)X }, y{ (float)Y } {}
-
 	// Special status
 	static consteval Vector2D Zero(void) noexcept { return { 0, 0 }; }
 	static consteval Vector2D Right(void) noexcept { return { 0, -1 }; }
@@ -39,10 +36,12 @@ EXPORT struct Vector2D
 	static consteval Vector2D Front(void) noexcept { return { 1, 0 }; }
 	static consteval Vector2D Back(void) noexcept { return { -1, 0 }; }
 
+	constexpr Vector2D operator-(void)				const noexcept { return Vector2D(-x, -y); }
+
 	constexpr Vector2D operator+(const Vector2D& v) const noexcept { return { x + v.x, y + v.y }; }
 	constexpr Vector2D operator-(const Vector2D& v) const noexcept { return { x - v.x, y - v.y }; }
-	constexpr Vector2D operator*(double fl) const noexcept { return { x * fl, y * fl }; }
-	constexpr Vector2D operator/(double fl) const noexcept { fl = 1 / fl; return { x * fl, y * fl }; }
+	constexpr Vector2D operator*(double fl) const noexcept { return { static_cast<vec_t>(x * fl), static_cast<vec_t>(y * fl) }; }
+	constexpr Vector2D operator/(double fl) const noexcept { fl = 1 / fl; return { static_cast<vec_t>(x * fl), static_cast<vec_t>(y * fl) }; }
 
 	constexpr double LengthSquared(void) const noexcept { return x * x + y * y; }
 	inline double Length(void) const noexcept { return std::sqrt(LengthSquared()); }
@@ -55,7 +54,7 @@ EXPORT struct Vector2D
 		if (flLength <= std::numeric_limits<vec_t>::epsilon())
 			return Zero();
 
-		return { x / flLength, y / flLength };
+		return { static_cast<vec_t>(x / flLength), static_cast<vec_t>(y / flLength) };
 	}
 
 	// Rotate in counter-clockwise. Angle is in degree.
@@ -66,8 +65,8 @@ EXPORT struct Vector2D
 		const auto s = std::sin(a);
 
 		return {
-			c * x - s * y,
-			s * x + c * y
+			static_cast<vec_t>(c * x - s * y),
+			static_cast<vec_t>(s * x + c * y),
 		};
 	}
 

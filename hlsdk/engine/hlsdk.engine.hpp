@@ -1826,12 +1826,12 @@ EXPORT struct mstudioseqdesc_t
 	int					activity{};
 	int					actweight{};
 
-	int					numevents{};
+	uint32_t			numevents{};
 	int					eventindex{};
 
-	int					numframes{};	// number of frames per sequence
+	uint32_t			numframes{};	// number of frames per sequence
 
-	int					numpivots{};	// number of foot pivots
+	uint32_t			numpivots{};	// number of foot pivots
 	int					pivotindex{};
 
 	int					motiontype{};
