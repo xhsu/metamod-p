@@ -1,18 +1,16 @@
 #if !defined(INCLUDED_IN_MODULE) || defined(__INTELLISENSE__)
 #pragma once
 
+#include <generator>
 #include <span>
 #include <unordered_map>
 #include <vector>
-
-#include <experimental/generator>	// #UPDATE_AT_CPP23 generator
 
 #include "../engine/hlsdk.engine.hpp"
 
 #else
 
 import std;
-import <experimental/generator>;
 
 import :engine;
 
@@ -115,7 +113,7 @@ EXPORT inline std::ptrdiff_t MAKE_STRING_UNSAFE(const char* psz) noexcept { retu
 //
 
 // LUNA: Try Query lib from CSDK instead.
-EXPORT inline std::experimental::generator<edict_t*> FIND_ENTITY_BY_CLASSNAME(const char* pszName) noexcept
+EXPORT inline std::generator<edict_t*> FIND_ENTITY_BY_CLASSNAME(const char* pszName) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityByString(nullptr, "classname", pszName);
 		pev_valid(pEdict) == EValidity::Full;
@@ -139,7 +137,7 @@ EXPORT inline std::experimental::generator<edict_t*> FIND_ENTITY_BY_CLASSNAME(co
 //}
 
 // LUNA: Try Query lib from CSDK instead.
-EXPORT std::experimental::generator<edict_t*> FIND_ENTITY_IN_SPHERE(const Vector vecOrigin, float const flRadius) noexcept
+EXPORT std::generator<edict_t*> FIND_ENTITY_IN_SPHERE(const Vector vecOrigin, float const flRadius) noexcept
 {
 	for (auto pEdict = g_engfuncs.pfnFindEntityInSphere(nullptr, vecOrigin, flRadius);
 		pev_valid(pEdict) == EValidity::Full;
