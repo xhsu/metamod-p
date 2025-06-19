@@ -3311,7 +3311,7 @@ EXPORT struct DLL_FUNCTIONS
 	void			(*pfnPM_Init)			(playermove_t* ppmove);
 	char			(*pfnPM_FindTextureType)(char* name);
 	void			(*pfnSetupVisibility)	(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas);
-	void			(*pfnUpdateClientData)	(const edict_t* ent, int sendweapons, clientdata_t* cd);
+	void			(*pfnUpdateClientData)	(const edict_t* ent, qboolean sendweapons, clientdata_t* cd);
 	int				(*pfnAddToFullPack)		(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet);
 	void			(*pfnCreateBaseline)	(int player, int eindex, entity_state_t* baseline, edict_t* entity, int playermodelindex, vec3_t player_mins, vec3_t player_maxs);
 	void			(*pfnRegisterEncoders)	(void);
