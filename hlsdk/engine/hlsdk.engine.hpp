@@ -2970,7 +2970,7 @@ EXPORT struct enginefuncs_t
 	int			(*pfnWalkMove)				(edict_t* ent, float yaw, float dist, WALKMOVE iMode){};
 	void		(*pfnSetOrigin)				(edict_t* e, const float* rgflOrigin){};
 	void		(*pfnEmitSound)				(edict_t* entity, SND_CHAN channel, const char* sample, /*int*/float volume, float attenuation, SOUND_FL fFlags, int pitch){};
-	void		(*pfnEmitAmbientSound)		(edict_t* entity, float* pos, const char* samp, float vol, float attenuation, SOUND_FL fFlags, int pitch){};
+	void		(*pfnEmitAmbientSound)		(edict_t* entity, const float* pos, const char* samp, float vol, float attenuation, SOUND_FL fFlags, int pitch){};
 	void		(*pfnTraceLine)				(const float* v1, const float* v2, TRACE_FL fFlags, edict_t* pentToSkip, TraceResult* ptr){};
 	void		(*pfnTraceToss)				(edict_t* pent, edict_t* pentToIgnore, TraceResult* ptr){};
 	int			(*pfnTraceMonsterHull)		(edict_t* pEdict, const float* v1, const float* v2, TRACE_FL fFlags, edict_t* pentToSkip, TraceResult* ptr){};
@@ -3057,7 +3057,7 @@ EXPORT struct enginefuncs_t
 	void		(*pfnSetClientKeyValue)		(int clientIndex, char* infobuffer, char* key, char* value){};
 	int			(*pfnIsMapValid)			(char* filename){};
 	void		(*pfnStaticDecal)			(const float* origin, int decalIndex, int entityIndex, int modelIndex){};
-	int			(*pfnPrecacheGeneric)		(char* s){};
+	int			(*pfnPrecacheGeneric)		(const char* s){};
 	int			(*pfnGetPlayerUserId)		(edict_t* e){}; // returns the server assigned userid for this player.  useful for logging frags, etc.  returns -1 if the edict couldn't be found in the list of clients
 	void		(*pfnBuildSoundMsg)			(edict_t* entity, int channel, const char* sample, /*int*/float volume, float attenuation, int fFlags, int pitch, int msg_dest, int msg_type, const float* pOrigin, edict_t* ed){};
 	int			(*pfnIsDedicatedServer)		(void){};// is this a dedicated server?

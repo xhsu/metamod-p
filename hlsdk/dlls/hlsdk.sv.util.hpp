@@ -707,10 +707,10 @@ EXPORT void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, con
 	g_engfuncs.pfnWriteCoord(vecVelocity.y);
 	g_engfuncs.pfnWriteCoord(vecVelocity.z);
 
-	g_engfuncs.pfnWriteByte((int)std::roundf(flRandSpeedVar * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flRandSpeedVar * 10.f));
 	g_engfuncs.pfnWriteShort(iModel);
 	g_engfuncs.pfnWriteByte(iCount);
-	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flLife * 10.f));
 	g_engfuncs.pfnWriteByte(bitsFlags);
 	g_engfuncs.pfnMessageEnd();
 };
@@ -728,7 +728,7 @@ EXPORT void UTIL_ExplodeModel(const Vector &vecOrigin, float flSpeed, short iMod
 
 	g_engfuncs.pfnWriteShort(iModel);
 	g_engfuncs.pfnWriteShort(iCount);
-	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flLife * 10.f));
 
 	g_engfuncs.pfnMessageEnd();
 };
@@ -747,17 +747,17 @@ EXPORT void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 
 	g_engfuncs.pfnWriteShort(iSprite);
 	g_engfuncs.pfnWriteByte(iStartingFrame);
-	g_engfuncs.pfnWriteByte((int)std::roundf(flFrameRate * 10.f));
-	g_engfuncs.pfnWriteByte((int)std::roundf(flLife * 10.f));
-	g_engfuncs.pfnWriteByte((int)std::roundf(flLineWidth * 10.f));
-	g_engfuncs.pfnWriteByte((int)std::roundf(flNoiseAmp * 100.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flFrameRate * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flLife * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flLineWidth * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flNoiseAmp * 100.f));
 
 	g_engfuncs.pfnWriteByte(Color.r);
 	g_engfuncs.pfnWriteByte(Color.g);
 	g_engfuncs.pfnWriteByte(Color.b);
 	g_engfuncs.pfnWriteByte(iBrightness);
 
-	g_engfuncs.pfnWriteByte((int)std::roundf(flScrollSpeed * 10.f));
+	g_engfuncs.pfnWriteByte(std::lroundf(flScrollSpeed * 10.f));
 
 	g_engfuncs.pfnMessageEnd();
 }
