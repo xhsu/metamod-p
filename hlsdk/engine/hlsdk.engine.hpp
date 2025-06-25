@@ -346,8 +346,8 @@ EXPORT enum SVC_TEMPENTITY_TYPES : uint8_t
 	// coord, coord, coord (pos) 
 	// byte (radius in 10's) 
 	// byte byte byte (color)
-	// byte (brightness)
-	// byte (life in 10's)
+	// byte (brightness) - LUNA: WRONG! no such argument!
+	// byte (life in 10's) - LUNA: it's in 0.1's
 	// byte (decay rate in 10's)
 
 	TE_ELIGHT = 28,		// point entity light, no world effect

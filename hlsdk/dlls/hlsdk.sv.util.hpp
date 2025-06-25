@@ -762,6 +762,23 @@ EXPORT void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 	g_engfuncs.pfnMessageEnd();
 }
 
+EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 color, uint8_t iBrightness, float flTime, float flDecayRate) noexcept
+{
+	g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, vecOrigin, nullptr);
+	g_engfuncs.pfnWriteByte(TE_DLIGHT);
+	g_engfuncs.pfnWriteCoord(vecOrigin.x);
+	g_engfuncs.pfnWriteCoord(vecOrigin.y);
+	g_engfuncs.pfnWriteCoord(vecOrigin.z);
+	g_engfuncs.pfnWriteByte(std::clamp(std::lround(flRadiusInMeter / 0.0254 / 10.0), 0l, 255l));	// (radius in 10's)
+	g_engfuncs.pfnWriteByte(color.r);
+	g_engfuncs.pfnWriteByte(color.g);
+	g_engfuncs.pfnWriteByte(color.b);
+	//g_engfuncs.pfnWriteByte(iBrightness);
+	g_engfuncs.pfnWriteByte(std::clamp(std::lroundf(flTime * 10.f), 0l, 255l));	// (life in 10's)
+	g_engfuncs.pfnWriteByte(std::clamp(std::lroundf(flDecayRate), 0l, 255l));	// (decay rate in 10's)
+	g_engfuncs.pfnMessageEnd();
+}
+
 /*
 * Part III: Model Helper
 */
