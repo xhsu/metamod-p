@@ -285,7 +285,13 @@ EXPORT inline constexpr auto CHAR_TEX_WOOD = 'W';
 EXPORT inline constexpr auto CHAR_TEX_COMPUTER = 'P';
 EXPORT inline constexpr auto CHAR_TEX_GLASS = 'Y';
 EXPORT inline constexpr auto CHAR_TEX_FLESH = 'F';
+
+// extended by CZDS
+EXPORT inline constexpr auto CHAR_TEX_CARPET = 'E';
 EXPORT inline constexpr auto CHAR_TEX_SNOW = 'N';
+EXPORT inline constexpr auto CHAR_TEX_GRASS_CZ = 'A';	// CZDS
+EXPORT inline constexpr auto CHAR_TEX_GRASS_CS = 'X';	// CSCZ
+EXPORT inline constexpr auto CHAR_TEX_GRAVEL = 'R';
 #pragma endregion pm_materials.h
 
 #pragma region cdll_dll.h
