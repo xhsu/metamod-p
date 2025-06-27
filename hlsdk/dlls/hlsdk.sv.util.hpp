@@ -762,7 +762,7 @@ EXPORT void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 	g_engfuncs.pfnMessageEnd();
 }
 
-EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 color, uint8_t iBrightness, float flTime, float flDecayRate) noexcept
+EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 color, float flTime, float flDecayRate) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, vecOrigin, nullptr);
 	g_engfuncs.pfnWriteByte(TE_DLIGHT);
