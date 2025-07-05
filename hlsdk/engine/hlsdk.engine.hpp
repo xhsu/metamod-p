@@ -710,6 +710,8 @@ EXPORT enum BUTTONS : uint32_t
 // Break Model Defines
 EXPORT enum BREAK_MODEL_TYPE : uint8_t
 {
+	BREAK_NONE = 0,
+
 	BREAK_TYPEMASK = 0x4F,
 	BREAK_GLASS = 0x01,
 	BREAK_METAL = 0x02,
@@ -721,6 +723,14 @@ EXPORT enum BREAK_MODEL_TYPE : uint8_t
 	BREAK_CONCRETE = 0x40,
 	BREAK_2 = 0x80,
 };
+
+EXPORT [[nodiscard]] inline constexpr
+BREAK_MODEL_TYPE operator|(BREAK_MODEL_TYPE lhs, BREAK_MODEL_TYPE rhs) noexcept
+{
+	return static_cast<BREAK_MODEL_TYPE>(
+		std::to_underlying(lhs) | std::to_underlying(rhs)
+	);
+}
 
 // Colliding temp entity sounds
 EXPORT enum TE_COL_BOUNCE : uint8_t
@@ -1079,7 +1089,7 @@ EXPORT struct entvars_t
 
 	float		health{};
 	float		frags{};
-	int			weapons{};  // bit mask for available weapons
+	uint32_t	weapons{};  // bit mask for available weapons
 	float		takedamage{};
 
 	EVAR_DF		deadflag{};
@@ -1725,44 +1735,45 @@ EXPORT struct studiohdr_t
 	vec3_t				bbmin;			// clipping bounding box
 	vec3_t				bbmax;
 
-	int					flags{};
+	uint32_t			flags{};
 
 	uint32_t			numbones{};			// bones
-	int					boneindex{};
+	ptrdiff_t			boneindex{};
 
 	uint32_t			numbonecontrollers{};		// bone controllers
-	int					bonecontrollerindex{};
+	ptrdiff_t			bonecontrollerindex{};
 
 	uint32_t			numhitboxes{};			// complex bounding boxes
-	int					hitboxindex{};
+	ptrdiff_t			hitboxindex{};
 
 	uint32_t			numseq{};				// animation sequences
-	int					seqindex{};
+	ptrdiff_t			seqindex{};
 
 	uint32_t			numseqgroups{};		// demand loaded sequences
-	int					seqgroupindex{};
+	ptrdiff_t			seqgroupindex{};
 
 	uint32_t			numtextures{};		// raw textures
-	int					textureindex{};
-	int					texturedataindex{};
+	ptrdiff_t			textureindex{};
+	ptrdiff_t			texturedataindex{};
 
 	uint32_t			numskinref{};			// replaceable textures
 	uint32_t			numskinfamilies{};
-	int					skinindex{};
+	ptrdiff_t			skinindex{};
 
 	uint32_t			numbodyparts{};
-	int					bodypartindex{};
+	ptrdiff_t			bodypartindex{};
 
 	uint32_t			numattachments{};		// queryable attachable points
-	int					attachmentindex{};
+	ptrdiff_t			attachmentindex{};
 
-	int					soundtable{};
-	int					soundindex{};
-	int					soundgroups{};
-	int					soundgroupindex{};
+	// HLAM: This seems to be obsolete. Probably replaced by events that reference external sounds?
+	int32_t				soundtable{};
+	int32_t				soundindex{};
+	int32_t				soundgroups{};
+	int32_t				soundgroupindex{};
 
 	uint32_t			numtransitions{};		// animation node to animation node transition graph
-	int					transitionindex{};
+	ptrdiff_t			transitionindex{};
 };
 
 // header for demand loaded sequence group data
@@ -1827,7 +1838,7 @@ EXPORT struct mstudioseqdesc_t
 	int					actweight{};
 
 	uint32_t			numevents{};
-	int					eventindex{};
+	ptrdiff_t			eventindex{};
 
 	uint32_t			numframes{};	// number of frames per sequence
 
@@ -1907,9 +1918,9 @@ EXPORT union mstudioanimvalue_t
 EXPORT struct mstudiobodyparts_t
 {
 	char				name[64];
-	int					nummodels;
-	int					base;
-	int					modelindex; // index into models array
+	uint32_t			nummodels;
+	int32_t				base;
+	ptrdiff_t			modelindex; // index into models array
 };
 
 // skin info
@@ -1931,22 +1942,22 @@ EXPORT struct mstudiomodel_t
 {
 	char				name[64];
 
-	int					type;
+	int32_t				type;
 
 	float				boundingradius;
 
-	int					nummesh;
-	int					meshindex;
+	uint32_t			nummesh;
+	ptrdiff_t			meshindex;
 
-	int					numverts;		// number of unique vertices
-	int					vertinfoindex;	// vertex bone info
-	int					vertindex;		// vertex vec3_t
-	int					numnorms;		// number of unique surface normals
-	int					norminfoindex;	// normal bone info
-	int					normindex;		// normal vec3_t
+	uint32_t			numverts;		// number of unique vertices
+	ptrdiff_t			vertinfoindex;	// vertex bone info
+	ptrdiff_t			vertindex;		// vertex vec3_t
+	uint32_t			numnorms;		// number of unique surface normals
+	ptrdiff_t			norminfoindex;	// normal bone info
+	ptrdiff_t			normindex;		// normal vec3_t
 
-	int					numgroups;		// deformation groups
-	int					groupindex;
+	uint32_t			numgroups;		// deformation groups
+	ptrdiff_t			groupindex;
 };
 
 

@@ -690,7 +690,7 @@ EXPORT void UTIL_Decal(edict_t *pent, Vector const& vecOrigin, short iDecalTextu
 	g_engfuncs.pfnMessageEnd();
 }
 
-EXPORT void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, uint8_t iCount, float flLife, uint8_t bitsFlags) noexcept
+EXPORT void UTIL_BreakModel(const Vector &vecOrigin, const Vector &vecScale, const Vector &vecVelocity, float flRandSpeedVar, short iModel, uint8_t iCount, float flLife, BREAK_MODEL_TYPE bitsFlags) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_BROADCAST, SVC_TEMPENTITY, nullptr, nullptr);
 	g_engfuncs.pfnWriteByte(TE_BREAKMODEL);

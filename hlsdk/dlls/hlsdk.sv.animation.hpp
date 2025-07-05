@@ -558,7 +558,7 @@ EXPORT inline void SetBodygroup(entvars_t* pev, int iGroup, int iValue) noexcept
 	auto const pbodypart =
 		(mstudiobodyparts_t*)((std::byte*)pModel + pModel->bodypartindex) + iGroup;
 
-	if (iValue >= pbodypart->nummodels)
+	if (iValue >= (int)pbodypart->nummodels)
 		return;
 
 	auto const iCurrent = (pev->body / pbodypart->base) % pbodypart->nummodels;
