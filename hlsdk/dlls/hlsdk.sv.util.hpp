@@ -105,9 +105,9 @@ EXPORT inline EValidity pev_valid(entvars_t* pev) noexcept
 EXPORT __forceinline EValidity pev_valid(edict_t* pEdict) noexcept { return pEdict ? pev_valid(&pEdict->v) : EValidity::Not; }
 
 // Use this instead of ALLOC_STRING on constant strings
-EXPORT inline const char* STRING(std::ptrdiff_t iOffset) noexcept { return gpGlobals->pStringBase + iOffset; }
-EXPORT template <size_t N> inline std::ptrdiff_t MAKE_STRING(const char(&rgsz)[N]) noexcept { return (&rgsz[0]) - gpGlobals->pStringBase; }
-EXPORT inline std::ptrdiff_t MAKE_STRING_UNSAFE(const char* psz) noexcept { return psz - gpGlobals->pStringBase; }
+EXPORT inline const char* STRING(string_t iOffset) noexcept { return gpGlobals->pStringBase + iOffset; }
+EXPORT template <size_t N> inline string_t MAKE_STRING(const char(&rgsz)[N]) noexcept { return string_t{ (&rgsz[0]) - gpGlobals->pStringBase }; }
+EXPORT inline string_t MAKE_STRING_UNSAFE(const char* psz) noexcept { return string_t{ psz - gpGlobals->pStringBase }; }
 
 //
 // Search Entity

@@ -142,6 +142,7 @@ EXPORT inline constexpr uint32_t EFLAG_SLERP = 1;	// do studio interpolation of 
 
 //
 // temp entity events
+// LUNA: refer to https://github.com/baso88/SC_AngelScript/wiki/Temporary-Entities for more detail.
 //
 EXPORT enum SVC_TEMPENTITY_TYPES : uint8_t
 {
@@ -1005,7 +1006,25 @@ EXPORT enum ESvcCommands : uint32_t	// LUNA: should be uint8_t but for the sake 
 EXPORT inline constexpr size_t MAX_ENT_LEAFS = 48;
 
 EXPORT using qboolean = std::int32_t;
-EXPORT using string_t = std::ptrdiff_t;
+//EXPORT using string_t = std::ptrdiff_t;
+EXPORT struct string_t final
+{
+	constexpr string_t() noexcept = default;
+	constexpr string_t(std::ptrdiff_t ofs) noexcept : m_diff{ ofs } {}
+	explicit string_t(const char* psz) noexcept;
+
+	constexpr string_t(string_t&&) noexcept = default;
+	constexpr string_t(string_t const&) noexcept = default;
+	constexpr string_t& operator=(string_t&&) noexcept = default;
+	constexpr string_t& operator=(string_t const&) noexcept = default;
+	constexpr ~string_t() noexcept = default;
+
+	std::ptrdiff_t m_diff{ 0 };
+
+	constexpr operator std::ptrdiff_t() const noexcept { return m_diff; }
+	operator const char* () const noexcept;
+};
+
 #ifndef HLSDK_SKIP_PTR_SIZE_CHECK
 static_assert(sizeof(string_t) == 4, "To compatible with GoldSrc Engine, the string_t (a.k.a. std::ptrdiff_t) must be 4 bytes wide.");
 #endif
@@ -1048,8 +1067,8 @@ EXPORT struct entvars_t
 	int			modelindex{};
 	string_t	model{};
 
-	int			viewmodel{};		// player's viewmodel
-	int			weaponmodel{};	// what other players see
+	string_t	viewmodel{};		// player's viewmodel
+	string_t	weaponmodel{};	// what other players see
 
 	vec3_t		absmin;		// BB max translated to world coord
 	vec3_t		absmax;		// BB max translated to world coord
@@ -1243,6 +1262,9 @@ EXPORT struct globalvars_t
 EXPORT inline globalvars_t* gpGlobals = nullptr;
 
 #pragma endregion progdefs.h
+
+string_t::string_t(const char* psz) noexcept : m_diff{ psz - gpGlobals->pStringBase } {}
+string_t::operator const char* () const noexcept { return gpGlobals->pStringBase + this->m_diff; }
 
 #pragma region cvardef.h
 
@@ -3023,7 +3045,7 @@ EXPORT struct enginefuncs_t
 	void*		(*pfnPvEntPrivateData)		(edict_t* pEdict){};
 	void		(*pfnFreeEntPrivateData)	(edict_t* pEdict){};
 	const char* (*pfnSzFromIndex)			(int iString){};
-	int			(*pfnAllocString)			(const char* szValue){};
+	string_t	(*pfnAllocString)			(const char* szValue){};
 	entvars_t*	(*pfnGetVarsOfEnt)			(edict_t* pEdict){};
 	edict_t*	(*pfnPEntityOfEntOffset)	(int iEntOffset){};
 	int			(*pfnEntOffsetOfPEntity)	(const edict_t* pEdict){};
