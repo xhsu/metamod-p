@@ -38,7 +38,7 @@ EXPORT template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// entindex -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(g_engfuncs.pfnPEntityOfEntIndex(ent)->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(false, "Casting to a unsupported type.");
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, entvars_t*>)
 	{
@@ -51,7 +51,7 @@ EXPORT template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// entvars_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pContainingEntity->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(false, "Casting to a unsupported type.");
 	}
 	else if constexpr (std::is_same_v<std::remove_cvref_t<org_t>, edict_t*>)
 	{
@@ -64,7 +64,7 @@ EXPORT template <typename new_t, typename org_t>
 		else if constexpr (requires(std::remove_cvref_t<new_t> org) { { org->pev } -> std::convertible_to<entvars_t*>; })	// edict_t* -> CBase/EHANDLE
 			return std::remove_cvref_t<new_t>(ent->pvPrivateData);
 		else
-			static_assert(std::_Always_false<new_t>, "Casting to a unsupported type.");
+			static_assert(false, "Casting to a unsupported type.");
 	}
 
 	// This is for CBaseEntity, but we are not going to restricting class name nor import CBase.
@@ -73,7 +73,7 @@ EXPORT template <typename new_t, typename org_t>
 		return ent_cast<new_t>(ent->pev);
 	}
 	else
-		static_assert(std::_Always_false<new_t>, "Casting from a unsupported type.");
+		static_assert(false, "Casting from a unsupported type.");
 }
 
 EXPORT inline auto ENTOFFSET(edict_t* pEdict) noexcept { return (*g_engfuncs.pfnEntOffsetOfPEntity)(pEdict); }	// eoffset is different from entindex!!

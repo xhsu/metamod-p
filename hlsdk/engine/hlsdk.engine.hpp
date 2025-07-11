@@ -1021,7 +1021,8 @@ EXPORT struct string_t final
 
 	std::ptrdiff_t m_diff{ 0 };
 
-	constexpr operator std::ptrdiff_t() const noexcept { return m_diff; }
+	constexpr operator std::ptrdiff_t const& () const noexcept { return m_diff; }
+	constexpr operator std::ptrdiff_t& () noexcept { return m_diff; }
 	operator const char* () const noexcept;
 };
 
