@@ -41,7 +41,7 @@ EXPORT struct engine_studio_api_t
 	struct model_s* (*Mod_ForName)(const char* name, int crash_if_missing) noexcept {};
 
 	// Retrieve pointer to studio model data block from a model
-	void* (*Mod_Extradata)(struct model_s* mod) noexcept {};
+	void* (*Mod_Extradata)(model_t* mod) noexcept {};
 
 	// Retrieve indexed model from client side model precache list
 	struct model_s* (*GetModelByIndex)(int index) noexcept {};
@@ -158,7 +158,7 @@ EXPORT struct server_studio_api_t
 	void (*LoadCacheFile)(char* path, struct cache_user_s* cu) noexcept {};
 
 	// Retrieve pointer to studio model data block from a model
-	void* (*Mod_Extradata)(struct model_s* mod) noexcept {};
+	studiohdr_t* (*Mod_Extradata)(model_t* mod) noexcept {};
 };
 
 
@@ -180,13 +180,13 @@ EXPORT struct sv_blending_interface_t
 	int version{ SV_BLENDING_INTERFACE_VERSION };
 
 	void (*SV_StudioSetupBones)(
-		struct model_s* pModel,
+		model_t* pModel,
 		float frame,
 		int sequence,
 		const float* angles,
 		const float* origin,
-		const std::byte* pcontroller,
-		const std::byte* pblending,
+		const uint8_t* pcontroller,	// Actual uint8, not bytes. Same below.
+		const uint8_t* pblending,
 		int iBone,
 		const edict_t* pEdict
 		) noexcept {};

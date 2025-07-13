@@ -1301,6 +1301,7 @@ EXPORT using CRC32_t = std::uint32_t;
 
 #pragma region custom.h
 
+EXPORT inline constexpr size_t MAX_RESOURCE_LIST = 1280;	// LUNA: only used in engine decompiling project.
 EXPORT inline constexpr size_t MAX_QPATH = 64;    // Must match value in quakedefs.h #NO_URGENT LUNA: where is it?
 
 /////////////////
@@ -1315,7 +1316,10 @@ EXPORT enum resourcetype_t
 	t_decal,
 	t_generic,
 	t_eventscript,
-	t_world = 6,	// Fake type for world
+	t_world,		// Fake type for world, is really t_model
+	rt_unk,
+
+	rt_max
 };
 
 EXPORT struct resourceinfo_t
@@ -2997,7 +3001,7 @@ EXPORT struct enginefuncs_t
 	void		(*pfnAngleVectors)			(const float* rgflVector, float* forward, float* right, float* up){};
 	edict_t*	(*pfnCreateEntity)			(void){};
 	void		(*pfnRemoveEntity)			(edict_t* e){};
-	edict_t*	(*pfnCreateNamedEntity)		(int className){};
+	edict_t*	(*pfnCreateNamedEntity)		(string_t className){};
 	void		(*pfnMakeStatic)			(edict_t* ent){};
 	int			(*pfnEntIsOnFloor)			(edict_t* e){};
 	int			(*pfnDropToFloor)			(edict_t* e){};

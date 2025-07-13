@@ -379,7 +379,15 @@ export struct client_t
 
 static_assert(sizeof(client_t) == 26504, "Anniversary 9980");
 
-#pragma endregion server.h
+// maintypes.h says it should be in engine/server.h
+export enum server_state_t : uint32_t
+{
+	ss_dead = 0,
+	ss_loading = 1,
+	ss_active = 2,
+};
+
+#pragma endregion server.h (Part I)
 
 #pragma region server_static.h
 
@@ -428,3 +436,122 @@ export struct server_static_t
 export extern "C++" inline server_static_t* gpServerStatics = nullptr;
 
 #pragma endregion server_static.h
+
+#pragma region consistency.h
+
+export inline constexpr auto MAX_CONSISTENCY_LIST = 512;
+
+export struct consistency_t
+{
+	char const* filename{};
+	qboolean issound{};
+	int32_t orig_index{};
+	int32_t value{};
+	FORCE_TYPE check_type{};
+	Vector mins{};
+	Vector maxs{};
+};
+
+#pragma endregion consistency.h
+
+#pragma region qlimits.h
+
+export inline constexpr auto MAX_MODEL_INDEX_BITS = (int16_t)9;	// sent as a short
+export inline constexpr auto MAX_MODELS = (1 << MAX_MODEL_INDEX_BITS);
+export inline constexpr auto MAX_SOUND_INDEX_BITS = (int16_t)9;
+export inline constexpr auto MAX_SOUNDS = (1 << MAX_SOUND_INDEX_BITS);
+export inline constexpr auto MAX_SOUNDS_HASHLOOKUP_SIZE = (MAX_SOUNDS * 2 - 1);
+
+export inline constexpr auto MAX_GENERIC_INDEX_BITS = (int16_t)9;
+export inline constexpr auto MAX_GENERIC = (1 << MAX_GENERIC_INDEX_BITS);
+export inline constexpr auto MAX_DECAL_INDEX_BITS = (int16_t)9;
+export inline constexpr auto MAX_BASE_DECALS = (1 << MAX_DECAL_INDEX_BITS);
+
+export inline constexpr auto MAX_EVENTS = 256;
+
+export inline constexpr auto MAX_LIGHTSTYLE_INDEX_BITS = (int16_t)6;
+export inline constexpr auto MAX_LIGHTSTYLES = (1 << MAX_LIGHTSTYLE_INDEX_BITS);
+export inline constexpr auto MAX_LIGHTSTYLE_SIZE = size_t{ 64 };
+
+#pragma endregion qlimits.h
+
+#pragma region event.h
+
+export struct event_t
+{
+	uint16_t index{};
+	const char* filename{};
+	uint32_t filesize{};
+	const char* pszScript{};
+};
+
+#pragma endregion event.h
+
+#pragma region inst_baseline.h
+
+export inline constexpr int NUM_BASELINES = 64;
+
+export struct extra_baselines_t
+{
+	int32_t number{};
+	string_t classname[NUM_BASELINES]{};
+	entity_state_t baseline[NUM_BASELINES]{};
+};
+
+#pragma endregion inst_baseline.h
+
+#pragma region server.h (Part II)
+
+export struct server_t
+{
+	qboolean active;
+	qboolean paused;
+	qboolean loadgame;
+	double time;
+	double oldtime;
+	int32_t lastcheck;
+	double lastchecktime;
+	char name[64];
+	char oldname[64];
+	char startspot[64];
+	char modelname[64];
+	model_t* worldmodel;
+	CRC32_t worldmapCRC;
+	unsigned char clientdllmd5[16];
+	resource_t resourcelist[MAX_RESOURCE_LIST];
+	int32_t num_resources;
+	consistency_t consistency_list[MAX_CONSISTENCY_LIST];
+	int32_t num_consistency;
+	const char* model_precache[MAX_MODELS];
+	model_t* models[MAX_MODELS];
+	unsigned char model_precache_flags[MAX_MODELS];
+	event_t event_precache[MAX_EVENTS];
+	const char* sound_precache[MAX_SOUNDS];
+	int16_t sound_precache_hashedlookup[MAX_SOUNDS_HASHLOOKUP_SIZE];
+	qboolean sound_precache_hashedlookup_built;
+	const char* generic_precache[MAX_GENERIC];
+	char generic_precache_names[MAX_GENERIC][64];
+	int32_t num_generic_names;
+	const char* lightstyles[MAX_LIGHTSTYLES];
+	int32_t num_edicts;
+	int32_t max_edicts;
+	edict_t* edicts;
+	entity_state_t* baselines;
+	extra_baselines_t* instance_baselines;
+	server_state_t state;
+	sizebuf_t datagram;
+	std::byte datagram_buf[MAX_DATAGRAM];
+	sizebuf_t reliable_datagram;
+	std::byte reliable_datagram_buf[MAX_DATAGRAM];
+	sizebuf_t multicast;
+	std::byte multicast_buf[1024];
+	sizebuf_t spectator;
+	std::byte spectator_buf[1024];
+	sizebuf_t signon;
+	std::byte signon_data[32768];
+};
+
+// Corresponding to g_psv in ReHLDS.
+export extern "C++" inline server_t* gpServerVars = nullptr;
+
+#pragma endregion server.h (Part II)

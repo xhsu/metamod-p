@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <numbers>
+#include <span>
 
 #else
 
@@ -73,8 +74,9 @@ EXPORT struct Vector2D
 	vec_t x{}, y{};
 };
 
-EXPORT constexpr double		DotProduct(const Vector2D& a, const Vector2D& b)	noexcept { return a.x * b.x + a.y * b.y; }
-EXPORT constexpr Vector2D	operator*(double fl, const Vector2D& v)				noexcept { return v * fl; }
+EXPORT constexpr double		DotProduct(const Vector2D& a, const Vector2D& b)		noexcept { return a.x * b.x + a.y * b.y; }
+EXPORT constexpr double		DotProduct(const Vector2D& a, std::span<float const> b)	noexcept { return a.x * b[0] + a.y * b[1]; }
+EXPORT constexpr Vector2D	operator*(double fl, const Vector2D& v)					noexcept { return v * fl; }
 
 //=========================================================
 // 3D Vector
@@ -148,9 +150,10 @@ EXPORT struct Vector                                            // same data-lay
 	vec_t x{}, y{}, z{};
 };
 
-EXPORT constexpr Vector operator*(double fl, const Vector& v)			noexcept { return v * fl; }
-EXPORT constexpr double DotProduct(const Vector& a, const Vector& b)	noexcept { return a.x * b.x + a.y * b.y + a.z * b.z; }
-EXPORT constexpr Vector CrossProduct(const Vector& a, const Vector& b)	noexcept { return { a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x }; }
+EXPORT constexpr Vector operator*(double fl, const Vector& v)					noexcept { return v * fl; }
+EXPORT constexpr double DotProduct(const Vector& a, const Vector& b)			noexcept { return a.x * b.x + a.y * b.y + a.z * b.z; }
+EXPORT constexpr double	DotProduct(const Vector& a, std::span<float const> b)	noexcept { return a.x * b[0] + a.y * b[1] + a.z * b[2]; }
+EXPORT constexpr Vector CrossProduct(const Vector& a, const Vector& b)			noexcept { return { a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x }; }
 
 // LUNA: watchout for the freaking marcos.
 EXPORT using vec3_t = Vector;
