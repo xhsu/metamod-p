@@ -140,6 +140,13 @@ EXPORT enum EVAR_EFFECTS : uint32_t
 // state->eflags values
 EXPORT inline constexpr uint32_t EFLAG_SLERP = 1;	// do studio interpolation of this entity
 
+// pev->gamestate values
+EXPORT enum EVAR_HGS : uint32_t
+{
+	HITGROUP_SHIELD_ENABLED = 0,
+	HITGROUP_SHIELD_DISABLED = 1,
+};
+
 //
 // temp entity events
 // LUNA: refer to https://github.com/baso88/SC_AngelScript/wiki/Temporary-Entities for more detail.
@@ -1026,6 +1033,9 @@ EXPORT struct string_t final
 	operator const char* () const noexcept;
 };
 
+EXPORT [[nodiscard]] constexpr auto operator<=>(string_t lhs, string_t rhs) noexcept { return lhs.m_diff <=> rhs.m_diff; };
+EXPORT [[nodiscard]] constexpr auto operator==(string_t lhs, string_t rhs) noexcept { return lhs.m_diff == rhs.m_diff; };
+
 #ifndef HLSDK_SKIP_PTR_SIZE_CHECK
 static_assert(sizeof(string_t) == 4, "To compatible with GoldSrc Engine, the string_t (a.k.a. std::ptrdiff_t) must be 4 bytes wide.");
 #endif
@@ -1118,12 +1128,12 @@ EXPORT struct entvars_t
 	int			button{};
 	int			impulse{};
 
-	edict_t* chain{};			// Entity pointer when linked into a linked list
-	edict_t* dmg_inflictor{};
-	edict_t* enemy{};
-	edict_t* aiment{};		// entity pointer when MOVETYPE_FOLLOW
-	edict_t* owner{};
-	edict_t* groundentity{};
+	edict_t*	chain{};			// Entity pointer when linked into a linked list
+	edict_t*	dmg_inflictor{};
+	edict_t*	enemy{};
+	edict_t*	aiment{};		// entity pointer when MOVETYPE_FOLLOW
+	edict_t*	owner{};
+	edict_t*	groundentity{};
 
 	int			spawnflags{};
 	int			flags{};
@@ -1158,7 +1168,7 @@ EXPORT struct entvars_t
 	float		pain_finished{};
 	float		radsuit_finished{};
 
-	edict_t* pContainingEntity{};
+	edict_t*	pContainingEntity{};
 
 	int			playerclass{};
 	float		maxspeed{};
@@ -1175,7 +1185,7 @@ EXPORT struct entvars_t
 	int			iStepLeft{};
 	float		flFallVelocity{};
 
-	int			gamestate{};
+	EVAR_HGS	gamestate{};
 
 	int			oldbuttons{};
 
