@@ -214,7 +214,7 @@ EXPORT inline void WRITEKEY_VECTOR(void* pf, const char* szKeyName, Vector const
 
 // Testing strings for nullity
 //#define iStringNull 0
-EXPORT inline qboolean FStringNull(string_t iString) noexcept { return iString == 0; }
+EXPORT inline qboolean FStringNull(string_t iString) noexcept { return iString == string_t{ 0 }; }
 
 EXPORT inline constexpr size_t cchMapNameMost = 32;
 
@@ -762,7 +762,7 @@ EXPORT void UTIL_Shockwave(Vector const &vecOrigin, float flRadius, short iSprit
 	g_engfuncs.pfnMessageEnd();
 }
 
-EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 color, float flTime, float flDecayRate) noexcept
+EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 color, float flTime, float flDecayMeterPerSec) noexcept
 {
 	g_engfuncs.pfnMessageBegin(MSG_PVS, SVC_TEMPENTITY, vecOrigin, nullptr);
 	g_engfuncs.pfnWriteByte(TE_DLIGHT);
@@ -775,7 +775,7 @@ EXPORT void UTIL_DLight(Vector const& vecOrigin, float flRadiusInMeter, color24 
 	g_engfuncs.pfnWriteByte(color.b);
 	//g_engfuncs.pfnWriteByte(iBrightness);
 	g_engfuncs.pfnWriteByte(std::clamp(std::lroundf(flTime * 10.f), 0l, 255l));	// (life in 10's)
-	g_engfuncs.pfnWriteByte(std::clamp(std::lroundf(flDecayRate), 0l, 255l));	// (decay rate in 10's)
+	g_engfuncs.pfnWriteByte(std::clamp(std::lround(flDecayMeterPerSec / 0.0254 / 10.0), 0l, 255l));	// (decay rate in 10's)
 	g_engfuncs.pfnMessageEnd();
 }
 
@@ -828,7 +828,7 @@ EXPORT struct BodyEnumInfo_t
 };
 
 EXPORT [[nodiscard]]	// #UPDATE_AT_CPP23 constexpr goto
-decltype(entvars_t::body) UTIL_CalcBody(std::span<BodyEnumInfo_t> info) noexcept
+decltype(entvars_t::body) UTIL_CalcBody(std::span<BodyEnumInfo_t const> info) noexcept
 {
 	for (auto ret = 0; ret < std::numeric_limits<decltype(entvars_t::body)>::max(); ++ret)
 	{
